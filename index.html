@@ -6,18 +6,20 @@
     <title>Travel Starfall Luxe</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { margin: 0; padding: 0; background: #050810; color: white; font-family: -apple-system, sans-serif; overflow-x: hidden; display: flex; justify-content: center; }
+        body { margin: 0; padding: 0; background: #050810; color: white; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
         .stars-bg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%); z-index: -1; }
-        .container { width: 92%; max-width: 360px; text-align: center; margin: 20px 0; background: rgba(255, 255, 255, 0.03); padding: 25px; border-radius: 30px; backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); z-index: 10; height: fit-content; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        button, .card { background: rgba(255, 255, 255, 0.07); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; padding: 14px 5px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; -webkit-tap-highlight-color: transparent; }
-        button.wide, .card { grid-column: span 2; display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; }
-        button:active, .card:active { background: rgba(255, 255, 255, 0.15); transform: scale(0.97); }
+        .container { width: 92%; max-width: 360px; text-align: center; margin: 20px 0; background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 28px; backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); position: relative; z-index: 10; height: fit-content; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        button, .card { background: rgba(255, 255, 255, 0.08); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 14px 5px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; -webkit-tap-highlight-color: transparent; }
+        .wide { grid-column: span 2; }
+        .card { grid-column: span 2; display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; text-align: left; margin-bottom: 8px; }
+        button:active, .card:active { background: rgba(255, 255, 255, 0.2); transform: scale(0.98); }
         .hidden { display: none !important; }
-        .back-btn { margin-bottom: 15px; width: 100%; opacity: 0.8; font-size: 14px; justify-content: center; }
+        .back-btn { margin-bottom: 15px; width: 100%; display: flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.05); }
         .info-block { background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 15px; margin-bottom: 10px; text-align: left; border-left: 3px solid #00d2ff; }
-        #scroll-area, #content-area { max-height: 50vh; overflow-y: auto; }
-        h1 { font-size: 24px; } h2 { font-size: 18px; }
+        #scroll-area, #content-area { max-height: 55vh; overflow-y: auto; padding-right: 5px; }
+        h1 { font-size: 24px; margin-bottom: 10px; }
+        h2 { font-size: 18px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -26,135 +28,135 @@
     <div id="screen-langs" class="container">
         <h1>Welcome! 🌍</h1>
         <div class="grid">
-            <button onclick="app.setLang('ru')">Русский 🇷🇺</button>
-            <button onclick="app.setLang('en')">English 🇺🇸</button>
-            <button onclick="app.setLang('tr')">Türkçe 🇹🇷</button>
-            <button onclick="app.setLang('fr')">Français 🇫🇷</button>
-            <button class="wide" onclick="app.setLang('cn')">中文 🇨🇳</button>
+            <button onclick="setLang('ru')">Русский 🇷🇺</button>
+            <button onclick="setLang('en')">English 🇺🇸</button>
+            <button onclick="setLang('tr')">Türkçe 🇹🇷</button>
+            <button onclick="setLang('pl')">Polski 🇵🇱</button>
+            <button onclick="setLang('fr')">Français 🇫🇷</button>
+            <button onclick="setLang('es')">Español 🇪🇸</button>
+            <button onclick="setLang('it')">Italiano 🇮🇹</button>
+            <button onclick="setLang('de')">Deutsch 🇩🇪</button>
+            <button class="wide" onclick="setLang('cn')">中文 🇨🇳</button>
         </div>
     </div>
 
     <div id="screen-citizen" class="container hidden">
-        <h2 id="txt-citizen">Ваше гражданство? 🛂</h2>
+        <h2 id="txt-cit-title">Ваше гражданство?</h2>
         <div class="grid">
-            <button class="wide" onclick="app.setCitizen('Russia')">Russia 🇷🇺</button>
-            <button class="wide" onclick="app.setCitizen('EU')">European Union 🇪🇺</button>
-            <button class="wide" onclick="app.setCitizen('USA')">USA 🇺🇸</button>
-            <button class="wide" onclick="app.setCitizen('Other')">Other 🌏</button>
+            <button class="wide" onclick="setCitizen('Russia')">Russia 🇷🇺</button>
+            <button class="wide" onclick="setCitizen('Ukraine')">Ukraine 🇺🇦</button>
+            <button class="wide" onclick="setCitizen('EU')">European Union 🇪🇺</button>
+            <button class="wide" onclick="setCitizen('Other')">Other 🌏</button>
         </div>
     </div>
 
     <div id="screen-countries" class="container hidden">
-        <button class="back-btn" onclick="app.show('screen-citizen')">⬅ <span class="lbl-back">Назад</span></button>
-        <h2 id="txt-select-country">Выберите страну</h2>
+        <button class="back-btn" onclick="show('screen-citizen')">⬅ <span class="lbl-back">Назад</span></button>
+        <h2 id="txt-sel-country">Выберите страну</h2>
         <div id="scroll-area"></div>
     </div>
 
     <div id="screen-menu" class="container hidden">
-        <button class="back-btn" onclick="app.show('screen-countries')">⬅ <span class="lbl-back">Назад</span></button>
+        <button class="back-btn" onclick="show('screen-countries')">⬅ <span class="lbl-back">Назад</span></button>
         <h2 id="active-country"></h2>
         <div id="menu-grid" class="grid"></div>
     </div>
 
     <div id="screen-content" class="container hidden">
-        <button class="back-btn" onclick="app.show('screen-menu')">⬅ <span class="lbl-back">Назад</span></button>
+        <button class="back-btn" onclick="show('screen-menu')">⬅ <span class="lbl-back">Назад</span></button>
         <h2 id="active-cat"></h2>
         <div id="content-area"></div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
 
-        const app = {
-            lang: 'ru',
-            citizen: 'Other',
-            country: '',
-            
-            data: {
-                ru: { back: "Назад", sel: "Выберите страну", chat: "Чат", cat: ["Правила", "Работа", "Еда", "Услуги", "Недвижимость", "Реклама", "Новости", "Документы"], countries: ["Турция 🇹🇷", "Северный Кипр 🇹🇷", "ОАЭ 🇦🇪", "Франция 🇫🇷", "Таиланд 🇹🇭"] },
-                en: { back: "Back", sel: "Select Country", chat: "Chat", cat: ["Rules", "Jobs", "Food", "Services", "Property", "Ads", "News", "Documents"], countries: ["Turkey 🇹🇷", "Northern Cyprus 🇹🇷", "UAE 🇦🇪", "France 🇫🇷", "Thailand 🇹🇭"] }
-            },
+        let state = { lang: 'ru', citizen: 'Other', country: '' };
 
-            visa: {
-                "Северный Кипр 🇹🇷": {
-                    "Russia": "РФ: 30-60 дней без визы по загранпаспорту.",
-                    "EU": "EU: 90 дней. Можно по ID-карте.",
-                    "Other": "30 дней по умолчанию для большинства стран."
-                },
-                "Northern Cyprus 🇹🇷": {
-                    "Russia": "Russia: 30-60 days visa-free with passport.",
-                    "EU": "EU: 90 days. ID-card entry allowed.",
-                    "Other": "30 days default for most visitors."
-                }
-            },
+        const translations = {
+            ru: { back: "Назад", sel: "Выберите страну", cit: "Ваше гражданство?", cat: ["Правила", "Работа", "Еда", "Услуги", "Недвижимость", "Реклама", "Новости", "Документы"], countries: ["Северный Кипр 🇹🇷", "Турция 🇹🇷", "ОАЭ 🇦🇪", "Россия 🇷🇺", "Франция 🇫🇷", "Германия 🇩🇪"] },
+            en: { back: "Back", sel: "Select Country", cit: "Your Citizenship?", cat: ["Rules", "Jobs", "Food", "Services", "Property", "Ads", "News", "Documents"], countries: ["Northern Cyprus 🇹🇷", "Turkey 🇹🇷", "UAE 🇦🇪", "Russia 🇷🇺", "France 🇫🇷", "Germany 🇩🇪"] },
+            tr: { back: "Geri", sel: "Ülke Seçin", cit: "Vatandaşlığınız?", cat: ["Kurallar", "İş", "Yemek", "Hizmetler", "Emlak", "Reklam", "Haberler", "Belgeler"], countries: ["Kuzey Kıbrıs 🇹🇷", "Türkiye 🇹🇷", "BAE 🇦🇪", "Rusya 🇷🇺", "Fransa 🇫🇷", "Almanya 🇩🇪"] }
+            // Другие языки будут использовать английский как базу для меню, если не прописаны
+        };
 
-            show(id) {
-                document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
-                document.getElementById(id).classList.remove('hidden');
-            },
-
-            setLang(l) {
-                this.lang = l;
-                const d = this.data[l] || this.data['en'];
-                document.querySelectorAll('.lbl-back').forEach(span => span.innerText = d.back);
-                document.getElementById('txt-select-country').innerText = d.sel;
-                this.show('screen-citizen');
-            },
-
-            setCitizen(c) {
-                this.citizen = c;
-                this.renderCountries();
-                this.show('screen-countries');
-            },
-
-            renderCountries() {
-                const d = this.data[this.lang] || this.data['en'];
-                const list = document.getElementById('scroll-area');
-                list.innerHTML = '';
-                d.countries.forEach(c => {
-                    const div = document.createElement('div');
-                    div.className = 'card';
-                    div.innerHTML = `<span>${c}</span> <span>➡️</span>`;
-                    div.onclick = () => this.openMenu(c);
-                    list.appendChild(div);
-                });
-            },
-
-            openMenu(c) {
-                this.country = c;
-                const d = this.data[this.lang] || this.data['en'];
-                document.getElementById('active-country').innerText = c;
-                const grid = document.getElementById('menu-grid');
-                grid.innerHTML = '';
-                const icons = ["📜", "💼", "🍴", "🛠", "🏠", "📢", "📰", "📄"];
-                
-                d.cat.forEach((name, i) => {
-                    const btn = document.createElement('button');
-                    btn.className = "wide";
-                    btn.innerHTML = `<span>${icons[i]} ${name}</span> <span>➡️</span>`;
-                    btn.onclick = () => this.openCat(name, i);
-                    grid.appendChild(btn);
-                });
-                this.show('screen-menu');
-            },
-
-            openCat(name, index) {
-                document.getElementById('active-cat').innerText = name;
-                const area = document.getElementById('content-area');
-                area.innerHTML = '';
-
-                if (index === 0) { // Правила
-                    let info = this.visa[this.country] ? (this.visa[this.country][this.citizen] || this.visa[this.country]["Other"]) : "No info yet.";
-                    area.innerHTML = `<div class="info-block"><h3>Border Policy</h3><p>${info}</p></div>`;
-                } else {
-                    area.innerHTML = `<p style="padding:20px; opacity:0.5;">Coming soon for citizens of ${this.citizen}...</p>`;
-                }
-                this.show('screen-content');
+        const visaData = {
+            "Северный Кипр 🇹🇷": {
+                "Russia": "Для граждан РФ: 30-60 дней без визы. Нужен загранпаспорт.",
+                "EU": "Для граждан ЕС: до 90 дней. Можно по ID-карте.",
+                "Other": "30 дней по умолчанию. Проверяйте на границе."
             }
         };
 
-        tg.ready();
-        tg.expand();
+        function show(id) {
+            document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function setLang(l) {
+            state.lang = l;
+            const d = translations[l] || translations['en'];
+            document.querySelectorAll('.lbl-back').forEach(el => el.innerText = d.back);
+            document.getElementById('txt-cit-title').innerText = d.cit;
+            show('screen-citizen');
+        }
+
+        function setCitizen(c) {
+            state.citizen = c;
+            renderCountries();
+            show('screen-countries');
+        }
+
+        function renderCountries() {
+            const d = translations[state.lang] || translations['en'];
+            document.getElementById('txt-sel-country').innerText = d.sel;
+            const area = document.getElementById('scroll-area');
+            area.innerHTML = '';
+            d.countries.forEach(name => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `<span>${name}</span> <span>➡️</span>`;
+                card.onclick = () => openCountry(name);
+                area.appendChild(card);
+            });
+        }
+
+        function openCountry(name) {
+            state.country = name;
+            const d = translations[state.lang] || translations['en'];
+            document.getElementById('active-country').innerText = name;
+            const grid = document.getElementById('menu-grid');
+            grid.innerHTML = '';
+            const icons = ["📜", "💼", "🍴", "🛠", "🏠", "📢", "📰", "📄"];
+            
+            d.cat.forEach((catName, i) => {
+                const btn = document.createElement('button');
+                btn.className = "wide";
+                btn.style.display = "flex";
+                btn.style.justifyContent = "space-between";
+                btn.innerHTML = `<span>${icons[i]} ${catName}</span> <span>➡️</span>`;
+                btn.onclick = () => openInfo(catName, i);
+                grid.appendChild(btn);
+            });
+            show('screen-menu');
+        }
+
+        function openInfo(catName, index) {
+            document.getElementById('active-cat').innerText = catName;
+            const area = document.getElementById('content-area');
+            area.innerHTML = '';
+
+            if (index === 0 && state.country.includes("Северный Кипр")) {
+                let info = visaData["Северный Кипр 🇹🇷"][state.citizen] || visaData["Северный Кипр 🇹🇷"]["Other"];
+                area.innerHTML = `<div class="info-block"><h3>Border Policy</h3><p>${info}</p></div>`;
+            } else {
+                area.innerHTML = `<p style="padding:20px; opacity:0.5;">Контент для категории "${catName}" в разработке для граждан ${state.citizen}.</p>`;
+            }
+            show('screen-content');
+        }
     </script>
 </body>
 </html>
