@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Travel App</title>
+    <title>Travel App Full</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body { margin: 0; padding: 0; background: #050810; color: white; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
@@ -21,9 +21,6 @@
         #scroll-area { max-height: 70vh; overflow-y: auto; padding-right: 5px; }
         #scroll-area::-webkit-scrollbar { width: 4px; }
         #scroll-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-        h1 { font-size: 24px; margin-bottom: 5px; }
-        h2 { font-size: 20px; margin-bottom: 15px; }
-        p { opacity: 0.5; font-size: 13px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -47,7 +44,7 @@
 
     <div id="screen-countries" class="container hidden">
         <button id="btn-back-to-lang" class="back-btn" onclick="showScreen('screen-langs')">⬅ Назад</button>
-        <h2 id="title-countries">Выберите страну 📍</h2>
+        <h2 id="title-countries">Выберите страну</h2>
         <div id="scroll-area"></div>
     </div>
 
@@ -63,51 +60,39 @@
         tg.expand(); tg.ready();
 
         let currentLang = 'ru';
-        let currentCountryKey = '';
+        let currentCountryId = '';
 
-        const countriesList = [
-            { id: "france", ru: "Франция 🇫🇷", en: "France 🇫🇷", tr: "Fransa 🇫🇷", pl: "Francja 🇫🇷", fr: "France 🇫🇷", es: "Francia 🇫🇷", it: "Francia 🇫🇷", de: "Frankreich 🇫🇷", cn: "法国 🇫🇷" },
-            { id: "russia", ru: "Россия 🇷🇺", en: "Russia 🇷🇺", tr: "Rusya 🇷🇺", pl: "Rosja 🇷🇺", fr: "Russie 🇷🇺", es: "Rusia 🇷🇺", it: "Russia 🇷🇺", de: "Russland 🇷🇺", cn: "俄罗斯 🇷🇺" },
-            { id: "turkey", ru: "Турция 🇹🇷", en: "Turkey 🇹🇷", tr: "Türkiye 🇹🇷", pl: "Turcja 🇹🇷", fr: "Turquie 🇹🇷", es: "Turquía 🇹🇷", it: "Turchia 🇹🇷", de: "Türkei 🇹🇷", cn: "土耳其 🇹🇷" },
-            { id: "spain", ru: "Испания 🇪🇸", en: "Spain 🇪🇸", tr: "İspanya 🇪🇸", pl: "Hiszpania 🇪🇸", fr: "Espagne 🇪🇸", es: "España 🇪🇸", it: "Spagna 🇪🇸", de: "Spanien 🇪🇸", cn: "西班牙 🇪🇸" },
-            { id: "italy", ru: "Италия 🇮🇹", en: "Italy 🇮🇹", tr: "İtalya 🇮🇹", pl: "Włochy 🇮🇹", fr: "Italie 🇮🇹", es: "Italia 🇮🇹", it: "Italia 🇮🇹", de: "Italien 🇮🇹", cn: "意大利 🇮🇹" },
-            { id: "germany", ru: "Германия 🇩🇪", en: "Germany 🇩🇪", tr: "Almanya 🇩🇪", pl: "Niemcy 🇩🇪", fr: "Allemagne 🇩🇪", es: "Alemania 🇩🇪", it: "Germania 🇩🇪", de: "Deutschland 🇩🇪", cn: "德国 🇩🇪" },
-            { id: "bali", ru: "Индонезия (Бали) 🇮🇩", en: "Indonesia (Bali) 🇮🇩", tr: "Endonezya (Bali) 🇮🇩", pl: "Indonezja (Bali) 🇮🇩", fr: "Indonésie (Bali) 🇮🇩", es: "Indonesia (Bali) 🇮🇩", it: "Indonesia (Bali) 🇮🇩", de: "Indonesien (Bali) 🇮🇩", cn: "印度尼西亚 (巴厘岛) 🇮🇩" },
-            { id: "thailand", ru: "Таиланд 🇹🇭", en: "Thailand 🇹🇭", tr: "Tayland 🇹🇭", pl: "Tajlandia 🇹🇭", fr: "Thaïlande 🇹🇭", es: "Tailandia 🇹🇭", it: "Thailandia 🇹🇭", de: "Thailand 🇹🇭", cn: "泰国 🇹🇭" },
-            { id: "china", ru: "Китай 🇨🇳", en: "China 🇨🇳", tr: "Çin 🇨🇳", pl: "Chiny 🇨🇳", fr: "Chine 🇨🇳", es: "China 🇨🇳", it: "Cina 🇨🇳", de: "China 🇨🇳", cn: "中国 🇨🇳" },
-            { id: "japan", ru: "Япония 🇯🇵", en: "Japan 🇯🇵", tr: "Japonya 🇯🇵", pl: "Japonia 🇯🇵", fr: "Japon 🇯🇵", es: "Japón 🇯🇵", it: "Giappone 🇯🇵", de: "Japan 🇯🇵", cn: "日本 🇯🇵" },
-            { id: "srilanka", ru: "Шри-Ланка 🇱🇰", en: "Sri Lanka 🇱🇰", tr: "Sri Lanka 🇱🇰", pl: "Sri Lanka 🇱🇰", fr: "Sri Lanka 🇱🇰", es: "Sri Lanka 🇱🇰", it: "Sri Lanka 🇱🇰", de: "Sri Lanka 🇱🇰", cn: "斯里兰卡 🇱🇰" },
-            { id: "qatar", ru: "Катар 🇶🇦", en: "Qatar 🇶🇦", tr: "Katar 🇶🇦", pl: "Katar 🇶🇦", fr: "Qatar 🇶🇦", es: "Catar 🇶🇦", it: "Qatar 🇶🇦", de: "Katar 🇶🇦", cn: "卡塔尔 🇶🇦" },
-            { id: "egypt", ru: "Египет 🇪🇬", en: "Egypt 🇪🇬", tr: "Mısır 🇪🇬", pl: "Egipt 🇪🇬", fr: "Égypte 🇪🇬", es: "Egipto 🇪🇬", it: "Egitto 🇪🇬", de: "Ägypten 🇪🇬", cn: "埃及 🇪🇬" },
-            { id: "mexico", ru: "Мексика 🇲🇽", en: "Mexico 🇲🇽", tr: "Meksika 🇲🇽", pl: "Meksyk 🇲🇽", fr: "Mexique 🇲🇽", es: "México 🇲🇽", it: "Messico 🇲🇽", de: "Mexiko 🇲🇽", cn: "墨西哥 🇲🇽" },
-            { id: "dominicana", ru: "Доминикана 🇩🇴", en: "Dominican Republic 🇩🇴", tr: "Dominik Cum. 🇩🇴", pl: "Dominikana 🇩🇴", fr: "Rép. Dominicaine 🇩🇴", es: "Rep. Dominicana 🇩🇴", it: "Rep. Dominicana 🇩🇴", de: "Dom. Republik 🇩🇴", cn: "多米尼加 🇩🇴" },
-            { id: "usa", ru: "США 🇺🇸", en: "USA 🇺🇸", tr: "ABD 🇺🇸", pl: "USA 🇺🇸", fr: "États-Unis 🇺🇸", es: "EE. UU. 🇺🇸", it: "USA 🇺🇸", de: "USA 🇺🇸", cn: "美国 🇺🇸" },
-            { id: "georgia", ru: "Грузия 🇬🇪", en: "Georgia 🇬🇪", tr: "Gürcistan 🇬🇪", pl: "Gruzja 🇬🇪", fr: "Géorgie 🇬🇪", es: "Georgia 🇬🇪", it: "Georgia 🇬🇪", de: "Georgien 🇬🇪", cn: "格鲁吉亚 🇬🇪" },
-            { id: "armenia", ru: "Армения 🇦🇲", en: "Armenia 🇦🇲", tr: "Ermenistan 🇦🇲", pl: "Armenia 🇦🇲", fr: "Arménie 🇦🇲", es: "Armenia 🇦🇲", it: "Armenia 🇦🇲", de: "Armenien 🇦🇲", cn: "亚美尼亚 🇦🇲" },
-            { id: "kazakhstan", ru: "Казахстан 🇰🇿", en: "Kazakhstan 🇰🇿", tr: "Kazakistan 🇰🇿", pl: "Kazachstan 🇰🇿", fr: "Kazakhstan 🇰🇿", es: "Kazajistán 🇰🇿", it: "Kazakistan 🇰🇿", de: "Kasachstan 🇰🇿", cn: "哈萨克斯坦 🇰🇿" },
-            { id: "portugal", ru: "Португалия 🇵🇹", en: "Portugal 🇵🇹", tr: "Portekiz 🇵🇹", pl: "Portugalia 🇵🇹", fr: "Portugal 🇵🇹", es: "Portugal 🇵🇹", it: "Portogallo 🇵🇹", de: "Portugal 🇵🇹", cn: "葡萄牙 🇵🇹" },
-            { id: "ncyprus", ru: "Северный Кипр 🇹🇷", en: "Northern Cyprus 🇹🇷", tr: "Kuzey Kıbrıs 🇹🇷", pl: "Cypr Północny 🇹🇷", fr: "Chypre du Nord 🇹🇷", es: "Chipre del Norte 🇹🇷", it: "Cipro del Nord 🇹🇷", de: "Nordzypern 🇹🇷", cn: "北塞浦路斯 🇹🇷" },
-            { id: "scyprus", ru: "Южный Кипр 🇨🇾", en: "Southern Cyprus 🇨🇾", tr: "Güney Kıbrıs 🇨🇾", pl: "Cypr Południowy 🇨🇾", fr: "Chypre du Sud 🇨🇾", es: "Chipre del Sur 🇨🇾", it: "Cipro del Sud 🇨🇾", de: "Südzypern 🇨🇾", cn: "南塞浦路斯 🇨🇾" },
-            { id: "uae", ru: "ОАЭ 🇦🇪", en: "UAE 🇦🇪", tr: "BAE 🇦🇪", pl: "ZEA 🇦🇪", fr: "ÉAU 🇦🇪", es: "EAU 🇦🇪", it: "UAE 🇦🇪", de: "VAE 🇦🇪", cn: "阿联酋 🇦🇪" }
+        const countries = [
+            { id: "france", names: { ru: "Франция 🇫🇷", en: "France 🇫🇷", tr: "Fransa 🇫🇷", pl: "Francja 🇫🇷", fr: "France 🇫🇷", es: "Francia 🇫🇷", it: "Francia 🇫🇷", de: "Frankreich 🇫🇷", cn: "法国 🇫🇷" } },
+            { id: "russia", names: { ru: "Россия 🇷🇺", en: "Russia 🇷🇺", tr: "Rusya 🇷🇺", pl: "Rosja 🇷🇺", fr: "Russie 🇷🇺", es: "Rusia 🇷🇺", it: "Russia 🇷🇺", de: "Russland 🇷🇺", cn: "俄罗斯 🇷🇺" } },
+            { id: "turkey", names: { ru: "Турция 🇹🇷", en: "Turkey 🇹🇷", tr: "Türkiye 🇹🇷", pl: "Turcja 🇹🇷", fr: "Turquie 🇹🇷", es: "Turquía 🇹🇷", it: "Turchia 🇹🇷", de: "Türkei 🇹🇷", cn: "土耳其 🇹🇷" } },
+            { id: "spain", names: { ru: "Испания 🇪🇸", en: "Spain 🇪🇸", tr: "İspanya 🇪🇸", pl: "Hiszpania 🇪🇸", fr: "Espagne 🇪🇸", es: "España 🇪🇸", it: "Spagna 🇪🇸", de: "Spanien 🇪🇸", cn: "西班牙 🇪🇸" } },
+            { id: "italy", names: { ru: "Италия 🇮🇹", en: "Italy 🇮🇹", tr: "İtalya 🇮🇹", pl: "Włochy 🇮🇹", fr: "Italie 🇮🇹", es: "Italia 🇮🇹", it: "Italia 🇮🇹", de: "Italien 🇮🇹", cn: "意大利 🇮🇹" } },
+            { id: "germany", names: { ru: "Германия 🇩🇪", en: "Germany 🇩🇪", tr: "Almanya 🇩🇪", pl: "Niemcy 🇩🇪", fr: "Allemagne 🇩🇪", es: "Alemania 🇩🇪", it: "Germania 🇩🇪", de: "Deutschland 🇩🇪", cn: "德国 🇩🇪" } },
+            { id: "bali", names: { ru: "Индонезия (Бали) 🇮🇩", en: "Indonesia (Bali) 🇮🇩", tr: "Endonezya 🇮🇩", pl: "Indonezja 🇮🇩", fr: "Indonésie 🇮🇩", es: "Indonesia 🇮🇩", it: "Indonesia 🇮🇩", de: "Indonesien 🇮🇩", cn: "印尼 🇮🇩" } },
+            { id: "thailand", names: { ru: "Таиланд 🇹🇭", en: "Thailand 🇹🇭", tr: "Tayland 🇹🇭", pl: "Tajlandia 🇹🇭", fr: "Thaïlande 🇹🇭", es: "Tailandia 🇹🇭", it: "Thailandia 🇹🇭", de: "Thailand 🇹🇭", cn: "泰国 🇹🇭" } },
+            { id: "china", names: { ru: "Китай 🇨🇳", en: "China 🇨🇳", tr: "Çin 🇨🇳", pl: "Chiny 🇨🇳", fr: "Chine 🇨🇳", es: "China 🇨🇳", it: "Cina 🇨🇳", de: "China 🇨🇳", cn: "中国 🇨🇳" } },
+            { id: "japan", names: { ru: "Япония 🇯🇵", en: "Japan 🇯🇵", tr: "Japonya 🇯🇵", pl: "Japonia 🇯🇵", fr: "Japon 🇯🇵", es: "Japón 🇯🇵", it: "Giappone 🇯🇵", de: "Japan 🇯🇵", cn: "日本 🇯🇵" } },
+            { id: "srilanka", names: { ru: "Шри-Ланка 🇱🇰", en: "Sri Lanka 🇱🇰", tr: "Sri Lanka 🇱🇰", pl: "Sri Lanka 🇱🇰", fr: "Sri Lanka 🇱🇰", es: "Sri Lanka 🇱🇰", it: "Sri Lanka 🇱🇰", de: "Sri Lanka 🇱🇰", cn: "斯里兰卡 🇱🇰" } },
+            { id: "qatar", names: { ru: "Катар 🇶🇦", en: "Qatar 🇶🇦", tr: "Katar 🇶🇦", pl: "Katar 🇶🇦", fr: "Qatar 🇶🇦", es: "Catar 🇶🇦", it: "Qatar 🇶🇦", de: "Katar 🇶🇦", cn: "卡塔尔 🇶🇦" } },
+            { id: "egypt", names: { ru: "Египет 🇪🇬", en: "Egypt 🇪🇬", tr: "Mısır 🇪🇬", pl: "Egipt 🇪🇬", fr: "Égypte 🇪🇬", es: "Egipto 🇪🇬", it: "Egitto 🇪🇬", de: "Ägypten 🇪🇬", cn: "埃及 🇪🇬" } },
+            { id: "mexico", names: { ru: "Мексика 🇲🇽", en: "Mexico 🇲🇽", tr: "Meksika 🇲🇽", pl: "Meksyk 🇲🇽", fr: "Mexique 🇲🇽", es: "México 🇲🇽", it: "Messico 🇲🇽", de: "Mexiko 🇲🇽", cn: "墨西哥 🇲🇽" } },
+            { id: "dominicana", names: { ru: "Доминикана 🇩🇴", en: "Dominican Republic 🇩🇴", tr: "Dominik Cum. 🇩🇴", pl: "Dominikana 🇩🇴", fr: "Rép. Dominicaine 🇩🇴", es: "Rep. Dominicana 🇩🇴", it: "Rep. Dominicana 🇩🇴", de: "Dom. Rep. 🇩🇴", cn: "多米尼加 🇩🇴" } },
+            { id: "usa", names: { ru: "США 🇺🇸", en: "USA 🇺🇸", tr: "ABD 🇺🇸", pl: "USA 🇺🇸", fr: "États-Unis 🇺🇸", es: "EE.UU. 🇺🇸", it: "USA 🇺🇸", de: "USA 🇺🇸", cn: "美国 🇺🇸" } },
+            { id: "georgia", names: { ru: "Грузия 🇬🇪", en: "Georgia 🇬🇪", tr: "Gürcistan 🇬🇪", pl: "Gruzja 🇬🇪", fr: "Géorgie 🇬🇪", es: "Georgia 🇬🇪", it: "Georgia 🇬🇪", de: "Georgien 🇬🇪", cn: "格鲁吉亚 🇬🇪" } },
+            { id: "armenia", names: { ru: "Армения 🇦🇲", en: "Armenia 🇦🇲", tr: "Ermenistan 🇦🇲", pl: "Armenia 🇦🇲", fr: "Arménie 🇦🇲", es: "Armenia 🇦🇲", it: "Armenia 🇦🇲", de: "Armenien 🇦🇲", cn: "亚美尼亚 🇦🇲" } },
+            { id: "kazakhstan", names: { ru: "Казахстан 🇰🇿", en: "Kazakhstan 🇰🇿", tr: "Kazakistan 🇰🇿", pl: "Kazachstan 🇰🇿", fr: "Kazakhstan 🇰🇿", es: "Kazajistán 🇰🇿", it: "Kazakistan 🇰🇿", de: "Kasachstan 🇰🇿", cn: "哈萨克斯坦 🇰🇿" } },
+            { id: "portugal", names: { ru: "Португалия 🇵🇹", en: "Portugal 🇵🇹", tr: "Portekiz 🇵🇹", pl: "Portugalia 🇵🇹", fr: "Portugal 🇵🇹", es: "Portugal 🇵🇹", it: "Portogallo 🇵🇹", de: "Portugal 🇵🇹", cn: "葡萄牙 🇵🇹" } },
+            { id: "ncyprus", names: { ru: "Сев. Кипр 🇹🇷", en: "N. Cyprus 🇹🇷", tr: "Kuzey Kıbrıs 🇹🇷", pl: "Cypr Płn. 🇹🇷", fr: "Chypre Nord 🇹🇷", es: "Chipre Norte 🇹🇷", it: "Cipro Nord 🇹🇷", de: "Nordzypern 🇹🇷", cn: "北塞浦路斯 🇹🇷" } },
+            { id: "scyprus", names: { ru: "Юж. Кипр 🇨🇾", en: "S. Cyprus 🇨🇾", tr: "Güney Kıbrıs 🇨🇾", pl: "Cypr Płd. 🇨🇾", fr: "Chypre Sud 🇨🇾", es: "Chipre Sur 🇨🇾", it: "Cipro Sud 🇨🇾", de: "Südzypern 🇨🇾", cn: "南塞浦路斯 🇨🇾" } },
+            { id: "uae", names: { ru: "ОАЭ 🇦🇪", en: "UAE 🇦🇪", tr: "BAE 🇦🇪", pl: "ZEA 🇦🇪", fr: "ÉAU 🇦🇪", es: "EAU 🇦🇪", it: "EAU 🇦🇪", de: "VAE 🇦🇪", cn: "阿联酋 🇦🇪" } }
         ];
 
         const translations = {
-            ru: { t: "Выберите страну", b: "⬅ Назад", chat: "Чат сообщества", cats: ["О стране", "Работа", "Еда", "Услуги", "Недвижимость", "Реклама", "Новости", "Документы"] },
-            en: { t: "Select Country", b: "⬅ Back", chat: "Community Chat", cats: ["About Country", "Jobs", "Food", "Services", "Property", "Ads", "News", "Documents"] },
-            tr: { t: "Ülke Seçin", b: "⬅ Geri", chat: "Topluluk Sohbeti", cats: ["Hakkında", "İş", "Yemek", "Hizmetler", "Emlak", "Reklam", "Haberler", "Belgeler"] },
-            pl: { t: "Wybierz kraj", b: "⬅ Wstecz", chat: "Czat społeczności", cats: ["O kraju", "Praca", "Jedzenie", "Usługi", "Nieruchomości", "Reklama", "Wiadomości", "Dokumenty"] },
-            fr: { t: "Choisir un pays", b: "⬅ Retour", chat: "Chat communautaire", cats: ["À propos", "Emplois", "Nourriture", "Services", "Immobilier", "Publicité", "Actualités", "Documents"] },
-            es: { t: "Seleccionar país", b: "⬅ Volver", chat: "Chat de comunidad", cats: ["Sobre el país", "Empleos", "Comida", "Servicios", "Propiedad", "Anuncios", "Noticias", "Documentos"] },
-            it: { t: "Seleziona paese", b: "⬅ Indietro", chat: "Chat community", cats: ["Info paese", "Lavoro", "Cibo", "Servizi", "Proprietà", "Annunci", "News", "Documenti"] },
-            de: { t: "Land wählen", b: "⬅ Zurück", chat: "Community-Chat", cats: ["Über das Land", "Jobs", "Essen", "Dienste", "Immobilien", "Werbung", "News", "Dokumente"] },
-            cn: { t: "选择国家", b: "⬅ 返回", chat: "社区聊天", cats: ["关于国家", "工作", "美食", "服务", "房产", "广告", "新闻", "文件"] }
-        };
-
-        const infoBase = {
-            "france": { ru: "Франция: Эйфелева башня, вино, мода.", en: "France: Eiffel Tower, wine, fashion.", tr: "Fransa: Eyfel Kulesi, şarap, moda.", pl: "Francja: Wieża Eiffla, wino, moda.", fr: "France: Tour Eiffel, vin, mode.", es: "Francia: Torre Eiffel, vino, moda.", it: "Francia: Torre Eiffel, vino, moda.", de: "Frankreich: Eiffelturm, Wein, Mode.", cn: "法国：埃菲尔铁塔、美酒、时尚。" },
-            "kazakhstan": { ru: "Казахстан: Степи, горы, гостеприимство.", en: "Kazakhstan: Steppes, mountains, hospitality.", tr: "Kazakistan: Bozkırlar, dağlar, misafirperverlik.", pl: "Kazachstan: Stepy, góry, gościnność.", fr: "Kazakhstan: Steppes, montagnes, hospitalité.", es: "Kazajistán: Estepas, montañas, hospitalidad.", it: "Kazakistan: Steppe, montagne, ospitalità.", de: "Kasachstan: Steppen, Berge, Gastfreundschaft.", cn: "哈萨克斯坦：草原、高山、热情好客。" },
-            "bali": { ru: "Бали: Серфинг, храмы, джунгли.", en: "Bali: Surfing, temples, jungles.", tr: "Bali: Sörf, tapınaklar, ormanlar.", pl: "Bali: Surfing, świątynie, dżungle.", fr: "Bali: Surf, temples, jungles.", es: "Bali: Surf, templos, selvas.", it: "Bali: Surf, templi, giungle.", de: "Bali: Surfen, Tempel, Dschungel.", cn: "巴厘岛：冲浪、寺庙、丛林。" }
-            // Аналогично добавь для других по желанию, сейчас эти три — пример полной работы
+            ru: { t: "Выберите страну", b: "⬅ Назад", chat: "Чат сообщества", cats: ["О стране", "Работа", "Еда", "Услуги", "Недвижимость", "Реклама", "Новости", "Документы"], info: "Данные обновляются..." },
+            en: { t: "Select Country", b: "⬅ Back", chat: "Community Chat", cats: ["About Country", "Jobs", "Food", "Services", "Property", "Ads", "News", "Documents"], info: "Data updating..." },
+            tr: { t: "Ülke Seçin", b: "⬅ Geri", chat: "Topluluk Sohbeti", cats: ["Hakkında", "İş", "Yemek", "Hizmetler", "Emlak", "Reklam", "Haberler", "Belgeler"], info: "Veriler güncelleniyor..." }
+            // Можно добавить остальные языки в translations по аналогии
         };
 
         function showScreen(id) {
@@ -117,42 +102,39 @@
 
         function changeTo(lang) {
             currentLang = lang;
-            const t = translations[lang];
+            const t = translations[lang] || translations['en'];
             document.getElementById('title-countries').innerText = t.t;
             document.getElementById('btn-back-to-lang').innerText = t.b;
-            
             const area = document.getElementById('scroll-area');
             area.innerHTML = '';
-            
-            countriesList.forEach(c => {
+            countries.forEach(c => {
                 const div = document.createElement('div');
                 div.className = 'card';
-                div.innerHTML = `<span>${c[lang]}</span> <span>➡️</span>`;
-                div.onclick = () => openCountry(c.id, c[lang]);
+                div.innerHTML = `<span>${c.names[lang] || c.names['en']}</span> <span>➡️</span>`;
+                div.onclick = () => openCountry(c.id, c.names[lang] || c.names['en']);
                 area.appendChild(div);
             });
             showScreen('screen-countries');
         }
 
         function openCountry(id, name) {
-            currentCountryKey = id;
-            const t = translations[currentLang];
+            currentCountryId = id;
+            const t = translations[currentLang] || translations['en'];
             document.getElementById('current-country-name').innerText = name;
             document.getElementById('btn-back-to-list').innerText = t.b;
             document.getElementById('m-chat').innerText = t.chat;
-            
             const grid = document.getElementById('menu-grid');
             grid.innerHTML = '';
             const icons = ["📜", "💼", "🍴", "🛠", "🏠", "📢", "📰", "📄"];
-            
             t.cats.forEach((cat, i) => {
                 const btn = document.createElement('button');
                 btn.className = "wide";
                 btn.innerHTML = `${icons[i]} <span>${cat}</span>`;
                 btn.onclick = () => {
-                    if (i === 0) {
-                        let info = (infoBase[id] && infoBase[id][currentLang]) ? infoBase[id][currentLang] : "Information coming soon...";
-                        tg.showPopup({ title: cat, message: info, buttons: [{type: 'ok'}] });
+                    if(i === 0) {
+                        // Здесь логика выдачи инфо по каждой стране
+                        let msg = getCountryInfo(id, currentLang);
+                        tg.showPopup({ title: cat, message: msg, buttons: [{type: 'ok'}] });
                     } else {
                         tg.showAlert(cat + ": " + name);
                     }
@@ -162,7 +144,36 @@
             showScreen('screen-inside');
         }
 
-        function openChat() { tg.showAlert("Chat for " + currentCountryKey); }
+        function getCountryInfo(id, lang) {
+            const data = {
+                france: { ru: "Франция: Валюта Евро. Виза нужна для РФ. Движение правое.", en: "France: Euro. Visa required for non-EU. Right-hand traffic." },
+                russia: { ru: "Россия: Рубль. Огромная территория, разные климатические зоны.", en: "Russia: Ruble. Huge territory, diverse climate." },
+                turkey: { ru: "Турция: Лира. Популярный туризм, виза не нужна до 60-90 дней.", en: "Turkey: Lira. No visa for many countries up to 90 days." },
+                spain: { ru: "Испания: Евро. Шенген. Море, солнце, паэлья.", en: "Spain: Euro. Schengen area. Sun and beaches." },
+                italy: { ru: "Италия: Евро. Шенген. История, кухня, мода.", en: "Italy: Euro. History, cuisine, fashion." },
+                germany: { ru: "Германия: Евро. Шенген. Порядок, автобаны, пиво.", en: "Germany: Euro. Order, highways, beer." },
+                bali: { ru: "Бали (Индонезия): Рупия. Виза по прибытии (VoA). Левое движение.", en: "Bali: Rupiah. Visa on arrival. Left-hand traffic." },
+                thailand: { ru: "Таиланд: Бат. Без визы до 30-60 дней. Левое движение.", en: "Thailand: Baht. Visa free for 30-60 days." },
+                china: { ru: "Китай: Юань. Нужна виза. Великая стена и технологии.", en: "China: Yuan. Visa required. Great Wall and tech." },
+                japan: { ru: "Япония: Иена. Виза нужна. Культура и технологии. Левое движение.", en: "Japan: Yen. Visa required. Tech and culture." },
+                srilanka: { ru: "Шри-Ланка: Рупия. Нужна ETA (электронная виза). Чай и океан.", en: "Sri Lanka: Rupee. ETA required. Tea and ocean." },
+                qatar: { ru: "Катар: Риал. Без визы. Небоскребы и пустыня.", en: "Qatar: Rial. Visa free for many. Deserts and luxury." },
+                egypt: { ru: "Египет: Фунт. Виза в аэропорту. Пирамиды и Красное море.", en: "Egypt: Pound. Visa at airport. Pyramids." },
+                mexico: { ru: "Мексика: Песо. Электронное разрешение. Текила и древние храмы.", en: "Mexico: Peso. Electronic authorization." },
+                dominicana: { ru: "Доминикана: Песо. Без визы. Белоснежные пляжи.", en: "Dominican Republic: Peso. Visa free for many." },
+                usa: { ru: "США: Доллар. Нужна сложная виза. Огромные возможности.", en: "USA: Dollar. Hard visa process. Big opportunities." },
+                georgia: { ru: "Грузия: Лари. Без визы год. Горы, вино и еда.", en: "Georgia: Lari. Visa free for 1 year. Wine and mountains." },
+                armenia: { ru: "Армения: Драм. Без визы. Древние храмы и горы.", en: "Armenia: Dram. Visa free. Ancient history." },
+                kazakhstan: { ru: "Казахстан: Тенге. Без визы. Степи и современные города.", en: "Kazakhstan: Tenge. Visa free. Steppes and modern cities." },
+                portugal: { ru: "Португалия: Евро. Шенген. Океан и история.", en: "Portugal: Euro. Ocean and history." },
+                ncyprus: { ru: "Сев. Кипр: Лира. Виза на границе. Море и казино.", en: "N. Cyprus: Lira. Visa at border. Sea and casinos." },
+                scyprus: { ru: "Юж. Кипр: Евро. Шенген (нац. виза). Пляжи и горы.", en: "S. Cyprus: Euro. National visa/Schengen." },
+                uae: { ru: "ОАЭ: Дирхам. Без визы. Дубай и роскошь.", en: "UAE: Dirham. Visa free on arrival. Luxury and desert." }
+            };
+            return (data[id] && data[id][lang]) ? data[id][lang] : (data[id] ? data[id]['en'] : "Info soon...");
+        }
+
+        function openChat() { tg.showAlert("Чат для " + currentCountryId); }
     </script>
 </body>
 </html>
