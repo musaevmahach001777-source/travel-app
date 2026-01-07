@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Travel App - Luxe</title>
+    <title>Travel App - Sunset</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 0;
-            background: radial-gradient(circle at top, #1c252e 0%, #0f171e 100%);
+            /* Вариант 2: Градиент заката */
+            background: linear-gradient(180deg, #240b36 0%, #c31432 100%);
             color: #ffffff;
             display: flex;
             flex-direction: column;
@@ -23,16 +24,13 @@
             max-width: 360px;
             text-align: center;
             margin-top: 30px;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.2);
             padding: 25px;
             border-radius: 30px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             box-sizing: border-box;
         }
-
-        .hidden { display: none !important; }
 
         .grid {
             display: grid;
@@ -41,8 +39,10 @@
             width: 100%;
         }
 
+        /* Кнопки: Коралловый закат */
         button {
-            background: linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%);
+            background: #ff5f6d;
+            background: linear-gradient(45deg, #ff5f6d, #ffc371);
             color: white;
             border: none;
             padding: 16px 5px;
@@ -50,41 +50,33 @@
             font-size: 14px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
-            -webkit-tap-highlight-color: transparent;
+            box-shadow: 0 4px 15px rgba(255, 95, 109, 0.3);
         }
 
         button.wide { grid-column: span 2; }
         
-        button:active {
-            transform: scale(0.95);
-            filter: brightness(1.1);
-        }
+        button:active { transform: scale(0.95); }
 
         .country-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.1);
             margin-bottom: 12px;
             padding: 20px;
             border-radius: 20px;
-            font-size: 17px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            cursor: pointer;
         }
 
         .back-btn {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             margin-bottom: 20px;
             width: 100%;
-            color: #00d2ff;
-            padding: 12px;
+            color: white;
         }
 
-        h1 { font-size: 24px; margin-bottom: 10px; }
-        p { font-size: 14px; opacity: 0.6; margin-bottom: 25px; }
+        h1 { font-size: 24px; }
+        p { font-size: 14px; opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -105,8 +97,8 @@
         </div>
     </div>
 
-    <div id="country-screen" class="container hidden">
-        <button id="btn-back" class="back-btn" onclick="showLangs()">⬅ Back</button>
+    <div id="country-screen" class="container" style="display: none;">
+        <button id="btn-back" class="back-btn" onclick="location.reload()">⬅ Back</button>
         <h1 id="country-title">In which country are you? 📍</h1>
         <div id="country-list"></div>
     </div>
@@ -114,13 +106,37 @@
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
-        tg.ready();
 
         const translations = {
-            ru: { title: "В какой вы стране? 📍", back: "⬅ Назад", countries: ["Турция 🇹🇷", "ОАЭ 🇦🇪", "Таиланд 🇹🇭"] },
-            en: { title: "In which country are you? 📍", back: "⬅ Back", countries: ["Turkey 🇹🇷", "UAE 🇦🇪", "Thailand 🇹🇭"] },
-            tr: { title: "Hangi ülkedesiniz? 📍", back: "⬅ Geri", countries: ["Türkiye 🇹🇷", "BAE 🇦🇪", "Tayland 🇹🇭"] },
-            pl: { title: "W jakim kraju jesteś? 📍", back: "⬅ Powrót", countries: ["Turcja 🇹🇷", "ZEA 🇦🇪", "Tajlandia 🇹🇭"] },
-            fr: { title: "Dans quel pays êtes-vous ? 📍", back: "⬅ Retour", countries: ["Turquie 🇹🇷", "Émirats 🇦🇪", "Thaïlande 🇹🇭"] },
-            es: { title: "¿En qué país estás? 📍", back: "⬅ Volver", countries: ["Turquía 🇹🇷", "EAU 🇦🇪", "Tailandia 🇹🇭"] },
-            it: { title: "In quale paese ti trovi? 📍", back: "⬅ Indietro", countries
+            ru: { title: "В какой вы стране? 📍", countries: ["Турция 🇹🇷", "ОАЭ 🇦🇪", "Таиланд 🇹🇭"] },
+            en: { title: "In which country are you? 📍", countries: ["Turkey 🇹🇷", "UAE 🇦🇪", "Thailand 🇹🇭"] },
+            tr: { title: "Hangi ülkedesiniz? 📍", countries: ["Türkiye 🇹🇷", "BAE 🇦🇪", "Tayland 🇹🇭"] },
+            pl: { title: "W jakim kraju jesteś? 📍", countries: ["Turcja 🇹🇷", "ZEA 🇦🇪", "Tajlandia 🇹🇭"] },
+            fr: { title: "Dans quel pays êtes-vous ? 📍", countries: ["Turquie 🇹🇷", "Émirats 🇦🇪", "Thaïlande 🇹🇭"] },
+            es: { title: "¿En qué país estás? 📍", countries: ["Turquía 🇹🇷", "EAU 🇦🇪", "Tailandia 🇹🇭"] },
+            it: { title: "In quale paese ti trovi? 📍", countries: ["Turchia 🇹🇷", "Emirati Arabi 🇦🇪", "Thailandia 🇹🇭"] },
+            de: { title: "In welchem Land bist du? 📍", countries: ["Türkei 🇹🇷", "VAE 🇦🇪", "Thailand 🇹🇭"] },
+            cn: { title: "你在哪个国家？ 📍", countries: ["土耳其 🇹🇷", "阿联酋 🇦🇪", "泰国 🇹🇭"] }
+        };
+
+        function setLanguage(lang) {
+            const data = translations[lang];
+            document.getElementById('country-title').innerText = data.title;
+            
+            const list = document.getElementById('country-list');
+            list.innerHTML = '';
+            
+            data.countries.forEach(country => {
+                const card = document.createElement('div');
+                card.className = 'country-card';
+                card.innerHTML = `<span>${country}</span> <span>➡️</span>`;
+                card.onclick = () => tg.showAlert(country);
+                list.appendChild(card);
+            });
+
+            document.getElementById('lang-screen').style.display = 'none';
+            document.getElementById('country-screen').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
