@@ -23,7 +23,7 @@
         .back-btn { margin-bottom: 20px; background: rgba(255, 255, 255, 0.1); border-radius: 15px; height: 45px; font-size: 14px; }
         .chat-btn { background: rgba(0, 210, 255, 0.1); color: #00d2ff; border-color: rgba(0, 210, 255, 0.2); margin-top: auto; }
         
-        .rules-content { text-align: left; line-height: 1.6; font-size: 16px; color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .rules-content { text-align: left; line-height: 1.6; font-size: 15px; color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); overflow-y: auto; max-height: 50vh; }
         
         .hidden { display: none !important; }
         #scroll-area { max-height: 65vh; overflow-y: auto; padding-right: 5px; }
@@ -82,58 +82,80 @@
             tr: { t: "Ülke Seçin 📍", b: "⬅ Geri", cat: ["Kurallar", "İş", "Yemek", "Hizmetler", "Emlak", "Reklam", "Haberler", "Belgeler"], chat: "Topluluk Sohbeti", c: ["Fransa 🇫🇷", "Rusya 🇷🇺", "Türkiye 🇹🇷", "İspanya 🇪🇸", "İtalya 🇮🇹", "Almanya 🇩🇪", "Endonezya (Bali) 🇮🇩", "Tayland 🇹🇭", "Çin 🇨🇳", "Japonya 🇯🇵", "Sri Lanka 🇱🇰", "Katar 🇶🇦", "Mısır 🇪🇬", "Meksika 🇲🇽", "Dominik Cumhuriyeti 🇩🇴", "ABD 🇺🇸", "Gürcistan 🇬🇪", "Ermenistan 🇦🇲", "Kazakistan 🇰🇿", "Portekiz 🇵🇹", "Kuzey Kıbrıs 🇹🇷", "Güney Kıbrıs 🇨🇾", "BAE 🇦🇪"] },
             pl: { t: "Wybierz kraj 📍", b: "⬅ Powrót", cat: ["Zasady", "Praca", "Jedzenie", "Usługi", "Nieruchomości", "Reklama", "Wiadomości", "Dokumenty"], chat: "Czat społeczności", c: ["Francja 🇫🇷", "Rosja 🇷🇺", "Turcja 🇹🇷", "Hiszpania 🇪🇸", "Włochy 🇮🇹", "Niemcy 🇩🇪", "Indonezja (Bali) 🇮🇩", "Tajlandia 🇹🇭", "Chiny 🇨🇳", "Japonia 🇯🇵", "Sri Lanka 🇱🇰", "Katar 🇶🇦", "Egipt 🇪🇬", "Meksyk 🇲🇽", "Dominikana 🇩🇴", "USA 🇺🇸", "Gruzja 🇬🇪", "Armenia 🇦🇲", "Kazakhstan 🇰🇿", "Portugalia 🇵🇹", "Cypr Północny 🇹🇷", "Cypr Południowy 🇨🇾", "ZEA 🇦🇪"] },
             fr: { t: "Choisir un pays 📍", b: "⬅ Retour", cat: ["Règles", "Travail", "Nourriture", "Services", "Immobilier", "Publicité", "Nouvelles", "Documents"], chat: "Chat communautaire", c: ["France 🇫🇷", "Russie 🇷🇺", "Turquie 🇹🇷", "Espagne 🇪🇸", "Italie 🇮🇹", "Allemagne 🇩🇪", "Indonésie (Bali) 🇮🇩", "Thaïlande 🇹🇭", "Chine 🇨🇳", "Japon 🇯🇵", "Sri Lanka 🇱🇰", "Qatar 🇶🇦", "Égypte 🇪🇬", "Mexique 🇲🇽", "République Dominicaine 🇩🇴", "États-Unis 🇺🇸", "Géorgie 🇬🇪", "Arménie 🇦🇲", "Kazakhstan 🇰🇿", "Portugal 🇵🇹", "Chypre du Nord 🇹🇷", "Chypre du Sud 🇨🇾", "Émirats 🇦🇪"] },
-            es: { t: "Seleccionar país 📍", b: "⬅ Volver", cat: ["Reglas", "Trabajo", "Comida", "Servicios", "Inmuebles", "Anuncios", "Noticias", "Documentos"], chat: "Chat de la comunidad", c: ["Francia 🇫🇷", "Rusia 🇷🇺", "Turquía 🇹🇷", "España 🇪🇸", "Italia 🇮🇹", "Alemania 🇩🇪", "Indonesia (Bali) 🇮🇩", "Tailandia 🇹🇭", "China 🇨🇳", "Japón 🇯🇵", "Sri Lanka 🇱🇰", "Catar 🇶🇦", "Egipto 🇪🇬", "México 🇲🇽", "República Dominicana 🇩🇴", "EE. UU. 🇺🇸", "Georgia 🇬🇪", "Armenia 🇦🇲", "Kazajistán 🇰🇿", "Portugal 🇵🇹", "Chipre del Norte 🇹🇷", "Chipre del Sud 🇨🇾", "EAU 🇦🇪"] },
+            es: { t: "Seleccionar país 📍", b: "⬅ Volver", cat: ["Reglas", "Trabajo", "Comida", "Servicios", "Inmuebles", "Anuncios", "Noticias", "Documents"], chat: "Chat de la comunidad", c: ["Francia 🇫🇷", "Rusia 🇷🇺", "Turquía 🇹🇷", "España 🇪🇸", "Italia 🇮🇹", "Alemania 🇩🇪", "Indonesia (Bali) 🇮🇩", "Tailandia 🇹🇭", "China 🇨🇳", "Japón 🇯🇵", "Sri Lanka 🇱🇰", "Catar 🇶🇦", "Egipto 🇪🇬", "México 🇲🇽", "República Dominicana 🇩🇴", "EE. UU. 🇺🇸", "Georgia 🇬🇪", "Armenia 🇦🇲", "Kazajistán 🇰🇿", "Portugal 🇵🇹", "Chipre del Norte 🇹🇷", "Chipre del Sud 🇨🇾", "EAU 🇦🇪"] },
             it: { t: "Scegli il paese 📍", b: "⬅ Indietro", cat: ["Regole", "Lavoro", "Cibo", "Servizi", "Immobili", "Pubblicità", "Notizie", "Documenti"], chat: "Chat della community", c: ["Francia 🇫🇷", "Russia 🇷🇺", "Turchia 🇹🇷", "Spagna 🇪🇸", "Italia 🇮🇹", "Germania 🇩🇪", "Indonesia (Bali) 🇮🇩", "Thailandia 🇹🇭", "Cina 🇨🇳", "Giappone 🇯🇵", "Sri Lanka 🇱🇰", "Qatar 🇶🇦", "Egitto 🇪🇬", "Messico 🇲🇽", "Repubblica Dominicana 🇩🇴", "USA 🇺🇸", "Georgia 🇬🇪", "Armenia 🇦🇲", "Kazakistan 🇰🇿", "Portogallo 🇵🇹", "Cipro del Nord 🇹🇷", "Cipro del Sud 🇨🇾", "EAU 🇦🇪"] },
             de: { t: "Land wählen 📍", b: "⬅ Zurück", cat: ["Regeln", "Arbeit", "Essen", "Dienstleistungen", "Immobilien", "Werbung", "Nachrichten", "Dokumente"], chat: "Community-Chat", c: ["Frankreich 🇫🇷", "Russland 🇷🇺", "Türkei 🇹🇷", "Spanien 🇪🇸", "Italien 🇮🇹", "Deutschland 🇩🇪", "Indonesien (Bali) 🇮🇩", "Thailand 🇹🇭", "China 🇨🇳", "Japan 🇯🇵", "Sri Lanka 🇱🇰", "Katar 🇶🇦", "Ägypten 🇪🇬", "Mexiko 🇲🇽", "Dominikanische Republik 🇩🇴", "USA 🇺🇸", "Georgien 🇬🇪", "Armenien 🇦🇲", "Kasachstan 🇰🇿", "Portugal 🇵🇹", "Nordzypern 🇹🇷", "Südzypern 🇨🇾", "VAE 🇦🇪"] },
             cn: { t: "选择国家 📍", b: "⬅ 返回", cat: ["规则", "工作", "美食", "服务", "房产", "广告", "新闻", "文件"], chat: "社区聊天", c: ["法国 🇫🇷", "俄罗斯 🇷🇺", "土耳其 🇹🇷", "西班牙 🇪🇸", "意大利 🇮🇹", "德国 🇩🇪", "印度尼西亚 (巴厘岛) 🇮🇩", "泰国 🇹🇭", "中国 🇨🇳", "日本 🇯🇵", "斯里兰卡 🇱🇰", "卡塔尔 🇶🇦", "埃及 🇪🇬", "墨西哥 🇲🇽", "多米尼加 🇩🇴", "美国 🇺🇸", "格鲁吉亚 🇬🇪", "亚美尼亚 🇦🇲", "哈萨克斯坦 🇰🇿", "葡萄牙 🇵🇹", "北塞浦路斯 🇹🇷", "南塞浦路斯 🇨🇾", "阿联酋 🇦🇪"] }
         };
 
-        const visaRules = {
-            "Северный Кипр 🇹🇷": {
-                ru: "<b>Срок пребывания:</b><br>• 30-60 дней: СНГ (РФ, РБ, КЗ).<br>• 90 дней: Евросоюз, США, Турция.<br><br><b>Особенности:</b><br>Виза ставится бесплатно в аэропорту или на сухопутной границе.",
-                en: "<b>Duration:</b><br>• 30-60 days: CIS countries.<br>• 90 days: EU, USA, Turkey.<br><br><b>Note:</b><br>Free visa issued at the border.",
-                tr: "<b>Süre:</b><br>• 30-60 gün: BDT.<br>• 90 gün: AB, ABD, Türkiye.",
-                pl: "<b>Czas trwania:</b><br>• 30-60 dni: WNP.<br>• 90 dni: UE, USA, Turcja.",
-                fr: "<b>Durée:</b><br>• 30-60 jours: CEI.<br>• 90 jours: UE, USA, Turquie.",
-                es: "<b>Duración:</b><br>• 30-60 días: CEI.<br>• 90 días: UE, EE.UU., Turquía.",
-                it: "<b>Durata:</b><br>• 30-60 giorni: CSI.<br>• 90 giorni: UE, USA, Turchia.",
-                de: "<b>Dauer:</b><br>• 30-60 Tage: GUS.<br>• 90 Tage: EU, USA, Türkei.",
-                cn: "<b>持续时间：</b><br>• 30-60 天：独联体。<br>• 90 天：欧盟、美国、土耳其。"
-            },
-            "Испания 🇪🇸": {
-                ru: "<b>Правила въезда:</b><br>• Без ограничений: Евросоюз.<br>• 90 дней: США, Украина (биометрия).<br>• С визой: РФ, СНГ (требуется Шенген).",
-                en: "<b>Entry Rules:</b><br>• Unlimited: EU.<br>• 90 days: USA, Ukraine.<br>• Visa required: RU, CIS (Schengen).",
-                tr: "<b>Giriş Kuralları:</b><br>• Sınırsız: AB.<br>• 90 gün: ABD, Ukrayna.<br>• Vizeli: RU, BDT.",
-                pl: "<b>Zasady wjazdu:</b><br>• Bez limitu: UE.<br>• 90 dni: USA, Ukraina.<br>• Z wizą: RU, WNP.",
-                fr: "<b>Règles d'entrée:</b><br>• Illimité: UE.<br>• 90 jours: USA, Ukraine.<br>• Avec visa: RU, CEI.",
-                es: "<b>Reglas de entrada:</b><br>• Ilimitado: UE.<br>• 90 días: EE.UU., Ucrania.<br>• Con visa: RU, CEI.",
-                it: "<b>Regole di ingresso:</b><br>• Illimitato: UE.<br>• 90 giorni: USA, Ucraina.<br>• Con visto: RU, CSI.",
-                de: "<b>Einreisebestimmungen:</b><br>• Unbegrenzt: EU.<br>• 90 Tage: USA, Ukraine.<br>• Mit Visum: RU, GUS.",
-                cn: "<b>入境规则：</b><br>• 欧盟无限制。<br>• 90 天：美国、乌克兰。<br>• 需签证：俄罗斯、独联体。"
-            },
-            "Грузия 🇬🇪": {
-                ru: "<b>Срок:</b><br>• 360 дней (1 год): РФ, Украина, КЗ, РБ, Евросоюз, США, Турция.<br><br><b>Документы:</b><br>Только загранпаспорт.",
-                en: "<b>Duration:</b><br>• 360 days: RU, UA, KZ, BY, EU, USA, Turkey.<br><br><b>Documents:</b><br>Passport only.",
-                tr: "<b>Süre:</b><br>360 gün: RU, UA, BDT, AB, ABD, Türkiye.",
-                pl: "<b>Czas:</b><br>360 dni: RU, UA, WNP, UE, USA, Turcja.",
-                fr: "<b>Durée:</b><br>360 jours: RU, UA, CEI, UE, USA, Turquie.",
-                es: "<b>Duración:</b><br>360 días: RU, UA, CEI, UE, EE.UU., Turquía.",
-                it: "<b>Durata:</b><br>360 giorni: RU, UA, CSI, UE, USA, Turchia.",
-                de: "<b>Dauer:</b><br>360 Tage: RU, UA, GUS, EU, USA, Türkei.",
-                cn: "<b>持续时间：</b><br>360 天：俄罗斯、乌克兰、哈萨克斯坦、白俄罗斯、欧盟、美国、土耳其。"
-            },
-            "Египет 🇪🇬": {
-                ru: "<b>Виза:</b><br>• 30 дней ($25): РФ, Украина, ЕС (в аэропорту).<br>• 15 дней (бесплатно): Синайский штамп (только Шарм).",
-                en: "<b>Visa:</b><br>• 30 days ($25): RU, UA, EU.<br>• 15 days (Free): Sinai stamp.",
-                tr: "<b>Vize:</b><br>30 gün ($25): RU, UA, AB. 15 gün (Bedava): Sina.",
-                pl: "<b>Wiza:</b><br>30 dni ($25): RU, UA, UE. 15 dni (Darmo): Synaj.",
-                fr: "<b>Visa:</b><br>30 jours ($25): RU, UA, UE. 15 jours (Gratuit): Sinaï.",
-                es: "<b>Visa:</b><br>30 días ($25): RU, UA, UE. 15 días (Gratis): Sinaí.",
-                it: "<b>Visto:</b><br>30 giorni ($25): RU, UA, UE. 15 giorni (Gratis): Sinai.",
-                de: "<b>Visum:</b><br>30 Tage ($25): RU, UA, EU. 15 Tage (Gratis): Sinai.",
-                cn: "<b>签证：</b><br>30 天（25 美元）：俄罗斯、乌克兰、欧盟。15 天（免费）：西奈半岛。"
+        // Генератор универсальных правил для всех стран на всех языках
+        function getRuleFor(country, lang) {
+            const base = {
+                ru: "<b>Общие правила:</b><br>• Туризм: до 90 дней.<br>• Нужен загранпаспорт.<br>• СНГ: уточняйте визу.",
+                en: "<b>General Rules:</b><br>• Tourism: up to 90 days.<br>• Passport required.<br>• CIS: check visa status.",
+                tr: "<b>Genel Kurallar:</b><br>• Turizm: 90 güne kadar.<br>• Pasaport gereklidir.",
+                pl: "<b>Zasady ogólne:</b><br>• Turystyka: do 90 dni.<br>• Paszport wymagany.",
+                fr: "<b>Règles générales:</b><br>• Tourisme: jusqu'à 90 jours.<br>• Passeport requis.",
+                es: "<b>Reglas generales:</b><br>• Turismo: hasta 90 días.<br>• Pasaporte requerido.",
+                it: "<b>Regole generali:</b><br>• Turismo: fino a 90 giorni.<br>• Passaporto richiesto.",
+                de: "<b>Allgemeine Regeln:</b><br>• Tourismus: bis zu 90 Tage.<br>• Reisepass erforderlich.",
+                cn: "<b>一般规则：</b><br>• 旅游：长达 90 天。<br>• 需要护照。"
+            };
+
+            const specific = {
+                "Северный Кипр 🇹🇷": {
+                    ru: "30-60 дней СНГ, 90 дней ЕС/Турция.",
+                    en: "30-60 days CIS, 90 days EU/Turkey.",
+                    tr: "30-60 gün BDT, 90 gün AB/Türkiye.",
+                    pl: "30-60 dni WNP, 90 dni UE/Turcja.",
+                    fr: "30-60 jours CEI, 90 jours UE/Turquie.",
+                    es: "30-60 días CEI, 90 días UE/Turquía.",
+                    it: "30-60 giorni CSI, 90 giorni UE/Turchia.",
+                    de: "30-60 Tage GUS, 90 Tage EU/Türkei.",
+                    cn: "30-60 天独联体，90 天欧盟/土耳其。"
+                },
+                "Грузия 🇬🇪": {
+                    ru: "360 дней без визы для большинства стран.",
+                    en: "360 days visa-free for most countries.",
+                    tr: "Çoğu ülke için 360 gün vizesiz.",
+                    pl: "360 dni bez wizy dla większości krajów.",
+                    fr: "360 jours sans visa pour la plupart des pays.",
+                    es: "360 días sin visa para la mayoría de los países.",
+                    it: "360 giorni senza visto per la maggior parte dei paesi.",
+                    de: "360 Tage visumfrei für die meisten Länder.",
+                    cn: "大多数国家 360 天免签。"
+                },
+                "Турция 🇹🇷": {
+                    ru: "60-90 дней для РФ и Украины. 30 дней СНГ.",
+                    en: "60-90 days for RU/UA. 30 days CIS.",
+                    tr: "RU/UA için 60-90 gün. 30 gün BDT.",
+                    pl: "60-90 dni dla RU/UA. 30 dni WNP.",
+                    fr: "60-90 jours pour RU/UA. 30 jours CEI.",
+                    es: "60-90 días para RU/UA. 30 días CEI.",
+                    it: "60-90 giorni per RU/UA. 30 giorni CSI.",
+                    de: "60-90 Tage für RU/UA. 30 Tage GUS.",
+                    cn: "俄罗斯/乌克兰 60-90 天。独联体 30 天。"
+                },
+                "Египет 🇪🇬": {
+                    ru: "Виза по прилете 30 дней ($25). Синай бесплатно 15 дней.",
+                    en: "Visa on arrival 30 days ($25). Sinai free 15 days.",
+                    tr: "Varışta vize 30 gün ($25). Sina 15 gün ücretsiz.",
+                    pl: "Wiza po przyjeździe 30 dni ($25). Synaj 15 dni za darmo.",
+                    fr: "Visa à l'arrivée 30 jours (25 $). Sinaï gratuit 15 jours.",
+                    es: "Visa a la llegada 30 días ($25). Sinaí gratis 15 días.",
+                    it: "Visto all'arrivo 30 giorni ($25). Sinai gratis 15 giorni.",
+                    de: "Visum bei Ankunft 30 Tage ($25). Sinai 15 Tage kostenlos.",
+                    cn: "落地签 30 天（25 美元）。西奈半岛 15 天免签。"
+                }
+            };
+
+            // Проверяем наличие специфического правила, иначе даем базу
+            const rules = specific[country] || specific["default"];
+            if (rules && rules[lang]) {
+                return `<b>${country}</b><br><br>${rules[lang]}<br><br>${base[lang]}`;
             }
-        };
+            return `<b>${country}</b><br><br>${base[lang]}`;
+        }
 
         function showScreen(id) {
             document.querySelectorAll('.container').forEach(s => s.classList.add('hidden'));
@@ -148,7 +170,7 @@
             const list = document.getElementById('scroll-area');
             list.innerHTML = '';
             
-            data.c.sort((a,b) => a.localeCompare(b, lang)).forEach(name => {
+            [...data.c].sort((a,b) => a.localeCompare(b, lang)).forEach(name => {
                 const div = document.createElement('div');
                 div.className = 'card';
                 div.innerHTML = `<span>${name}</span> <span style="opacity:0.3">➡️</span>`;
@@ -173,24 +195,18 @@
                 const btn = document.createElement('button');
                 btn.innerHTML = `${icons[index]} <span>${catName}</span>`;
                 btn.onclick = () => {
-                    if (index === 0) openRulesPage(name);
-                    else tg.showAlert(`${catName}: ${name}`);
+                    if (index === 0) {
+                        document.getElementById('rules-country-title').innerText = catName;
+                        document.getElementById('rules-text-container').innerHTML = getRuleFor(name, currentLang);
+                        document.getElementById('btn-back-to-inside').innerText = data.b;
+                        showScreen('screen-rules');
+                    } else {
+                        tg.showAlert(`${catName}: ${name}`);
+                    }
                 };
                 grid.appendChild(btn);
             });
             showScreen('screen-inside');
-        }
-
-        function openRulesPage(countryName) {
-            const data = dict[currentLang];
-            document.getElementById('btn-back-to-inside').innerText = data.b;
-            document.getElementById('rules-country-title').innerText = `${countryName} — ${data.cat[0]}`;
-            
-            const ruleObj = visaRules[countryName];
-            const text = ruleObj ? (ruleObj[currentLang] || ruleObj['en']) : "Information coming soon...";
-            
-            document.getElementById('rules-text-container').innerHTML = text;
-            showScreen('screen-rules');
         }
 
         function openChat() { tg.showAlert(`${dict[currentLang].chat}: ${selectedCountry}`); }
