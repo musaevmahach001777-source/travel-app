@@ -15,10 +15,9 @@
             display: flex;
             justify-content: center;
             min-height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* АНИМИРОВАННЫЙ ФОН */
         .stars-bg {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -50,7 +49,7 @@
             width: 92%;
             max-width: 360px;
             text-align: center;
-            margin-top: 30px;
+            margin: 30px 0;
             background: rgba(255, 255, 255, 0.03);
             padding: 25px;
             border-radius: 32px;
@@ -59,6 +58,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
             z-index: 10;
+            height: fit-content;
         }
 
         .grid {
@@ -67,7 +67,6 @@
             gap: 12px;
         }
 
-        /* Общий стиль для всех кнопок и карточек */
         button, .country-card {
             background: rgba(255, 255, 255, 0.06);
             color: white;
@@ -89,12 +88,11 @@
         button:active, .country-card:active { 
             background: rgba(255, 255, 255, 0.12); 
             transform: scale(0.97); 
-            border-color: rgba(255, 255, 255, 0.3);
         }
 
         .country-card {
             margin-bottom: 12px;
-            padding: 20px;
+            padding: 18px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -104,14 +102,11 @@
 
         .hidden { display: none !important; }
 
-        /* ИСПРАВЛЕННАЯ КНОПКА НАЗАД */
         .back-btn {
             margin-bottom: 25px;
             width: 100%;
             font-size: 14px;
-            background: rgba(255, 255, 255, 0.06); /* Как у стран */
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Как у стран */
-            color: white; /* Белый текст */
+            color: white;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -120,6 +115,16 @@
         h1 { font-size: 26px; margin-bottom: 10px; }
         h2 { font-size: 20px; margin-bottom: 20px; font-weight: 600; }
         p { opacity: 0.5; font-size: 14px; margin-bottom: 25px; }
+        
+        #country-list {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* Скроллбар для списка стран */
+        #country-list::-webkit-scrollbar { width: 4px; }
+        #country-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -153,16 +158,24 @@
         tg.expand();
         tg.ready();
 
+        const allCountries = [
+            "Франция 🇫🇷", "Россия 🇷🇺", "Турция 🇹🇷", "Испания 🇪🇸", "Италия 🇮🇹", 
+            "Германия 🇩🇪", "Индонезия (Бали) 🇮🇩", "Таиланд 🇹🇭", "Китай 🇨🇳", "Япония 🇯🇵", 
+            "Шри-Ланка 🇱🇰", "Катар 🇶🇦", "Египет 🇪🇬", "Мексика 🇲🇽", "Доминикана 🇩🇴", 
+            "США 🇺🇸", "Грузия 🇬🇪", "Армения 🇦🇲", "Казахстан 🇰🇿", "Португалия 🇵🇹", 
+            "Северный Кипр 🇹🇷", "Южный Кипр 🇨🇾"
+        ];
+
         const dict = {
-            ru: { t: "В какой вы стране? 📍", b: "⬅ Назад", c: ["Турция 🇹🇷", "ОАЭ 🇦🇪", "Таиланд 🇹🇭"] },
-            en: { t: "In which country are you? 📍", b: "⬅ Back", c: ["Turkey 🇹🇷", "UAE 🇦🇪", "Thailand 🇹🇭"] },
-            tr: { t: "Hangi ülkedesiniz? 📍", b: "⬅ Geri", c: ["Türkiye 🇹🇷", "BAE 🇦🇪", "Tayland 🇹🇭"] },
-            pl: { t: "W jakim kraju jesteś? 📍", b: "⬅ Powrót", c: ["Turcja 🇹🇷", "ZEA 🇦🇪", "Tajlandia 🇹🇭"] },
-            fr: { t: "Dans quel pays êtes-vous ? 📍", b: "⬅ Retour", c: ["Turquie 🇹🇷", "Émirats 🇦🇪", "Thaïlande 🇹🇭"] },
-            es: { t: "¿En qué país estás? 📍", b: "⬅ Volver", c: ["Turquía 🇹🇷", "EAU 🇦🇪", "Tailandia 🇹🇭"] },
-            it: { t: "In quale paese ti trovi? 📍", b: "⬅ Indietro", c: ["Turchia 🇹🇷", "Emirati Arabi 🇦🇪", "Thailandia 🇹🇭"] },
-            de: { t: "In welchem Land bist du? 📍", b: "⬅ Zurück", c: ["Türkei 🇹🇷", "VAE 🇦🇪", "Thailand 🇹🇭"] },
-            cn: { t: "你在哪个国家？ 📍", b: "⬅ 返回", c: ["土耳к 🇹🇷", "阿联酋 🇦🇪", "泰国 🇹🇭"] }
+            ru: { t: "В какой вы стране? 📍", b: "⬅ Назад" },
+            en: { t: "In which country are you? 📍", b: "⬅ Back" },
+            tr: { t: "Hangi ülkedesiniz? 📍", b: "⬅ Geri" },
+            pl: { t: "W jakim kraju jesteś? 📍", b: "⬅ Powrót" },
+            fr: { t: "Dans quel pays êtes-vous ? 📍", b: "⬅ Retour" },
+            es: { t: "¿En qué país estás? 📍", b: "⬅ Volver" },
+            it: { t: "In quale paese ti trovi? 📍", b: "⬅ Indietro" },
+            de: { t: "In welchem Land bist du? 📍", b: "⬅ Zurück" },
+            cn: { t: "你在哪个国家？ 📍", b: "⬅ 返回" }
         };
 
         function changeTo(lang) {
@@ -170,18 +183,21 @@
             const data = dict[lang];
             document.getElementById('title-text').innerText = data.t;
             document.getElementById('back-text').innerText = data.b;
+            
             const list = document.getElementById('country-list');
             list.innerHTML = '';
-            data.c.forEach(name => {
+            
+            allCountries.forEach(name => {
                 const div = document.createElement('div');
                 div.className = 'country-card';
-                div.innerHTML = `<span>${name}</span> <span style="opacity:0.5">➡️</span>`;
+                div.innerHTML = `<span>${name}</span> <span style="opacity:0.3">➡️</span>`;
                 div.onclick = () => {
                     if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
                     tg.showAlert(name);
                 };
                 list.appendChild(div);
             });
+
             document.getElementById('screen-langs').classList.add('hidden');
             document.getElementById('screen-countries').classList.remove('hidden');
         }
