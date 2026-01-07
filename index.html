@@ -3,34 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Travel App - Minimalist</title>
+    <title>Travel App - Starfall</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 0;
-            /* Вариант 3: Мягкий светлый градиент */
-            background: linear-gradient(180deg, #e0eafc 0%, #cfdef3 100%);
-            color: #2c3e50;
+            background: #050b14; /* Глубокий космический цвет */
+            color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            overflow: hidden; /* Чтобы звезды не создавали прокрутку */
         }
 
+        /* АНИМАЦИЯ ЗВЕЗД */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+
+        /* КОНТЕЙНЕР */
         .container {
             width: 90%;
             max-width: 360px;
             text-align: center;
-            margin-top: 30px;
-            background: rgba(255, 255, 255, 0.7);
+            margin-top: 50px;
+            background: rgba(255, 255, 255, 0.05);
             padding: 25px;
             border-radius: 30px;
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1;
         }
 
         .grid {
@@ -40,51 +64,51 @@
             width: 100%;
         }
 
-        /* Кнопки: Чистый белый с тенью */
         button {
-            background: #ffffff;
-            color: #2c3e50;
-            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 16px 5px;
-            border-radius: 20px;
+            border-radius: 18px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            transition: all 0.2s;
+            transition: all 0.3s;
         }
 
         button.wide { grid-column: span 2; }
         
         button:active { 
+            background: rgba(255, 255, 255, 0.2);
             transform: scale(0.95);
-            background: #f8f9fa;
         }
 
         .country-card {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.07);
             margin-bottom: 12px;
             padding: 20px;
-            border-radius: 22px;
+            border-radius: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
-            color: #2c3e50;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .back-btn {
-            background: rgba(0, 0, 0, 0.05);
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             margin-bottom: 20px;
             width: 100%;
-            color: #2c3e50;
+            color: #aaa;
         }
 
-        h1 { font-size: 24px; color: #1a2a3a; }
-        p { font-size: 14px; opacity: 0.7; }
+        h1 { font-size: 24px; letter-spacing: 1px; }
+        p { font-size: 14px; opacity: 0.6; }
     </style>
 </head>
 <body>
+
+    <div class="stars-container" id="star-field"></div>
 
     <div id="lang-screen" class="container">
         <h1>Welcome! 🌍</h1>
@@ -112,8 +136,26 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
+        // Генерация звезд
+        const starField = document.getElementById('star-field');
+        for (let i = 0; i < 80; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 3 + 'px';
+            star.style.width = size;
+            star.style.height = size;
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
+            starField.appendChild(star);
+        }
+
         const translations = {
             ru: { title: "В какой вы стране? 📍", countries: ["Турция 🇹🇷", "ОАЭ 🇦🇪", "Таиланд 🇹🇭"] },
             en: { title: "In which country are you? 📍", countries: ["Turkey 🇹🇷", "UAE 🇦🇪", "Thailand 🇹🇭"] },
             tr: { title: "Hangi ülkedesiniz? 📍", countries: ["Türkiye 🇹🇷", "BAE 🇦🇪", "Tayland 🇹🇭"] },
-            pl: { title: "W jakim kraju
+            pl: { title: "W jakim kraju jesteś? 📍", countries: ["Turcja 🇹🇷", "ZEA 🇦🇪", "Tajlandia 🇹🇭"] },
+            fr: { title: "Dans quel pays êtes-vous ? 📍", countries: ["Turquie 🇹🇷", "Émirats 🇦🇪", "Thaïlande 🇹🇭"] },
+            es: { title: "¿En qué país estás? 📍", countries: ["Turquía 🇹🇷", "EAU 🇦🇪", "Tailandia 🇹🇭"] },
+            it: { title: "In quale paese ti trovi? 📍", countries: ["Turchia 🇹🇷", "Emirati Arabi 🇦🇪", "Thailandia 🇹🇭"] },
+            de: { title: "In welchem Land bist du? 📍", countries: ["Türkei 🇹🇷", "VAE 🇦
