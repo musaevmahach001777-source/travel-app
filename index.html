@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Travel Starfall</title>
+    <title>Travel Starfall Luxe</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
@@ -11,14 +11,14 @@
             padding: 0;
             background: #050810;
             color: white;
-            font-family: -apple-system, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
             display: flex;
             justify-content: center;
             min-height: 100vh;
             overflow: hidden;
         }
 
-        /* АНИМИРОВАННЫЙ ФОН (ЧИСТЫЙ CSS) */
+        /* АНИМИРОВАННЫЙ ФОН СО ЗВЕЗДАМИ */
         .stars-bg {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -26,7 +26,6 @@
             z-index: -1;
         }
 
-        /* Эффект мерцающих точек */
         .stars-bg::after {
             content: "";
             position: absolute;
@@ -35,13 +34,12 @@
                 radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
                 radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
                 radial-gradient(1.5px 1.5px at 50px 160px, #ddd, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 80px 120px, #fff, rgba(0,0,0,0)),
-                radial-gradient(2.5px 2.5px at 110px 10px, #fff, rgba(0,0,0,0)),
-                radial-gradient(1px 1px at 150px 50px, #eee, rgba(0,0,0,0));
+                radial-gradient(2px 2px at 80px 120px, #fff, rgba(0,0,0,0));
             background-repeat: repeat;
-            background-size: 200px 200px;
-            animation: starsAnim 100s linear infinite;
-            opacity: 0.4;
+            background-size: 250px 250px;
+            /* Ускоренная анимация: 40s вместо 100s */
+            animation: starsAnim 40s linear infinite;
+            opacity: 0.5;
         }
 
         @keyframes starsAnim {
@@ -49,20 +47,21 @@
             to { transform: translateY(-50%); }
         }
 
-        /* ИНТЕРФЕЙС */
         .container {
-            width: 90%;
+            width: 92%;
             max-width: 360px;
             text-align: center;
-            margin-top: 40px;
-            background: rgba(255, 255, 255, 0.05);
+            margin-top: 30px;
+            /* Эффект стекла: меньше непрозрачности */
+            background: rgba(255, 255, 255, 0.03);
             padding: 25px;
-            border-radius: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             position: relative;
             z-index: 10;
-            height: fit-content;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
 
         .grid {
@@ -72,39 +71,49 @@
         }
 
         button {
-            background: rgba(255, 255, 255, 0.08);
+            /* Кнопки стали прозрачнее */
+            background: rgba(255, 255, 255, 0.05);
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 16px 5px;
-            border-radius: 18px;
+            border-radius: 20px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.2s ease;
             -webkit-tap-highlight-color: transparent;
         }
 
         button.wide { grid-column: span 2; }
-        button:active { background: rgba(255, 255, 255, 0.2); transform: scale(0.96); }
+        button:active { background: rgba(255, 255, 255, 0.15); transform: scale(0.96); border-color: #00d2ff; }
 
         .country-card {
-            background: rgba(255, 255, 255, 0.07);
+            background: rgba(255, 255, 255, 0.06);
             margin-bottom: 12px;
-            padding: 18px;
-            border-radius: 20px;
+            padding: 20px;
+            border-radius: 22px;
             display: flex;
             justify-content: space-between;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
         }
 
         .hidden { display: none !important; }
 
         .back-btn {
-            background: none;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 20px;
+            background: rgba(0, 210, 255, 0.05);
+            border: 1px solid rgba(0, 210, 255, 0.2);
+            margin-bottom: 25px;
             width: 100%;
             color: #00d2ff;
+            font-size: 13px;
+            letter-spacing: 0.5px;
         }
+
+        h1 { font-size: 26px; margin-bottom: 10px; }
+        h2 { font-size: 20px; margin-bottom: 20px; font-weight: 600; }
+        p { opacity: 0.5; font-size: 14px; margin-bottom: 25px; }
     </style>
 </head>
 <body>
@@ -113,7 +122,7 @@
 
     <div id="screen-langs" class="container">
         <h1>Welcome! 🌍</h1>
-        <p style="opacity: 0.6; font-size: 14px; margin-bottom: 20px;">Choose your language</p>
+        <p>Choose your language</p>
         <div class="grid">
             <button onclick="changeTo('ru')">Русский 🇷🇺</button>
             <button onclick="changeTo('en')">English 🇺🇸</button>
@@ -121,14 +130,14 @@
             <button onclick="changeTo('pl')">Polski 🇵🇱</button>
             <button onclick="changeTo('fr')">Français 🇫🇷</button>
             <button onclick="changeTo('es')">Español 🇪🇸</button>
-            <button onclick="changeTo('it')">Italiano 🇮🇹</button>
+            <button onclick="setLanguage('it')">Italiano 🇮🇹</button>
             <button onclick="changeTo('de')">Deutsch 🇩🇪</button>
             <button class="wide" onclick="changeTo('cn')">中文 🇨🇳</button>
         </div>
     </div>
 
     <div id="screen-countries" class="container hidden">
-        <button class="back-btn" onclick="location.reload()">⬅ Back / Назад</button>
+        <button id="back-text" class="back-btn" onclick="goBack()">⬅ Назад</button>
         <h2 id="title-text">В какой вы стране? 📍</h2>
         <div id="country-list"></div>
     </div>
@@ -139,34 +148,46 @@
         tg.ready();
 
         const dict = {
-            ru: { t: "В какой вы стране? 📍", c: ["Турция 🇹🇷", "ОАЭ 🇦🇪", "Таиланд 🇹🇭"] },
-            en: { t: "In which country are you? 📍", c: ["Turkey 🇹🇷", "UAE 🇦🇪", "Thailand 🇹🇭"] },
-            tr: { t: "Hangi ülkedesiniz? 📍", c: ["Türkiye 🇹🇷", "BAE 🇦🇪", "Tayland 🇹🇭"] },
-            pl: { t: "W jakim kraju jesteś? 📍", c: ["Turcja 🇹🇷", "ZEA 🇦🇪", "Tajlandia 🇹🇭"] },
-            fr: { t: "Dans quel pays êtes-vous ? 📍", c: ["Turquie 🇹🇷", "Émirats 🇦🇪", "Thaïlande 🇹🇭"] },
-            es: { t: "¿En qué país estás? 📍", c: ["Turquía 🇹🇷", "EAU 🇦🇪", "Tailandia 🇹🇭"] },
-            it: { t: "In quale paese ti trovi? 📍", c: ["Turchia 🇹🇷", "Emirati Arabi 🇦🇪", "Thailandia 🇹🇭"] },
-            de: { t: "In welchem Land bist du? 📍", c: ["Türkei 🇹🇷", "VAE 🇦🇪", "Thailand 🇹🇭"] },
-            cn: { t: "你在哪个国家？ 📍", c: ["土耳其 🇹🇷", "阿联酋 🇦🇪", "泰国 🇹🇭"] }
+            ru: { t: "В какой вы стране? 📍", b: "⬅ Назад", c: ["Турция 🇹🇷", "ОАЭ 🇦🇪", "Таиланд 🇹🇭"] },
+            en: { t: "In which country are you? 📍", b: "⬅ Back", c: ["Turkey 🇹🇷", "UAE 🇦🇪", "Thailand 🇹🇭"] },
+            tr: { t: "Hangi ülkedesiniz? 📍", b: "⬅ Geri", c: ["Türkiye 🇹🇷", "BAE 🇦🇪", "Tayland 🇹🇭"] },
+            pl: { t: "W jakim kraju jesteś? 📍", b: "⬅ Powrót", c: ["Turcja 🇹🇷", "ZEA 🇦🇪", "Tajlandia 🇹🇭"] },
+            fr: { t: "Dans quel pays êtes-vous ? 📍", b: "⬅ Retour", c: ["Turquie 🇹🇷", "Émirats 🇦🇪", "Thaïlande 🇹🇭"] },
+            es: { t: "¿En qué país estás? 📍", b: "⬅ Volver", c: ["Turquía 🇹🇷", "EAU 🇦🇪", "Tailandia 🇹🇭"] },
+            it: { t: "In quale paese ti trovi? 📍", b: "⬅ Indietro", c: ["Turchia 🇹🇷", "Emirati Arabi 🇦🇪", "Thailandia 🇹🇭"] },
+            de: { t: "In welchem Land bist du? 📍", b: "⬅ Zurück", c: ["Türkei 🇹🇷", "VAE 🇦🇪", "Thailand 🇹🇭"] },
+            cn: { t: "你在哪个国家？ 📍", b: "⬅ 返回", c: ["土耳其 🇹🇷", "阿联酋 🇦🇪", "泰国 🇹🇭"] }
         };
 
         function changeTo(lang) {
-            tg.HapticFeedback.impactOccurred('light');
+            tg.HapticFeedback.impactOccurred('medium');
             const data = dict[lang];
+            
             document.getElementById('title-text').innerText = data.t;
+            document.getElementById('back-text').innerText = data.b;
             
             const list = document.getElementById('country-list');
             list.innerHTML = '';
+            
             data.c.forEach(name => {
                 const div = document.createElement('div');
                 div.className = 'country-card';
-                div.innerHTML = `<span>${name}</span> <span>➡️</span>`;
-                div.onclick = () => tg.showAlert(name);
+                div.innerHTML = `<span>${name}</span> <span style="color:#00d2ff">➡️</span>`;
+                div.onclick = () => {
+                    tg.HapticFeedback.selectionChanged();
+                    tg.showAlert(name);
+                };
                 list.appendChild(div);
             });
 
             document.getElementById('screen-langs').classList.add('hidden');
             document.getElementById('screen-countries').classList.remove('hidden');
+        }
+
+        function goBack() {
+            tg.HapticFeedback.impactOccurred('light');
+            document.getElementById('screen-countries').classList.add('hidden');
+            document.getElementById('screen-langs').classList.remove('hidden');
         }
     </script>
 </body>
