@@ -1,106 +1,11 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travel App</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        /* Настройки фона всей страницы */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            /* Градиентный фон (можно заменить на картинку) */
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px); /* Эффект матового стекла */
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            width: 80%;
-        }
-
-        h1 {
-            margin-bottom: 10px;
-            font-size: 24px;
-        }
-
-        p {
-            margin-bottom: 25px;
-            opacity: 0.8;
-        }
-
-        /* Настройка дизайна кнопок */
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            width: 100%;
-        }
-
-        button {
-            padding: 15px;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.3s;
-            color: white;
-            /* Оранжевый цвет как основной акцент */
-            background: #ff9800; 
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Эффект при нажатии */
-        button:active {
-            transform: scale(0.95);
-            background: #e68a00;
-        }
-
-        .footer {
-            margin-top: 30px;
-            font-size: 12px;
-            opacity: 0.5;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <h1>Welcome! 🌍</h1>
-        <p>Choose your language / Выберите язык</p>
-        
-        <div class="grid">
-            <button onclick="selectLang('ru')">Русский RU</button>
-            <button onclick="selectLang('en')">English GB</button>
-            <button onclick="selectLang('cn')">中文 CN</button>
-            <button onclick="selectLang('de')">Deutsch DE</button>
-        </div>
-
-        <div class="footer">@travelles_bot</div>
-    </div>
-
-    <script>
-        let tg = window.Telegram.WebApp;
-        tg.expand(); // Разворачивает приложение на весь экран
-
-        function selectLang(lang) {
-            // Здесь будет логика перехода к списку стран
-            alert("Вы выбрали: " + lang);
-        }
-    </script>
-</body>
-</html>
+<div class="grid">
+    <button onclick="selectLang('ru')">Русский 🇷🇺</button>
+    <button onclick="selectLang('en')">English 🇺🇸</button>
+    <button onclick="selectLang('tr')">Türkçe 🇹🇷</button>
+    <button onclick="selectLang('pl')">Polski 🇵🇱</button>
+    <button onclick="selectLang('fr')">Français 🇫🇷</button>
+    <button onclick="selectLang('es')">Español 🇪🇸</button>
+    <button onclick="selectLang('it')">Italiano 🇮🇹</button>
+    <button onclick="selectLang('de')">Deutsch 🇩🇪</button>
+    <button onclick="selectLang('cn')">中文 🇨🇳</button>
+</div>
