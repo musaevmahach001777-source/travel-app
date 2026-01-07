@@ -8,34 +8,33 @@
     <style>
         body { margin: 0; padding: 0; background: #050810; color: white; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
         .stars-bg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%); z-index: -1; }
-        .stars-bg::after { content: ""; position: absolute; top: 0; left: 0; width: 200%; height: 200%; background-image: radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)), radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)); background-repeat: repeat; background-size: 250px 250px; animation: starsAnim 35s linear infinite; opacity: 0.5; }
+        .stars-bg::after { content: ""; position: absolute; top: 0; left: 0; width: 200%; height: 200%; background-image: radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)), radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)); background-repeat: repeat; background-size: 250px 250px; animation: starsAnim 35s linear infinite; opacity: 0.3; }
         @keyframes starsAnim { from { transform: translateY(0); } to { transform: translateY(-50%); } }
         
-        .container { width: 92%; max-width: 360px; text-align: center; margin: 30px 0; background: rgba(255, 255, 255, 0.03); padding: 25px; border-radius: 32px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); position: relative; z-index: 10; height: fit-content; }
+        .container { width: 92%; max-width: 360px; text-align: center; margin: 20px 0; background: rgba(255, 255, 255, 0.03); padding: 25px; border-radius: 32px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); position: relative; z-index: 10; height: fit-content; }
         
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        button, .card { background: rgba(255, 255, 255, 0.06); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; }
+        button, .card { background: rgba(255, 255, 255, 0.06); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; outline: none; }
         button { padding: 14px 5px; font-size: 13px; font-weight: 600; cursor: pointer; }
         button.wide { grid-column: span 2; }
-        button:active, .card:active { background: rgba(255, 255, 255, 0.12); transform: scale(0.97); }
+        button:active, .card:active { background: rgba(255, 255, 255, 0.15); transform: scale(0.98); }
         
         .card { margin-bottom: 12px; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; text-align: left; }
-        .chat-btn { background: rgba(0, 210, 255, 0.08); border-color: rgba(0, 210, 255, 0.2); color: #00d2ff; margin-top: 10px; }
+        .chat-btn { background: rgba(0, 210, 255, 0.1); border-color: rgba(0, 210, 255, 0.3); color: #00d2ff; margin-top: 10px; }
         
         .hidden { display: none !important; }
-        .back-btn { margin-bottom: 20px; width: 100%; font-size: 14px; color: white; display: flex; justify-content: center; align-items: center; }
+        .back-btn { margin-bottom: 20px; width: 100%; font-size: 14px; color: white; display: flex; justify-content: center; align-items: center; height: 45px; }
 
-        /* Стили для контента */
         .info-block { background: rgba(255, 255, 255, 0.05); border-radius: 18px; padding: 15px; margin-bottom: 10px; text-align: left; border-left: 3px solid #00d2ff; }
         .info-block h3 { margin: 0 0 5px 0; font-size: 16px; color: #00d2ff; }
         .info-block p { margin: 0; font-size: 14px; opacity: 0.8; line-height: 1.4; }
 
-        #scroll-area, #content-area { max-height: 60vh; overflow-y: auto; padding-right: 5px; }
+        #scroll-area, #content-area { max-height: 55vh; overflow-y: auto; padding-right: 5px; }
         #scroll-area::-webkit-scrollbar, #content-area::-webkit-scrollbar { width: 4px; }
         #scroll-area::-webkit-scrollbar-thumb, #content-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
         
         h1 { font-size: 26px; margin-bottom: 10px; }
-        h2 { font-size: 22px; margin-bottom: 15px; color: #fff; }
+        h2 { font-size: 20px; margin-bottom: 15px; color: #fff; }
     </style>
 </head>
 <body>
@@ -58,4 +57,32 @@
     </div>
 
     <div id="screen-countries" class="container hidden">
-        <button id="btn-back-to-lang" class="back-btn
+        <button class="back-btn" onclick="showScreen('screen-langs')">⬅ <span class="back-label">Back</span></button>
+        <h2 id="title-countries">Select Country</h2>
+        <div id="scroll-area"></div>
+    </div>
+
+    <div id="screen-inside" class="container hidden">
+        <button class="back-btn" onclick="showScreen('screen-countries')">⬅ <span class="back-label">Back</span></button>
+        <h2 id="current-country-name">Country Name</h2>
+        <div id="menu-grid" class="grid"></div>
+        <button class="wide chat-btn" onclick="openChat()">💬 <span id="m-chat-label">Community Chat</span></button>
+    </div>
+
+    <div id="screen-content" class="container hidden">
+        <button class="back-btn" onclick="showScreen('screen-inside')">⬅ <span class="back-label">Back</span></button>
+        <h2 id="content-title">Category</h2>
+        <div id="content-area"></div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        let currentLang = 'ru';
+        let selectedCountry = '';
+
+        const dict = {
+            ru: { t: "Выберите страну 📍", b: "Назад", chat: "Чат сообщества", cat: ["Правила", "Работа", "Еда", "Услуги", "Недвижимость", "Реклама", "Новости", "Документы"], c: ["Франция 🇫🇷", "Россия 🇷🇺", "Турция 🇹🇷", "Испания 🇪🇸", "Италия 🇮🇹", "Германия 🇩🇪", "Индонезия (Бали) 🇮🇩", "Таиланд 🇹🇭", "Китай 🇨🇳", "Япония 🇯🇵", "Шри-Ланка 🇱🇰", "Катар 🇶🇦", "Египет 🇪🇬", "Мексика 🇲🇽", "Доминикана 🇩🇴", "США 🇺🇸", "Грузия 🇬🇪", "Армения 🇦🇲", "Казахстан 🇰🇿", "Португалия 🇵🇹", "Северный Кипр 🇹🇷", "Южный Кипр 🇨🇾"] },
+            en: { t: "Select Country 📍", b: "Back", chat: "Community Chat", cat: ["Rules", "Jobs", "Food", "Services", "Property", "Ads",
