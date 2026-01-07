@@ -10,20 +10,25 @@
         .stars-bg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%); z-index: -1; }
         .stars-bg::after { content: ""; position: absolute; top: 0; left: 0; width: 200%; height: 200%; background-image: radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)), radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)); background-repeat: repeat; background-size: 250px 250px; animation: starsAnim 35s linear infinite; opacity: 0.5; }
         @keyframes starsAnim { from { transform: translateY(0); } to { transform: translateY(-50%); } }
-        .container { width: 92%; max-width: 360px; text-align: center; margin: 30px 0; background: rgba(255, 255, 255, 0.03); padding: 25px; border-radius: 32px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); position: relative; z-index: 10; height: fit-content; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        button, .card { background: rgba(255, 255, 255, 0.06); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; }
-        button { padding: 14px 5px; font-size: 13px; font-weight: 600; cursor: pointer; }
-        button.wide { grid-column: span 2; }
-        button:active, .card:active { background: rgba(255, 255, 255, 0.12); transform: scale(0.97); }
-        .card { margin-bottom: 12px; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .chat-btn { background: rgba(0, 210, 255, 0.08); border-color: rgba(0, 210, 255, 0.2); color: #00d2ff; margin-top: 10px; }
+        
+        .container { width: 92%; max-width: 360px; text-align: center; margin: 20px 0; background: rgba(255, 255, 255, 0.03); padding: 25px; border-radius: 32px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); position: relative; z-index: 10; height: fit-content; min-height: 80vh; display: flex; flex-direction: column; }
+        
+        .grid { display: grid; grid-template-columns: 1fr; gap: 12px; width: 100%; }
+        button, .card { background: rgba(255, 255, 255, 0.06); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; width: 100%; box-sizing: border-box; }
+        button { padding: 16px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        button:active { background: rgba(255, 255, 255, 0.12); transform: scale(0.98); }
+        
+        .card { margin-bottom: 10px; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .back-btn { margin-bottom: 20px; background: rgba(255, 255, 255, 0.1); border-radius: 15px; height: 45px; font-size: 14px; }
+        .chat-btn { background: rgba(0, 210, 255, 0.1); color: #00d2ff; border-color: rgba(0, 210, 255, 0.2); margin-top: auto; }
+        
+        .rules-content { text-align: left; line-height: 1.6; font-size: 16px; color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        
         .hidden { display: none !important; }
-        .back-btn { margin-bottom: 20px; width: 100%; font-size: 14px; color: white; display: flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; height: 45px; }
-        #scroll-area { max-height: 60vh; overflow-y: auto; padding-right: 5px; }
-        h1 { font-size: 26px; margin-bottom: 10px; }
-        h2 { font-size: 22px; margin-bottom: 15px; color: #fff; }
-        p { opacity: 0.5; font-size: 14px; margin-bottom: 25px; }
+        #scroll-area { max-height: 65vh; overflow-y: auto; padding-right: 5px; }
+        h1 { font-size: 24px; margin: 10px 0; }
+        h2 { font-size: 20px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -31,8 +36,8 @@
 
     <div id="screen-langs" class="container">
         <h1>Welcome! 🌍</h1>
-        <p>Choose your language</p>
-        <div class="grid">
+        <p style="opacity: 0.6;">Choose your language</p>
+        <div class="grid" style="grid-template-columns: 1fr 1fr;">
             <button onclick="changeTo('ru')">Русский 🇷🇺</button>
             <button onclick="changeTo('en')">English 🇺🇸</button>
             <button onclick="changeTo('tr')">Türkçe 🇹🇷</button>
@@ -41,27 +46,33 @@
             <button onclick="changeTo('es')">Español 🇪🇸</button>
             <button onclick="changeTo('it')">Italiano 🇮🇹</button>
             <button onclick="changeTo('de')">Deutsch 🇩🇪</button>
-            <button class="wide" onclick="changeTo('cn')">中文 🇨🇳</button>
+            <button style="grid-column: span 2;" onclick="changeTo('cn')">中文 🇨🇳</button>
         </div>
     </div>
 
     <div id="screen-countries" class="container hidden">
         <button id="btn-back-to-lang" class="back-btn" onclick="showScreen('screen-langs')">⬅ Назад</button>
         <h2 id="title-countries">Выберите страну 📍</h2>
-        <div id="scroll-area"></div>
+        <div id="scroll-area" class="grid"></div>
     </div>
 
     <div id="screen-inside" class="container hidden">
         <button id="btn-back-to-list" class="back-btn" onclick="showScreen('screen-countries')">⬅ Назад</button>
         <h2 id="current-country-name">Country</h2>
         <div id="menu-grid" class="grid"></div>
-        <button class="wide chat-btn" onclick="openChat()">💬 <span id="m-chat">Community Chat</span></button>
+        <button class="chat-btn" onclick="openChat()">💬 <span id="m-chat">Community Chat</span></button>
+    </div>
+
+    <div id="screen-rules" class="container hidden">
+        <button id="btn-back-to-inside" class="back-btn" onclick="showScreen('screen-inside')">⬅ Назад</button>
+        <h2 id="rules-country-title">Правила</h2>
+        <div id="rules-text-container" class="rules-content"></div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.expand(); tg.ready();
-
+        tg.expand();
+        
         let currentLang = 'ru';
         let selectedCountry = '';
 
@@ -79,169 +90,48 @@
 
         const visaRules = {
             "Северный Кипр 🇹🇷": {
-                ru: "30-60 дней: СНГ (РФ, РБ, КЗ). 90 дней: Евросоюз, США, Турция.",
-                en: "30-60 days: CIS countries. 90 days: EU, USA, Turkey.",
-                tr: "30-60 gün: BDT. 90 gün: AB, ABD, Türkiye.",
-                pl: "30-60 dni: WNP. 90 dni: UE, USA, Turcja.",
-                fr: "30-60 jours: CEI. 90 jours: UE, USA, Turquie.",
-                es: "30-60 días: CEI. 90 días: UE, EE.UU., Turquía.",
-                it: "30-60 giorni: CSI. 90 giorni: UE, USA, Turchia.",
-                de: "30-60 Tage: GUS. 90 Tage: EU, USA, Türkei.",
-                cn: "30-60 天：独联体。90 天：欧盟、美国、土耳其。"
-            },
-            "Грузия 🇬🇪": {
-                ru: "360 дней (1 год): РФ, Украина, КЗ, РБ, Евросоюз, США, Турция, Армения.",
-                en: "360 days: RU, UA, KZ, BY, EU, USA, Turkey.",
-                tr: "360 gün: RU, UA, BDT, AB, ABD, Türkiye.",
-                pl: "360 dni: RU, UA, WNP, UE, USA, Turcja.",
-                fr: "360 jours: RU, UA, CEI, UE, USA, Turquie.",
-                es: "360 días: RU, UA, CEI, UE, EE.UU., Turquía.",
-                it: "360 giorni: RU, UA, CSI, UE, USA, Turchia.",
-                de: "360 Tage: RU, UA, GUS, EU, USA, Türkei.",
-                cn: "360 天：俄罗斯、乌克兰、哈萨克斯坦、白俄罗斯、欧盟、美国、土耳其。"
-            },
-            "Турция 🇹🇷": {
-                ru: "90 дней: Украина, ЕС, КЗ. 60+30 дней: РФ. 30 дней: Беларусь.",
-                en: "90 days: UA, EU, KZ. 60+30 days: RU. 30 days: BY.",
-                tr: "90 gün: UA, AB, KZ. 60+30 gün: RU. 30 gün: BY.",
-                pl: "90 dni: UA, UE, KZ. 60+30 dni: RU. 30 dni: BY.",
-                fr: "90 jours: UA, UE, KZ. 60+30 jours: RU. 30 jours: BY.",
-                es: "90 días: UA, UE, KZ. 60+30 días: RU. 30 días: BY.",
-                it: "90 giorni: UA, UE, KZ. 60+30 giorni: RU. 30 giorni: BY.",
-                de: "90 Tage: UA, EU, KZ. 60+30 Tage: RU. 30 Tage: BY.",
-                cn: "90 天：乌克兰、欧盟、哈萨克斯坦。60+30 天：俄罗斯。30 天：白俄罗斯。"
-            },
-            "Франция 🇫🇷": {
-                ru: "Без ограничений: Евросоюз. 90 дней (Шенген): США, Украина. С визой: РФ, СНГ.",
-                en: "Unlimited: EU. 90 days: USA, UA. With visa: RU, CIS.",
-                tr: "Sınırsız: AB. 90 gün: ABD, UA. Vizeli: RU, BDT.",
-                pl: "Bez limitu: UE. 90 dni: USA, UA. Z wizą: RU, WNP.",
-                fr: "Illimité: UE. 90 jours: USA, UA. Avec visa: RU, CEI.",
-                es: "Ilimitado: UE. 90 días: EE.UU., UA. Con visa: RU, CEI.",
-                it: "Illimitato: UE. 90 giorni: USA, UA. Con visto: RU, CSI.",
-                de: "Unbegrenzt: EU. 90 Tage: USA, UA. Mit Visum: RU, GUS.",
-                cn: "欧盟无限制。90 天（申根）：美国、乌克兰。需签证：俄罗斯、独联体。"
-            },
-            "Германия 🇩🇪": {
-                ru: "Без ограничений: Евросоюз. 90 дней (Шенген): США, Украина. С визой: РФ, РБ, КЗ.",
-                en: "Unlimited: EU. 90 days: USA, UA. With visa: RU, BY, KZ.",
-                tr: "Sınırsız: AB. 90 gün: ABD, UA. Vizeli: RU, BY, KZ.",
-                pl: "Bez limitu: UE. 90 dni: USA, UA. Z wizą: RU, BY, KZ.",
-                fr: "Illimité: UE. 90 jours: USA, UA. Avec visa: RU, BY, KZ.",
-                es: "Ilimitado: UE. 90 días: EE.UU., UA. Con visa: RU, BY, KZ.",
-                it: "Illimitato: UE. 90 giorni: USA, UA. Con visto: RU, BY, KZ.",
-                de: "Unbegrenzt: EU. 90 Tage: USA, UA. Mit Visum: RU, BY, KZ.",
-                cn: "欧盟无限制。90 天（申根）：美国、乌克兰。需签证：俄罗斯、白俄罗斯、哈萨克斯坦。"
+                ru: "<b>Срок пребывания:</b><br>• 30-60 дней: СНГ (РФ, РБ, КЗ).<br>• 90 дней: Евросоюз, США, Турция.<br><br><b>Особенности:</b><br>Виза ставится бесплатно в аэропорту или на сухопутной границе.",
+                en: "<b>Duration:</b><br>• 30-60 days: CIS countries.<br>• 90 days: EU, USA, Turkey.<br><br><b>Note:</b><br>Free visa issued at the border.",
+                tr: "<b>Süre:</b><br>• 30-60 gün: BDT.<br>• 90 gün: AB, ABD, Türkiye.",
+                pl: "<b>Czas trwania:</b><br>• 30-60 dni: WNP.<br>• 90 dni: UE, USA, Turcja.",
+                fr: "<b>Durée:</b><br>• 30-60 jours: CEI.<br>• 90 jours: UE, USA, Turquie.",
+                es: "<b>Duración:</b><br>• 30-60 días: CEI.<br>• 90 días: UE, EE.UU., Turquía.",
+                it: "<b>Durata:</b><br>• 30-60 giorni: CSI.<br>• 90 giorni: UE, USA, Turchia.",
+                de: "<b>Dauer:</b><br>• 30-60 Tage: GUS.<br>• 90 Tage: EU, USA, Türkei.",
+                cn: "<b>持续时间：</b><br>• 30-60 天：独联体。<br>• 90 天：欧盟、美国、土耳其。"
             },
             "Испания 🇪🇸": {
-                ru: "Без ограничений: Евросоюз. 90 дней: США, Украина. С визой: РФ, СНГ.",
-                en: "Unlimited: EU. 90 days: USA, UA. With visa: RU, CIS.",
-                tr: "Sınırsız: AB. 90 gün: ABD, UA. Vizeli: RU, BDT.",
-                pl: "Bez limitu: UE. 90 dni: USA, UA. Z wizą: RU, WNP.",
-                fr: "Illimité: UE. 90 jours: USA, UA. Avec visa: RU, CEI.",
-                es: "Ilimitado: UE. 90 días: EE.UU., UA. Con visa: RU, CEI.",
-                it: "Illimitato: UE. 90 giorni: USA, UA. Con visto: RU, CSI.",
-                de: "Unbegrenzt: EU. 90 Tage: USA, UA. Mit Visum: RU, GUS.",
-                cn: "欧盟无限制。90 天：美国、乌克兰。需签证：俄罗斯、独联体。"
+                ru: "<b>Правила въезда:</b><br>• Без ограничений: Евросоюз.<br>• 90 дней: США, Украина (биометрия).<br>• С визой: РФ, СНГ (требуется Шенген).",
+                en: "<b>Entry Rules:</b><br>• Unlimited: EU.<br>• 90 days: USA, Ukraine.<br>• Visa required: RU, CIS (Schengen).",
+                tr: "<b>Giriş Kuralları:</b><br>• Sınırsız: AB.<br>• 90 gün: ABD, Ukrayna.<br>• Vizeli: RU, BDT.",
+                pl: "<b>Zasady wjazdu:</b><br>• Bez limitu: UE.<br>• 90 dni: USA, Ukraina.<br>• Z wizą: RU, WNP.",
+                fr: "<b>Règles d'entrée:</b><br>• Illimité: UE.<br>• 90 jours: USA, Ukraine.<br>• Avec visa: RU, CEI.",
+                es: "<b>Reglas de entrada:</b><br>• Ilimitado: UE.<br>• 90 días: EE.UU., Ucrania.<br>• Con visa: RU, CEI.",
+                it: "<b>Regole di ingresso:</b><br>• Illimitato: UE.<br>• 90 giorni: USA, Ucraina.<br>• Con visto: RU, CSI.",
+                de: "<b>Einreisebestimmungen:</b><br>• Unbegrenzt: EU.<br>• 90 Tage: USA, Ukraine.<br>• Mit Visum: RU, GUS.",
+                cn: "<b>入境规则：</b><br>• 欧盟无限制。<br>• 90 天：美国、乌克兰。<br>• 需签证：俄罗斯、独联体。"
             },
-            "Италия 🇮🇹": {
-                ru: "Без ограничений: Евросоюз. 90 дней: США, Украина. С визой: РФ, КЗ, Китай.",
-                en: "Unlimited: EU. 90 days: USA, UA. With visa: RU, KZ, China.",
-                tr: "Sınırsız: AB. 90 gün: ABD, UA. Vizeli: RU, KZ, Çin.",
-                pl: "Bez limitu: UE. 90 dni: USA, UA. Z wizą: RU, KZ, Chiny.",
-                fr: "Illimité: UE. 90 jours: USA, UA. Avec visa: RU, KZ, Chine.",
-                es: "Ilimitado: UE. 90 días: EE.UU., UA. Con visa: RU, KZ, China.",
-                it: "Illimitato: UE. 90 giorni: USA, UA. Con visto: RU, KZ, Cina.",
-                de: "Unbegrenzt: EU. 90 Tage: USA, UA. Mit Visum: RU, KZ, China.",
-                cn: "欧盟无限制。90 天：美国、乌克兰。需签证：俄罗斯、哈萨克斯坦、中国。"
-            },
-            "Португалия 🇵🇹": {
-                ru: "Без ограничений: Евросоюз. 90 дней: США, Великобритания, Украина. С визой: РФ, СНГ.",
-                en: "Unlimited: EU. 90 days: USA, UK, UA. With visa: RU, CIS.",
-                tr: "Sınırsız: AB. 90 gün: ABD, BK, UA. Vizeli: RU, BDT.",
-                pl: "Bez limitu: UE. 90 dni: USA, UK, UA. Z wizą: RU, WNP.",
-                fr: "Illimité: UE. 90 jours: USA, UK, UA. Avec visa: RU, CEI.",
-                es: "Ilimitado: UE. 90 días: EE.UU., RU, UA. Con visa: RU, CEI.",
-                it: "Illimitato: UE. 90 giorni: USA, UK, UA. Con visto: RU, CSI.",
-                de: "Unbegrenzt: EU. 90 Tage: USA, UK, UA. Mit Visum: RU, GUS.",
-                cn: "欧盟无限制。90 天：美国、英国、乌克兰。需签证：俄罗斯、独联体。"
-            },
-            "ОАЭ 🇦🇪": {
-                ru: "90 дней: РФ, Украина, Евросоюз. 30 дней: Казахстан, США, Китай.",
-                en: "90 days: RU, UA, EU. 30 days: KZ, USA, China.",
-                tr: "90 gün: RU, UA, AB. 30 gün: KZ, ABD, Çin.",
-                pl: "90 dni: RU, UA, UE. 30 dni: KZ, USA, Chiny.",
-                fr: "90 jours: RU, UA, UE. 30 jours: KZ, USA, Chine.",
-                es: "90 días: RU, UA, UE. 30 días: KZ, USA, China.",
-                it: "90 giorni: RU, UA, UE. 30 giorni: KZ, USA, Cina.",
-                de: "90 Tage: RU, UA, EU. 30 Tage: KZ, USA, China.",
-                cn: "90 天：俄罗斯、乌克兰、欧盟。30 天：哈萨克斯坦、美国、中国。"
-            },
-            "Таиланд 🇹🇭": {
-                ru: "60 дней: РФ, ЕС, США, Украина, КЗ. 30 дней (VoA): Беларусь.",
-                en: "60 days: RU, EU, USA, UA, KZ. 30 days (VoA): BY.",
-                tr: "60 gün: RU, AB, ABD, UA, KZ. 30 gün: BY.",
-                pl: "60 dni: RU, UE, USA, UA, KZ. 30 dni: BY.",
-                fr: "60 jours: RU, UE, USA, UA, KZ. 30 jours: BY.",
-                es: "60 días: RU, UE, EE.UU., UA, KZ. 30 días: BY.",
-                it: "60 giorni: RU, UE, USA, UA, KZ. 30 giorni: BY.",
-                de: "60 Tage: RU, EU, USA, UA, KZ. 30 Tage: BY.",
-                cn: "60 天：俄罗斯、欧盟、美国、乌克兰、哈萨克斯坦。30 天：白俄罗斯。"
-            },
-            "Индонезия (Бали) 🇮🇩": {
-                ru: "30 дней (VoA): РФ, Украина, КЗ, РБ, ЕС, США, Китай.",
-                en: "30 days (VoA): RU, UA, KZ, BY, EU, USA, China.",
-                tr: "30 gün: RU, UA, KZ, BY, AB, ABD, Çin.",
-                pl: "30 dni: RU, UA, KZ, BY, UE, USA, Chiny.",
-                fr: "30 jours: RU, UA, KZ, BY, UE, USA, Chine.",
-                es: "30 días: RU, UA, KZ, BY, UE, EE.UU., China.",
-                it: "30 giorni: RU, UA, KZ, BY, UE, USA, Cina.",
-                de: "30 Tage: RU, UA, KZ, BY, EU, USA, China.",
-                cn: "30 天（落地签）：俄罗斯、乌克兰、哈萨克斯坦、白俄罗斯、欧盟、美国、中国。"
+            "Грузия 🇬🇪": {
+                ru: "<b>Срок:</b><br>• 360 дней (1 год): РФ, Украина, КЗ, РБ, Евросоюз, США, Турция.<br><br><b>Документы:</b><br>Только загранпаспорт.",
+                en: "<b>Duration:</b><br>• 360 days: RU, UA, KZ, BY, EU, USA, Turkey.<br><br><b>Documents:</b><br>Passport only.",
+                tr: "<b>Süre:</b><br>360 gün: RU, UA, BDT, AB, ABD, Türkiye.",
+                pl: "<b>Czas:</b><br>360 dni: RU, UA, WNP, UE, USA, Turcja.",
+                fr: "<b>Durée:</b><br>360 jours: RU, UA, CEI, UE, USA, Turquie.",
+                es: "<b>Duración:</b><br>360 días: RU, UA, CEI, UE, EE.UU., Turquía.",
+                it: "<b>Durata:</b><br>360 giorni: RU, UA, CSI, UE, USA, Turchia.",
+                de: "<b>Dauer:</b><br>360 Tage: RU, UA, GUS, EU, USA, Türkei.",
+                cn: "<b>持续时间：</b><br>360 天：俄罗斯、乌克兰、哈萨克斯坦、白俄罗斯、欧盟、美国、土耳其。"
             },
             "Египет 🇪🇬": {
-                ru: "30 дней ($25): РФ, Украина, ЕС. 15 дней (бесплатно): Синай.",
-                en: "30 days ($25): RU, UA, EU. 15 days (Free): Sinai.",
-                tr: "30 gün ($25): RU, UA, AB. 15 gün (Bedava): Sina.",
-                pl: "30 dni ($25): RU, UA, UE. 15 dni (Darmo): Synaj.",
-                fr: "30 jours ($25): RU, UA, UE. 15 jours (Gratuit): Sinaï.",
-                es: "30 días ($25): RU, UA, UE. 15 días (Gratis): Sinaí.",
-                it: "30 giorni ($25): RU, UA, UE. 15 giorni (Gratis): Sinai.",
-                de: "30 Tage ($25): RU, UA, EU. 15 Tage (Gratis): Sinai.",
-                cn: "30 天（25 美元）：俄罗斯、乌克兰、欧盟。15 天（免费）：西奈半岛。"
-            },
-            "США 🇺🇸": {
-                ru: "90 дней (ESTA): ЕС, Британия. С визой (B1/B2): РФ, Украина, КЗ.",
-                en: "90 days (ESTA): EU, UK. With visa (B1/B2): RU, UA, KZ.",
-                tr: "90 gün (ESTA): AB, BK. Vizeli: RU, UA, KZ.",
-                pl: "90 dni (ESTA): UE, UK. Z wizą: RU, UA, KZ.",
-                fr: "90 jours (ESTA): UE, UK. Avec visa: RU, UA, KZ.",
-                es: "90 días (ESTA): UE, RU, UA, KZ. Con visa: RU, UA, KZ.",
-                it: "90 giorni (ESTA): UE, UK. Con visto: RU, UA, KZ.",
-                de: "90 Tage (ESTA): EU, UK. Mit Visum: RU, UA, KZ.",
-                cn: "90 天（ESTA）：欧盟、英国。需签证：俄罗斯、乌克兰、哈萨克斯坦。"
-            },
-            "Армения 🇦🇲": {
-                ru: "180 дней: РФ (внутр. паспорт), Украина, Беларусь, КЗ, ЕС, США.",
-                en: "180 days: RU (ID card), UA, BY, KZ, EU, USA.",
-                tr: "180 gün: RU, UA, BY, KZ, AB, ABD.",
-                pl: "180 dni: RU, UA, BY, KZ, UE, USA.",
-                fr: "180 jours: RU, UA, BY, KZ, UE, USA.",
-                es: "180 días: RU, UA, BY, KZ, UE, USA.",
-                it: "180 giorni: RU, UA, BY, KZ, UE, USA.",
-                de: "180 Tage: RU, UA, BY, KZ, EU, USA.",
-                cn: "180 天：俄罗斯（内部护照即可）、乌克兰、白俄罗斯、哈萨克斯坦、欧盟、美国。"
-            },
-            "Южный Кипр 🇨🇾": {
-                ru: "90 дней: ЕС, Украина. С визой: РФ, СНГ (нац. виза).",
-                en: "90 days: EU, UA. With visa: RU, CIS (nat. visa).",
-                tr: "90 gün: AB, UA. Vizeli: RU, BDT.",
-                pl: "90 dni: UE, UA. Z wizą: RU, WNP.",
-                fr: "90 jours: UE, UA. Avec visa: RU, CEI.",
-                es: "90 días: UE, UA. Con visa: RU, CEI.",
-                it: "90 giorni: UE, UA. Con visto: RU, CSI.",
-                de: "90 Tage: EU, UA. Mit Visum: RU, GUS.",
-                cn: "90 天：欧盟、乌克兰。需签证：俄罗斯、独联体。"
+                ru: "<b>Виза:</b><br>• 30 дней ($25): РФ, Украина, ЕС (в аэропорту).<br>• 15 дней (бесплатно): Синайский штамп (только Шарм).",
+                en: "<b>Visa:</b><br>• 30 days ($25): RU, UA, EU.<br>• 15 days (Free): Sinai stamp.",
+                tr: "<b>Vize:</b><br>30 gün ($25): RU, UA, AB. 15 gün (Bedava): Sina.",
+                pl: "<b>Wiza:</b><br>30 dni ($25): RU, UA, UE. 15 dni (Darmo): Synaj.",
+                fr: "<b>Visa:</b><br>30 jours ($25): RU, UA, UE. 15 jours (Gratuit): Sinaï.",
+                es: "<b>Visa:</b><br>30 días ($25): RU, UA, UE. 15 días (Gratis): Sinaí.",
+                it: "<b>Visto:</b><br>30 giorni ($25): RU, UA, UE. 15 giorni (Gratis): Sinai.",
+                de: "<b>Visum:</b><br>30 Tage ($25): RU, UA, EU. 15 Tage (Gratis): Sinai.",
+                cn: "<b>签证：</b><br>30 天（25 美元）：俄罗斯、乌克兰、欧盟。15 天（免费）：西奈半岛。"
             }
         };
 
@@ -257,8 +147,8 @@
             document.getElementById('btn-back-to-lang').innerText = data.b;
             const list = document.getElementById('scroll-area');
             list.innerHTML = '';
-            const sorted = [...data.c].sort((a, b) => a.localeCompare(b, lang));
-            sorted.forEach(name => {
+            
+            data.c.sort((a,b) => a.localeCompare(b, lang)).forEach(name => {
                 const div = document.createElement('div');
                 div.className = 'card';
                 div.innerHTML = `<span>${name}</span> <span style="opacity:0.3">➡️</span>`;
@@ -274,30 +164,33 @@
             document.getElementById('current-country-name').innerText = name;
             document.getElementById('btn-back-to-list').innerText = data.b;
             document.getElementById('m-chat').innerText = data.chat;
+            
             const grid = document.getElementById('menu-grid');
             grid.innerHTML = '';
             const icons = ["📜", "💼", "🍴", "🛠", "🏠", "📢", "📰", "📄"];
             
             data.cat.forEach((catName, index) => {
                 const btn = document.createElement('button');
-                btn.className = "wide";
                 btn.innerHTML = `${icons[index]} <span>${catName}</span>`;
                 btn.onclick = () => {
-                    if (index === 0) { // Категория "Правила"
-                        // Поиск в базе по названию страны (даже если есть флаг)
-                        const rule = visaRules[name];
-                        if (rule) {
-                            tg.showAlert(rule[currentLang] || rule['en']);
-                        } else {
-                            tg.showAlert(`${catName}: ${name}`);
-                        }
-                    } else {
-                        tg.showAlert(`${catName}: ${name}`);
-                    }
+                    if (index === 0) openRulesPage(name);
+                    else tg.showAlert(`${catName}: ${name}`);
                 };
                 grid.appendChild(btn);
             });
             showScreen('screen-inside');
+        }
+
+        function openRulesPage(countryName) {
+            const data = dict[currentLang];
+            document.getElementById('btn-back-to-inside').innerText = data.b;
+            document.getElementById('rules-country-title').innerText = `${countryName} — ${data.cat[0]}`;
+            
+            const ruleObj = visaRules[countryName];
+            const text = ruleObj ? (ruleObj[currentLang] || ruleObj['en']) : "Information coming soon...";
+            
+            document.getElementById('rules-text-container').innerHTML = text;
+            showScreen('screen-rules');
         }
 
         function openChat() { tg.showAlert(`${dict[currentLang].chat}: ${selectedCountry}`); }
