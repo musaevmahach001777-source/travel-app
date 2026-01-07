@@ -6,7 +6,6 @@
     <title>Travel App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* Общие настройки страницы */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
@@ -16,36 +15,24 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        /* Главный контейнер */
         .container {
             width: 90%;
             max-width: 360px;
             text-align: center;
+            margin-top: 50px;
             background: rgba(255, 255, 255, 0.1);
             padding: 20px;
             border-radius: 25px;
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-sizing: border-box;
         }
 
-        h1 {
-            font-size: 24px;
-            margin: 0 0 10px 0;
-        }
+        /* Скрываем элементы по умолчанию */
+        .hidden { display: none; }
 
-        p {
-            font-size: 14px;
-            opacity: 0.8;
-            margin-bottom: 20px;
-        }
-
-        /* Сетка кнопок: строго 2 колонки */
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -53,7 +40,6 @@
             width: 100%;
         }
 
-        /* Стиль кнопок */
         button {
             background: #ff9800;
             color: white;
@@ -62,62 +48,80 @@
             border-radius: 15px;
             font-size: 14px;
             font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.1s, background 0.2s;
+            transition: transform 0.1s;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active { transform: scale(0.95); }
+
+        /* Стиль карточек стран */
+        .country-card {
+            background: rgba(255, 255, 255, 0.2);
+            margin-bottom: 10px;
+            padding: 20px;
+            border-radius: 20px;
+            font-size: 18px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            gap: 5px;
+            cursor: pointer;
         }
 
-        /* Последняя кнопка (Китай) на всю ширину */
-        button.wide {
-            grid-column: span 2;
-        }
-
-        button:active {
-            transform: scale(0.95);
-            background: #e68a00;
-        }
-
-        .footer {
-            margin-top: 20px;
-            font-size: 10px;
-            opacity: 0.5;
-            text-transform: uppercase;
+        .back-btn {
+            background: #555;
+            margin-bottom: 15px;
+            width: 100%;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div id="lang-screen" class="container">
         <h1>Welcome! 🌍</h1>
-        <p>Choose your language / Выберите язык</p>
-        
+        <p>Выберите язык</p>
         <div class="grid">
-            <button onclick="selectLang('ru')">Русский 🇷🇺</button>
-            <button onclick="selectLang('en')">English 🇺🇸</button>
-            <button onclick="selectLang('tr')">Türkçe 🇹🇷</button>
-            <button onclick="selectLang('pl')">Polski 🇵🇱</button>
-            <button onclick="selectLang('fr')">Français 🇫🇷</button>
-            <button onclick="selectLang('es')">Español 🇪🇸</button>
-            <button onclick="selectLang('it')">Italiano 🇮🇹</button>
-            <button onclick="selectLang('de')">Deutsch 🇩🇪</button>
-            <button class="wide" onclick="selectLang('cn')">中文 🇨🇳</button>
+            <button onclick="showCountries()">Русский 🇷🇺</button>
+            <button onclick="tg.showAlert('Only Russian is available for now!')">English 🇺🇸</button>
+            <button onclick="showCountries()">Türkçe 🇹🇷</button>
+            <button onclick="showCountries()">Polski 🇵🇱</button>
+            <button onclick="showCountries()">Français 🇫🇷</button>
+            <button onclick="showCountries()">Español 🇪🇸</button>
+            <button onclick="showCountries()">Italiano 🇮🇹</button>
+            <button onclick="showCountries()">Deutsch 🇩🇪</button>
         </div>
+    </div>
 
-        <div class="footer">@travelles_bot</div>
+    <div id="country-screen" class="container hidden">
+        <button class="back-btn" onclick="showLangs()">⬅ Назад</button>
+        <h1>Куда летим? ✈️</h1>
+        <div class="country-card" onclick="selectCountry('Турция')">
+            <span>Турция 🇹🇷</span> ➡️
+        </div>
+        <div class="country-card" onclick="selectCountry('ОАЭ')">
+            <span>ОАЭ 🇦🇪</span> ➡️
+        </div>
+        <div class="country-card" onclick="selectCountry('Таиланд')">
+            <span>Таиланд 🇹🇭</span> ➡️
+        </div>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
-        tg.ready();
 
-        function selectLang(lang) {
+        function showCountries() {
+            document.getElementById('lang-screen').classList.add('hidden');
+            document.getElementById('country-screen').classList.remove('hidden');
             tg.HapticFeedback.impactOccurred('medium');
-            alert("Вы выбрали: " + lang.toUpperCase());
+        }
+
+        function showLangs() {
+            document.getElementById('country-screen').classList.add('hidden');
+            document.getElementById('lang-screen').classList.remove('hidden');
+        }
+
+        function selectCountry(name) {
+            tg.showConfirm("Открыть путеводитель по стране: " + name + "?");
         }
     </script>
 </body>
