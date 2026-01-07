@@ -14,7 +14,7 @@
         .container { width: 92%; max-width: 360px; text-align: center; margin: 20px 0; background: rgba(255, 255, 255, 0.03); padding: 25px; border-radius: 32px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); position: relative; z-index: 10; height: fit-content; }
         
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        button, .card { background: rgba(255, 255, 255, 0.06); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; outline: none; }
+        button, .card { background: rgba(255, 255, 255, 0.06); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; outline: none; box-sizing: border-box; }
         button { padding: 14px 5px; font-size: 13px; font-weight: 600; cursor: pointer; }
         button.wide { grid-column: span 2; }
         button:active, .card:active { background: rgba(255, 255, 255, 0.15); transform: scale(0.98); }
@@ -26,15 +26,12 @@
         .back-btn { margin-bottom: 20px; width: 100%; font-size: 14px; color: white; display: flex; justify-content: center; align-items: center; height: 45px; }
 
         .info-block { background: rgba(255, 255, 255, 0.05); border-radius: 18px; padding: 15px; margin-bottom: 10px; text-align: left; border-left: 3px solid #00d2ff; }
-        .info-block h3 { margin: 0 0 5px 0; font-size: 16px; color: #00d2ff; }
-        .info-block p { margin: 0; font-size: 14px; opacity: 0.8; line-height: 1.4; }
+        .info-block h3 { margin: 0 0 5px 0; font-size: 15px; color: #00d2ff; }
+        .info-block p { margin: 0; font-size: 13px; opacity: 0.8; line-height: 1.4; }
 
-        #scroll-area, #content-area { max-height: 55vh; overflow-y: auto; padding-right: 5px; }
-        #scroll-area::-webkit-scrollbar, #content-area::-webkit-scrollbar { width: 4px; }
-        #scroll-area::-webkit-scrollbar-thumb, #content-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-        
-        h1 { font-size: 26px; margin-bottom: 10px; }
-        h2 { font-size: 20px; margin-bottom: 15px; color: #fff; }
+        #scroll-area, #content-area { max-height: 50vh; overflow-y: auto; padding-right: 5px; }
+        h1 { font-size: 24px; margin-bottom: 10px; }
+        h2 { font-size: 18px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -42,47 +39,19 @@
 
     <div id="screen-langs" class="container">
         <h1>Welcome! 🌍</h1>
-        <p style="opacity:0.5; font-size:14px; margin-bottom:25px;">Choose your language</p>
+        <p style="opacity:0.5; font-size:14px; margin-bottom:20px;">Choose Language</p>
         <div class="grid">
-            <button onclick="changeTo('ru')">Русский 🇷🇺</button>
-            <button onclick="changeTo('en')">English 🇺🇸</button>
-            <button onclick="changeTo('tr')">Türkçe 🇹🇷</button>
-            <button onclick="changeTo('pl')">Polski 🇵🇱</button>
-            <button onclick="changeTo('fr')">Français 🇫🇷</button>
-            <button onclick="changeTo('es')">Español 🇪🇸</button>
-            <button onclick="changeTo('it')">Italiano 🇮🇹</button>
-            <button onclick="changeTo('de')">Deutsch 🇩🇪</button>
-            <button class="wide" onclick="changeTo('cn')">中文 🇨🇳</button>
+            <button onclick="setLang('ru')">Русский 🇷🇺</button>
+            <button onclick="setLang('en')">English 🇺🇸</button>
+            <button onclick="setLang('tr')">Türkçe 🇹🇷</button>
+            <button onclick="setLang('pl')">Polski 🇵🇱</button>
+            <button onclick="setLang('fr')">Français 🇫🇷</button>
+            <button onclick="setLang('es')">Español 🇪🇸</button>
+            <button onclick="setLang('it')">Italiano 🇮🇹</button>
+            <button onclick="setLang('de')">Deutsch 🇩🇪</button>
+            <button class="wide" onclick="setLang('cn')">中文 🇨🇳</button>
         </div>
     </div>
 
-    <div id="screen-countries" class="container hidden">
-        <button class="back-btn" onclick="showScreen('screen-langs')">⬅ <span class="back-label">Back</span></button>
-        <h2 id="title-countries">Select Country</h2>
-        <div id="scroll-area"></div>
-    </div>
-
-    <div id="screen-inside" class="container hidden">
-        <button class="back-btn" onclick="showScreen('screen-countries')">⬅ <span class="back-label">Back</span></button>
-        <h2 id="current-country-name">Country Name</h2>
-        <div id="menu-grid" class="grid"></div>
-        <button class="wide chat-btn" onclick="openChat()">💬 <span id="m-chat-label">Community Chat</span></button>
-    </div>
-
-    <div id="screen-content" class="container hidden">
-        <button class="back-btn" onclick="showScreen('screen-inside')">⬅ <span class="back-label">Back</span></button>
-        <h2 id="content-title">Category</h2>
-        <div id="content-area"></div>
-    </div>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.ready();
-
-        let currentLang = 'ru';
-        let selectedCountry = '';
-
-        const dict = {
-            ru: { t: "Выберите страну 📍", b: "Назад", chat: "Чат сообщества", cat: ["Правила", "Работа", "Еда", "Услуги", "Недвижимость", "Реклама", "Новости", "Документы"], c: ["Франция 🇫🇷", "Россия 🇷🇺", "Турция 🇹🇷", "Испания 🇪🇸", "Италия 🇮🇹", "Германия 🇩🇪", "Индонезия (Бали) 🇮🇩", "Таиланд 🇹🇭", "Китай 🇨🇳", "Япония 🇯🇵", "Шри-Ланка 🇱🇰", "Катар 🇶🇦", "Египет 🇪🇬", "Мексика 🇲🇽", "Доминикана 🇩🇴", "США 🇺🇸", "Грузия 🇬🇪", "Армения 🇦🇲", "Казахстан 🇰🇿", "Португалия 🇵🇹", "Северный Кипр 🇹🇷", "Южный Кипр 🇨🇾"] },
-            en: { t: "Select Country 📍", b: "Back", chat: "Community Chat", cat: ["Rules", "Jobs", "Food", "Services", "Property", "Ads",
+    <div id="screen-citizen" class="container hidden">
+        <h2 id="citizen-title">
