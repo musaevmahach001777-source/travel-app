@@ -6,32 +6,18 @@
     <title>Travel Starfall Luxe</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { margin: 0; padding: 0; background: #050810; color: white; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
+        body { margin: 0; padding: 0; background: #050810; color: white; font-family: -apple-system, sans-serif; overflow-x: hidden; display: flex; justify-content: center; }
         .stars-bg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%); z-index: -1; }
-        .stars-bg::after { content: ""; position: absolute; top: 0; left: 0; width: 200%; height: 200%; background-image: radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)), radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)); background-repeat: repeat; background-size: 250px 250px; animation: starsAnim 35s linear infinite; opacity: 0.3; }
-        @keyframes starsAnim { from { transform: translateY(0); } to { transform: translateY(-50%); } }
-        
-        .container { width: 92%; max-width: 360px; text-align: center; margin: 20px 0; background: rgba(255, 255, 255, 0.03); padding: 25px; border-radius: 32px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); position: relative; z-index: 10; height: fit-content; }
-        
+        .container { width: 92%; max-width: 360px; text-align: center; margin: 20px 0; background: rgba(255, 255, 255, 0.03); padding: 25px; border-radius: 30px; backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); z-index: 10; height: fit-content; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        button, .card { background: rgba(255, 255, 255, 0.06); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; outline: none; box-sizing: border-box; }
-        button { padding: 14px 5px; font-size: 13px; font-weight: 600; cursor: pointer; }
-        button.wide { grid-column: span 2; }
-        button:active, .card:active { background: rgba(255, 255, 255, 0.15); transform: scale(0.98); }
-        
-        .card { margin-bottom: 12px; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; text-align: left; }
-        .chat-btn { background: rgba(0, 210, 255, 0.1); border-color: rgba(0, 210, 255, 0.3); color: #00d2ff; margin-top: 10px; }
-        
+        button, .card { background: rgba(255, 255, 255, 0.07); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; padding: 14px 5px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; -webkit-tap-highlight-color: transparent; }
+        button.wide, .card { grid-column: span 2; display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; }
+        button:active, .card:active { background: rgba(255, 255, 255, 0.15); transform: scale(0.97); }
         .hidden { display: none !important; }
-        .back-btn { margin-bottom: 20px; width: 100%; font-size: 14px; color: white; display: flex; justify-content: center; align-items: center; height: 45px; }
-
-        .info-block { background: rgba(255, 255, 255, 0.05); border-radius: 18px; padding: 15px; margin-bottom: 10px; text-align: left; border-left: 3px solid #00d2ff; }
-        .info-block h3 { margin: 0 0 5px 0; font-size: 15px; color: #00d2ff; }
-        .info-block p { margin: 0; font-size: 13px; opacity: 0.8; line-height: 1.4; }
-
-        #scroll-area, #content-area { max-height: 50vh; overflow-y: auto; padding-right: 5px; }
-        h1 { font-size: 24px; margin-bottom: 10px; }
-        h2 { font-size: 18px; margin-bottom: 15px; }
+        .back-btn { margin-bottom: 15px; width: 100%; opacity: 0.8; font-size: 14px; justify-content: center; }
+        .info-block { background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 15px; margin-bottom: 10px; text-align: left; border-left: 3px solid #00d2ff; }
+        #scroll-area, #content-area { max-height: 50vh; overflow-y: auto; }
+        h1 { font-size: 24px; } h2 { font-size: 18px; }
     </style>
 </head>
 <body>
@@ -39,19 +25,136 @@
 
     <div id="screen-langs" class="container">
         <h1>Welcome! 🌍</h1>
-        <p style="opacity:0.5; font-size:14px; margin-bottom:20px;">Choose Language</p>
         <div class="grid">
-            <button onclick="setLang('ru')">Русский 🇷🇺</button>
-            <button onclick="setLang('en')">English 🇺🇸</button>
-            <button onclick="setLang('tr')">Türkçe 🇹🇷</button>
-            <button onclick="setLang('pl')">Polski 🇵🇱</button>
-            <button onclick="setLang('fr')">Français 🇫🇷</button>
-            <button onclick="setLang('es')">Español 🇪🇸</button>
-            <button onclick="setLang('it')">Italiano 🇮🇹</button>
-            <button onclick="setLang('de')">Deutsch 🇩🇪</button>
-            <button class="wide" onclick="setLang('cn')">中文 🇨🇳</button>
+            <button onclick="app.setLang('ru')">Русский 🇷🇺</button>
+            <button onclick="app.setLang('en')">English 🇺🇸</button>
+            <button onclick="app.setLang('tr')">Türkçe 🇹🇷</button>
+            <button onclick="app.setLang('fr')">Français 🇫🇷</button>
+            <button class="wide" onclick="app.setLang('cn')">中文 🇨🇳</button>
         </div>
     </div>
 
     <div id="screen-citizen" class="container hidden">
-        <h2 id="citizen-title">
+        <h2 id="txt-citizen">Ваше гражданство? 🛂</h2>
+        <div class="grid">
+            <button class="wide" onclick="app.setCitizen('Russia')">Russia 🇷🇺</button>
+            <button class="wide" onclick="app.setCitizen('EU')">European Union 🇪🇺</button>
+            <button class="wide" onclick="app.setCitizen('USA')">USA 🇺🇸</button>
+            <button class="wide" onclick="app.setCitizen('Other')">Other 🌏</button>
+        </div>
+    </div>
+
+    <div id="screen-countries" class="container hidden">
+        <button class="back-btn" onclick="app.show('screen-citizen')">⬅ <span class="lbl-back">Назад</span></button>
+        <h2 id="txt-select-country">Выберите страну</h2>
+        <div id="scroll-area"></div>
+    </div>
+
+    <div id="screen-menu" class="container hidden">
+        <button class="back-btn" onclick="app.show('screen-countries')">⬅ <span class="lbl-back">Назад</span></button>
+        <h2 id="active-country"></h2>
+        <div id="menu-grid" class="grid"></div>
+    </div>
+
+    <div id="screen-content" class="container hidden">
+        <button class="back-btn" onclick="app.show('screen-menu')">⬅ <span class="lbl-back">Назад</span></button>
+        <h2 id="active-cat"></h2>
+        <div id="content-area"></div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+
+        const app = {
+            lang: 'ru',
+            citizen: 'Other',
+            country: '',
+            
+            data: {
+                ru: { back: "Назад", sel: "Выберите страну", chat: "Чат", cat: ["Правила", "Работа", "Еда", "Услуги", "Недвижимость", "Реклама", "Новости", "Документы"], countries: ["Турция 🇹🇷", "Северный Кипр 🇹🇷", "ОАЭ 🇦🇪", "Франция 🇫🇷", "Таиланд 🇹🇭"] },
+                en: { back: "Back", sel: "Select Country", chat: "Chat", cat: ["Rules", "Jobs", "Food", "Services", "Property", "Ads", "News", "Documents"], countries: ["Turkey 🇹🇷", "Northern Cyprus 🇹🇷", "UAE 🇦🇪", "France 🇫🇷", "Thailand 🇹🇭"] }
+            },
+
+            visa: {
+                "Северный Кипр 🇹🇷": {
+                    "Russia": "РФ: 30-60 дней без визы по загранпаспорту.",
+                    "EU": "EU: 90 дней. Можно по ID-карте.",
+                    "Other": "30 дней по умолчанию для большинства стран."
+                },
+                "Northern Cyprus 🇹🇷": {
+                    "Russia": "Russia: 30-60 days visa-free with passport.",
+                    "EU": "EU: 90 days. ID-card entry allowed.",
+                    "Other": "30 days default for most visitors."
+                }
+            },
+
+            show(id) {
+                document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+                document.getElementById(id).classList.remove('hidden');
+            },
+
+            setLang(l) {
+                this.lang = l;
+                const d = this.data[l] || this.data['en'];
+                document.querySelectorAll('.lbl-back').forEach(span => span.innerText = d.back);
+                document.getElementById('txt-select-country').innerText = d.sel;
+                this.show('screen-citizen');
+            },
+
+            setCitizen(c) {
+                this.citizen = c;
+                this.renderCountries();
+                this.show('screen-countries');
+            },
+
+            renderCountries() {
+                const d = this.data[this.lang] || this.data['en'];
+                const list = document.getElementById('scroll-area');
+                list.innerHTML = '';
+                d.countries.forEach(c => {
+                    const div = document.createElement('div');
+                    div.className = 'card';
+                    div.innerHTML = `<span>${c}</span> <span>➡️</span>`;
+                    div.onclick = () => this.openMenu(c);
+                    list.appendChild(div);
+                });
+            },
+
+            openMenu(c) {
+                this.country = c;
+                const d = this.data[this.lang] || this.data['en'];
+                document.getElementById('active-country').innerText = c;
+                const grid = document.getElementById('menu-grid');
+                grid.innerHTML = '';
+                const icons = ["📜", "💼", "🍴", "🛠", "🏠", "📢", "📰", "📄"];
+                
+                d.cat.forEach((name, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = "wide";
+                    btn.innerHTML = `<span>${icons[i]} ${name}</span> <span>➡️</span>`;
+                    btn.onclick = () => this.openCat(name, i);
+                    grid.appendChild(btn);
+                });
+                this.show('screen-menu');
+            },
+
+            openCat(name, index) {
+                document.getElementById('active-cat').innerText = name;
+                const area = document.getElementById('content-area');
+                area.innerHTML = '';
+
+                if (index === 0) { // Правила
+                    let info = this.visa[this.country] ? (this.visa[this.country][this.citizen] || this.visa[this.country]["Other"]) : "No info yet.";
+                    area.innerHTML = `<div class="info-block"><h3>Border Policy</h3><p>${info}</p></div>`;
+                } else {
+                    area.innerHTML = `<p style="padding:20px; opacity:0.5;">Coming soon for citizens of ${this.citizen}...</p>`;
+                }
+                this.show('screen-content');
+            }
+        };
+
+        tg.ready();
+        tg.expand();
+    </script>
+</body>
+</html>
