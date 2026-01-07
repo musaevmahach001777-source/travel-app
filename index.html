@@ -122,7 +122,6 @@
             padding-right: 5px;
         }
 
-        /* Скроллбар для списка стран */
         #country-list::-webkit-scrollbar { width: 4px; }
         #country-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
     </style>
@@ -158,24 +157,43 @@
         tg.expand();
         tg.ready();
 
-        const allCountries = [
-            "Франция 🇫🇷", "Россия 🇷🇺", "Турция 🇹🇷", "Испания 🇪🇸", "Италия 🇮🇹", 
-            "Германия 🇩🇪", "Индонезия (Бали) 🇮🇩", "Таиланд 🇹🇭", "Китай 🇨🇳", "Япония 🇯🇵", 
-            "Шри-Ланка 🇱🇰", "Катар 🇶🇦", "Египет 🇪🇬", "Мексика 🇲🇽", "Доминикана 🇩🇴", 
-            "США 🇺🇸", "Грузия 🇬🇪", "Армения 🇦🇲", "Казахстан 🇰🇿", "Португалия 🇵🇹", 
-            "Северный Кипр 🇹🇷", "Южный Кипр 🇨🇾"
-        ];
-
         const dict = {
-            ru: { t: "В какой вы стране? 📍", b: "⬅ Назад" },
-            en: { t: "In which country are you? 📍", b: "⬅ Back" },
-            tr: { t: "Hangi ülkedesiniz? 📍", b: "⬅ Geri" },
-            pl: { t: "W jakim kraju jesteś? 📍", b: "⬅ Powrót" },
-            fr: { t: "Dans quel pays êtes-vous ? 📍", b: "⬅ Retour" },
-            es: { t: "¿En qué país estás? 📍", b: "⬅ Volver" },
-            it: { t: "In quale paese ti trovi? 📍", b: "⬅ Indietro" },
-            de: { t: "In welchem Land bist du? 📍", b: "⬅ Zurück" },
-            cn: { t: "你在哪个国家？ 📍", b: "⬅ 返回" }
+            ru: { 
+                t: "В какой вы стране? 📍", b: "⬅ Назад",
+                c: ["Франция 🇫🇷", "Россия 🇷🇺", "Турция 🇹🇷", "Испания 🇪🇸", "Италия 🇮🇹", "Германия 🇩🇪", "Индонезия (Бали) 🇮🇩", "Таиланд 🇹🇭", "Китай 🇨🇳", "Япония 🇯🇵", "Шри-Ланка 🇱🇰", "Катар 🇶🇦", "Египет 🇪🇬", "Мексика 🇲🇽", "Доминикана 🇩🇴", "США 🇺🇸", "Грузия 🇬🇪", "Армения 🇦🇲", "Казахстан 🇰🇿", "Португалия 🇵🇹", "Северный Кипр 🇹🇷", "Южный Кипр 🇨🇾"]
+            },
+            en: { 
+                t: "In which country are you? 📍", b: "⬅ Back",
+                c: ["France 🇫🇷", "Russia 🇷🇺", "Turkey 🇹🇷", "Spain 🇪🇸", "Italy 🇮🇹", "Germany 🇩🇪", "Indonesia (Bali) 🇮🇩", "Thailand 🇹🇭", "China 🇨🇳", "Japan 🇯🇵", "Sri Lanka 🇱🇰", "Qatar 🇶🇦", "Egypt 🇪🇬", "Mexico 🇲🇽", "Dominican Republic 🇩🇴", "USA 🇺🇸", "Georgia 🇬🇪", "Armenia 🇦🇲", "Kazakhstan 🇰🇿", "Portugal 🇵🇹", "Northern Cyprus 🇹🇷", "Southern Cyprus 🇨🇾"]
+            },
+            tr: { 
+                t: "Hangi ülkedesiniz? 📍", b: "⬅ Geri",
+                c: ["Fransa 🇫🇷", "Rusya 🇷🇺", "Türkiye 🇹🇷", "İspanya 🇪🇸", "İtalya 🇮🇹", "Almanya 🇩🇪", "Endonezya (Bali) 🇮🇩", "Tayland 🇹🇭", "Çin 🇨🇳", "Japonya 🇯🇵", "Sri Lanka 🇱🇰", "Katar 🇶🇦", "Mısır 🇪🇬", "Meksika 🇲🇽", "Dominik Cumhuriyeti 🇩🇴", "ABD 🇺🇸", "Gürcistan 🇬🇪", "Ermenistan 🇦🇲", "Kazakistan 🇰🇿", "Portekiz 🇵🇹", "Kuzey Kıbrıs 🇹🇷", "Güney Kıbrıs 🇨🇾"]
+            },
+            pl: { 
+                t: "W jakim kraju jesteś? 📍", b: "⬅ Powrót",
+                c: ["Francja 🇫🇷", "Rosja 🇷🇺", "Turcja 🇹🇷", "Hiszpania 🇪🇸", "Włochy 🇮🇹", "Niemcy 🇩🇪", "Indonezja (Bali) 🇮🇩", "Tajlandia 🇹🇭", "Chiny 🇨🇳", "Japonia 🇯🇵", "Sri Lanka 🇱🇰", "Katar 🇶🇦", "Egipt 🇪🇬", "Meksyk 🇲🇽", "Dominikana 🇩🇴", "USA 🇺🇸", "Gruzja 🇬🇪", "Armenia 🇦🇲", "Kazachstan 🇰🇿", "Portugalia 🇵🇹", "Cypr Północny 🇹🇷", "Cypr Południowy 🇨🇾"]
+            },
+            fr: { 
+                t: "Dans quel pays êtes-vous ? 📍", b: "⬅ Retour",
+                c: ["France 🇫🇷", "Russie 🇷🇺", "Turquie 🇹🇷", "Espagne 🇪🇸", "Italie 🇮🇹", "Allemagne 🇩🇪", "Indonésie (Bali) 🇮🇩", "Thaïlande 🇹🇭", "Chine 🇨🇳", "Japon 🇯🇵", "Sri Lanka 🇱🇰", "Qatar 🇶🇦", "Égypte 🇪🇬", "Mexique 🇲🇽", "République Dominicaine 🇩🇴", "États-Unis 🇺🇸", "Géorgie 🇬🇪", "Arménie 🇦🇲", "Kazakhstan 🇰🇿", "Portugal 🇵🇹", "Chypre du Nord 🇹🇷", "Chypre du Sud 🇨🇾"]
+            },
+            es: { 
+                t: "¿En qué país estás? 📍", b: "⬅ Volver",
+                c: ["Francia 🇫🇷", "Rusia 🇷🇺", "Turquía 🇹🇷", "España 🇪🇸", "Italia 🇮🇹", "Alemania 🇩🇪", "Indonesia (Bali) 🇮🇩", "Tailandia 🇹🇭", "China 🇨🇳", "Japón 🇯🇵", "Sri Lanka 🇱🇰", "Catar 🇶🇦", "Egipto 🇪🇬", "México 🇲🇽", "República Dominicana 🇩🇴", "EE. UU. 🇺🇸", "Georgia 🇬🇪", "Armenia 🇦🇲", "Kazajistán 🇰🇿", "Portugal 🇵🇹", "Chipre del Norte 🇹🇷", "Chipre del Sur 🇨🇾"]
+            },
+            it: { 
+                t: "In quale paese ti trovi? 📍", b: "⬅ Indietro",
+                c: ["Francia 🇫🇷", "Russia 🇷🇺", "Turchia 🇹🇷", "Spagna 🇪🇸", "Italia 🇮🇹", "Germania 🇩🇪", "Indonesia (Bali) 🇮🇩", "Thailandia 🇹🇭", "Cina 🇨🇳", "Giappone 🇯🇵", "Sri Lanka 🇱🇰", "Qatar 🇶🇦", "Egitto 🇪🇬", "Messico 🇲🇽", "Repubblica Dominicana 🇩🇴", "USA 🇺🇸", "Georgia 🇬🇪", "Armenia 🇦🇲", "Kazakistan 🇰🇿", "Portogallo 🇵🇹", "Cipro del Nord 🇹🇷", "Cipro del Sud 🇨🇾"]
+            },
+            de: { 
+                t: "In welchem Land bist du? 📍", b: "⬅ Zurück",
+                c: ["Frankreich 🇫🇷", "Russland 🇷🇺", "Türkei 🇹🇷", "Spanien 🇪🇸", "Italien 🇮🇹", "Deutschland 🇩🇪", "Indonesien (Bali) 🇮🇩", "Thailand 🇹🇭", "China 🇨🇳", "Japan 🇯🇵", "Sri Lanka 🇱🇰", "Katar 🇶🇦", "Ägypten 🇪🇬", "Mexiko 🇲🇽", "Dominikanische Republik 🇩🇴", "USA 🇺🇸", "Georgien 🇬🇪", "Armenien 🇦🇲", "Kasachstan 🇰🇿", "Portugal 🇵🇹", "Nordzypern 🇹🇷", "Südzypern 🇨🇾"]
+            },
+            cn: { 
+                t: "你在哪个国家？ 📍", b: "⬅ 返回",
+                c: ["法国 🇫🇷", "俄罗斯 🇷🇺", "土耳其 🇹🇷", "西班牙 🇪🇸", "意大利 🇮🇹", "德国 🇩🇪", "印度尼西亚 (巴厘岛) 🇮🇩", "泰国 🇹🇭", "中国 🇨🇳", "日本 🇯🇵", "斯里兰卡 🇱🇰", "卡塔尔 🇶🇦", "埃及 🇪🇬", "墨西哥 🇲🇽", "多米尼加 🇩🇴", "美国 🇺🇸", "格鲁吉亚 🇬🇪", "亚美尼亚 🇦🇲", "哈萨克斯坦 🇰🇿", "葡萄牙 🇵🇹", "北塞浦路斯 🇹🇷", "南塞浦路斯 🇨🇾"]
+            }
         };
 
         function changeTo(lang) {
@@ -187,7 +205,10 @@
             const list = document.getElementById('country-list');
             list.innerHTML = '';
             
-            allCountries.forEach(name => {
+            // Сортировка по алфавиту для каждого языка
+            const sortedCountries = [...data.c].sort((a, b) => a.localeCompare(b, lang));
+
+            sortedCountries.forEach(name => {
                 const div = document.createElement('div');
                 div.className = 'country-card';
                 div.innerHTML = `<span>${name}</span> <span style="opacity:0.3">➡️</span>`;
