@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Travel App</title>
+    <title>Travel App - Luxe</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-            color: white;
+            /* Глубокий темный фон */
+            background: radial-gradient(circle at top, #1c252e 0%, #0f171e 100%);
+            color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -23,11 +24,12 @@
             max-width: 360px;
             text-align: center;
             margin-top: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 25px;
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            padding: 25px;
+            border-radius: 30px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
             box-sizing: border-box;
         }
 
@@ -36,44 +38,62 @@
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
             width: 100%;
         }
 
+        /* Кнопки с неоновым градиентом */
         button {
-            background: #ff9800;
+            background: linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%);
             color: white;
             border: none;
-            padding: 15px 5px;
-            border-radius: 15px;
+            padding: 16px 5px;
+            border-radius: 18px;
             font-size: 14px;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            font-weight: 700;
             cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.2);
+            transition: all 0.2s;
         }
 
         button.wide { grid-column: span 2; }
-        button:active { transform: scale(0.95); }
+        
+        button:active {
+            transform: scale(0.95);
+            filter: brightness(1.2);
+        }
 
+        /* Карточки стран в стиле Glassmorphism */
         .country-card {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
             margin-bottom: 12px;
-            padding: 18px;
-            border-radius: 18px;
+            padding: 20px;
+            border-radius: 20px;
             font-size: 17px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .country-card:active {
+            border-color: #00d2ff;
+            background: rgba(0, 210, 255, 0.05);
         }
 
         .back-btn {
-            background: rgba(255, 255, 255, 0.2);
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             margin-bottom: 20px;
             width: 100%;
-            color: #eee;
+            color: #00d2ff;
+            font-size: 13px;
         }
+
+        h1 { font-size: 24px; margin-bottom: 10px; }
+        p { font-size: 14px; opacity: 0.6; margin-bottom: 25px; }
     </style>
 </head>
 <body>
@@ -96,22 +116,17 @@
 
     <div id="country-screen" class="container hidden">
         <button id="btn-back" class="back-btn" onclick="showLangs()">⬅ Back</button>
-        <h1 id="country-title" style="font-size: 22px;">In which country are you? 📍</h1>
+        <h1 id="country-title" style="font-size: 20px;">In which country are you? 📍</h1>
         <div id="country-list"></div>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
+        tg.headerColor = '#1c252e';
 
-        // Словарь переводов с новой фразой "В какой вы стране?"
         const translations = {
             ru: { title: "В какой вы стране? 📍", back: "⬅ Назад", countries: ["Турция 🇹🇷", "ОАЭ 🇦🇪", "Таиланд 🇹🇭"] },
             en: { title: "In which country are you? 📍", back: "⬅ Back", countries: ["Turkey 🇹🇷", "UAE 🇦🇪", "Thailand 🇹🇭"] },
             tr: { title: "Hangi ülkedesiniz? 📍", back: "⬅ Geri", countries: ["Türkiye 🇹🇷", "BAE 🇦🇪", "Tayland 🇹🇭"] },
-            pl: { title: "W jakim kraju jesteś? 📍", back: "⬅ Powrót", countries: ["Turcja 🇹🇷", "ZEA 🇦🇪", "Tajlandia 🇹🇭"] },
-            fr: { title: "Dans quel pays êtes-vous ? 📍", back: "⬅ Retour", countries: ["Turquie 🇹🇷", "Émirats 🇦🇪", "Thaïlande 🇹🇭"] },
-            es: { title: "¿En qué país estás? 📍", back: "⬅ Volver", countries: ["Turquía 🇹🇷", "EAU 🇦🇪", "Tailandia 🇹🇭"] },
-            it: { title: "In quale paese ti trovi? 📍", back: "⬅ Indietro", countries: ["Turchia 🇹🇷", "Emirati Arabi 🇦🇪", "Thailandia 🇹🇭"] },
-            de: { title: "In welchem Land bist du? 📍", back: "⬅ Zurück", countries: ["Türkei 🇹🇷", "VAE 🇦🇪", "Thailand 🇹🇭"] },
-            cn: { title: "你在哪个国家？ 📍", back: "⬅ 返回", countries: ["土耳其 🇹🇷
+            pl: { title: "W jakim kraju jesteś? 📍", back: "⬅ Powrót", countries: ["Turcja
