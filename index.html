@@ -37,7 +37,7 @@
                 radial-gradient(2px 2px at 80px 120px, #fff, rgba(0,0,0,0));
             background-repeat: repeat;
             background-size: 250px 250px;
-            animation: starsAnim 40s linear infinite;
+            animation: starsAnim 35s linear infinite;
             opacity: 0.5;
         }
 
@@ -54,12 +54,11 @@
             background: rgba(255, 255, 255, 0.03);
             padding: 25px;
             border-radius: 32px;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
             z-index: 10;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
 
         .grid {
@@ -68,55 +67,54 @@
             gap: 12px;
         }
 
-        button {
-            background: rgba(255, 255, 255, 0.05);
+        /* Общий стиль для всех кнопок и карточек */
+        button, .country-card {
+            background: rgba(255, 255, 255, 0.06);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 16px 5px;
             border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
             transition: all 0.2s ease;
             -webkit-tap-highlight-color: transparent;
         }
 
-        button.wide { grid-column: span 2; }
-        
-        /* Исправленный эффект нажатия */
-        button:active { 
-            background: rgba(0, 210, 255, 0.15); 
-            transform: scale(0.96); 
-            border-color: #00d2ff; 
-        }
-
-        .country-card {
-            background: rgba(255, 255, 255, 0.06);
-            margin-bottom: 12px;
-            padding: 20px;
-            border-radius: 22px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        button {
+            padding: 16px 5px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
         }
 
-        .country-card:active {
-            border-color: #00d2ff;
-            background: rgba(0, 210, 255, 0.05);
+        button.wide { grid-column: span 2; }
+        
+        button:active, .country-card:active { 
+            background: rgba(255, 255, 255, 0.12); 
+            transform: scale(0.97); 
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .country-card {
+            margin-bottom: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            text-align: left;
         }
 
         .hidden { display: none !important; }
 
+        /* ИСПРАВЛЕННАЯ КНОПКА НАЗАД */
         .back-btn {
-            background: rgba(0, 210, 255, 0.05);
-            border: 1px solid rgba(0, 210, 255, 0.2);
             margin-bottom: 25px;
             width: 100%;
-            color: #00d2ff;
-            font-size: 13px;
-            padding: 12px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.06); /* Как у стран */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Как у стран */
+            color: white; /* Белый текст */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         h1 { font-size: 26px; margin-bottom: 10px; }
@@ -138,7 +136,8 @@
             <button onclick="changeTo('pl')">Polski 🇵🇱</button>
             <button onclick="changeTo('fr')">Français 🇫🇷</button>
             <button onclick="changeTo('es')">Español 🇪🇸</button>
-            <button onclick="changeTo('it')">Italiano 🇮🇹</button> <button onclick="changeTo('de')">Deutsch 🇩🇪</button>
+            <button onclick="changeTo('it')">Italiano 🇮🇹</button>
+            <button onclick="changeTo('de')">Deutsch 🇩🇪</button>
             <button class="wide" onclick="changeTo('cn')">中文 🇨🇳</button>
         </div>
     </div>
@@ -163,30 +162,26 @@
             es: { t: "¿En qué país estás? 📍", b: "⬅ Volver", c: ["Turquía 🇹🇷", "EAU 🇦🇪", "Tailandia 🇹🇭"] },
             it: { t: "In quale paese ti trovi? 📍", b: "⬅ Indietro", c: ["Turchia 🇹🇷", "Emirati Arabi 🇦🇪", "Thailandia 🇹🇭"] },
             de: { t: "In welchem Land bist du? 📍", b: "⬅ Zurück", c: ["Türkei 🇹🇷", "VAE 🇦🇪", "Thailand 🇹🇭"] },
-            cn: { t: "你在哪个国家？ 📍", b: "⬅ 返回", c: ["土耳其 🇹🇷", "阿联酋 🇦🇪", "泰国 🇹🇭"] }
+            cn: { t: "你在哪个国家？ 📍", b: "⬅ 返回", c: ["土耳к 🇹🇷", "阿联酋 🇦🇪", "泰国 🇹🇭"] }
         };
 
         function changeTo(lang) {
             if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-            
             const data = dict[lang];
             document.getElementById('title-text').innerText = data.t;
             document.getElementById('back-text').innerText = data.b;
-            
             const list = document.getElementById('country-list');
             list.innerHTML = '';
-            
             data.c.forEach(name => {
                 const div = document.createElement('div');
                 div.className = 'country-card';
-                div.innerHTML = `<span>${name}</span> <span style="color:#00d2ff">➡️</span>`;
+                div.innerHTML = `<span>${name}</span> <span style="opacity:0.5">➡️</span>`;
                 div.onclick = () => {
                     if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
                     tg.showAlert(name);
                 };
                 list.appendChild(div);
             });
-
             document.getElementById('screen-langs').classList.add('hidden');
             document.getElementById('screen-countries').classList.remove('hidden');
         }
