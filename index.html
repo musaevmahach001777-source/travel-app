@@ -18,7 +18,7 @@
             overflow: hidden;
         }
 
-        /* АНИМИРОВАННЫЙ ФОН СО ЗВЕЗДАМИ */
+        /* АНИМИРОВАННЫЙ ФОН */
         .stars-bg {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -37,7 +37,6 @@
                 radial-gradient(2px 2px at 80px 120px, #fff, rgba(0,0,0,0));
             background-repeat: repeat;
             background-size: 250px 250px;
-            /* Ускоренная анимация: 40s вместо 100s */
             animation: starsAnim 40s linear infinite;
             opacity: 0.5;
         }
@@ -52,7 +51,6 @@
             max-width: 360px;
             text-align: center;
             margin-top: 30px;
-            /* Эффект стекла: меньше непрозрачности */
             background: rgba(255, 255, 255, 0.03);
             padding: 25px;
             border-radius: 32px;
@@ -71,7 +69,6 @@
         }
 
         button {
-            /* Кнопки стали прозрачнее */
             background: rgba(255, 255, 255, 0.05);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -85,7 +82,13 @@
         }
 
         button.wide { grid-column: span 2; }
-        button:active { background: rgba(255, 255, 255, 0.15); transform: scale(0.96); border-color: #00d2ff; }
+        
+        /* Исправленный эффект нажатия */
+        button:active { 
+            background: rgba(0, 210, 255, 0.15); 
+            transform: scale(0.96); 
+            border-color: #00d2ff; 
+        }
 
         .country-card {
             background: rgba(255, 255, 255, 0.06);
@@ -99,6 +102,11 @@
             cursor: pointer;
         }
 
+        .country-card:active {
+            border-color: #00d2ff;
+            background: rgba(0, 210, 255, 0.05);
+        }
+
         .hidden { display: none !important; }
 
         .back-btn {
@@ -108,7 +116,7 @@
             width: 100%;
             color: #00d2ff;
             font-size: 13px;
-            letter-spacing: 0.5px;
+            padding: 12px;
         }
 
         h1 { font-size: 26px; margin-bottom: 10px; }
@@ -130,8 +138,7 @@
             <button onclick="changeTo('pl')">Polski 🇵🇱</button>
             <button onclick="changeTo('fr')">Français 🇫🇷</button>
             <button onclick="changeTo('es')">Español 🇪🇸</button>
-            <button onclick="setLanguage('it')">Italiano 🇮🇹</button>
-            <button onclick="changeTo('de')">Deutsch 🇩🇪</button>
+            <button onclick="changeTo('it')">Italiano 🇮🇹</button> <button onclick="changeTo('de')">Deutsch 🇩🇪</button>
             <button class="wide" onclick="changeTo('cn')">中文 🇨🇳</button>
         </div>
     </div>
@@ -160,9 +167,9 @@
         };
 
         function changeTo(lang) {
-            tg.HapticFeedback.impactOccurred('medium');
-            const data = dict[lang];
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
             
+            const data = dict[lang];
             document.getElementById('title-text').innerText = data.t;
             document.getElementById('back-text').innerText = data.b;
             
@@ -174,7 +181,7 @@
                 div.className = 'country-card';
                 div.innerHTML = `<span>${name}</span> <span style="color:#00d2ff">➡️</span>`;
                 div.onclick = () => {
-                    tg.HapticFeedback.selectionChanged();
+                    if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
                     tg.showAlert(name);
                 };
                 list.appendChild(div);
@@ -185,7 +192,7 @@
         }
 
         function goBack() {
-            tg.HapticFeedback.impactOccurred('light');
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
             document.getElementById('screen-countries').classList.add('hidden');
             document.getElementById('screen-langs').classList.remove('hidden');
         }
