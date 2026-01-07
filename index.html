@@ -3,69 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Travel App - Starfall</title>
+    <title>Travel Starfall</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 0;
-            background: #050b14; /* Глубокий космический цвет */
-            color: #ffffff;
+            background: #050810;
+            color: white;
+            font-family: -apple-system, sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
             min-height: 100vh;
-            overflow: hidden; /* Чтобы звезды не создавали прокрутку */
+            overflow: hidden;
         }
 
-        /* АНИМАЦИЯ ЗВЕЗД */
-        .stars-container {
+        /* АНИМИРОВАННЫЙ ФОН (ЧИСТЫЙ CSS) */
+        .stars-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
             z-index: -1;
-            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
         }
 
-        .star {
+        /* Эффект мерцающих точек */
+        .stars-bg::after {
+            content: "";
             position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: twinkle var(--duration) infinite ease-in-out;
+            top: 0; left: 0; width: 200%; height: 200%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 80px 120px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2.5px 2.5px at 110px 10px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 150px 50px, #eee, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: starsAnim 100s linear infinite;
+            opacity: 0.4;
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.2); }
+        @keyframes starsAnim {
+            from { transform: translateY(0); }
+            to { transform: translateY(-50%); }
         }
 
-        /* КОНТЕЙНЕР */
+        /* ИНТЕРФЕЙС */
         .container {
             width: 90%;
             max-width: 360px;
             text-align: center;
-            margin-top: 50px;
+            margin-top: 40px;
             background: rgba(255, 255, 255, 0.05);
             padding: 25px;
             border-radius: 30px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 1;
+            position: relative;
+            z-index: 10;
+            height: fit-content;
         }
 
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            width: 100%;
         }
 
         button {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 16px 5px;
@@ -73,89 +80,94 @@
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            -webkit-tap-highlight-color: transparent;
         }
 
         button.wide { grid-column: span 2; }
-        
-        button:active { 
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(0.95);
-        }
+        button:active { background: rgba(255, 255, 255, 0.2); transform: scale(0.96); }
 
         .country-card {
             background: rgba(255, 255, 255, 0.07);
             margin-bottom: 12px;
-            padding: 20px;
+            padding: 18px;
             border-radius: 20px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
+
+        .hidden { display: none !important; }
 
         .back-btn {
             background: none;
             border: 1px solid rgba(255, 255, 255, 0.2);
             margin-bottom: 20px;
             width: 100%;
-            color: #aaa;
+            color: #00d2ff;
         }
-
-        h1 { font-size: 24px; letter-spacing: 1px; }
-        p { font-size: 14px; opacity: 0.6; }
     </style>
 </head>
 <body>
 
-    <div class="stars-container" id="star-field"></div>
+    <div class="stars-bg"></div>
 
-    <div id="lang-screen" class="container">
+    <div id="screen-langs" class="container">
         <h1>Welcome! 🌍</h1>
-        <p>Choose your language</p>
+        <p style="opacity: 0.6; font-size: 14px; margin-bottom: 20px;">Choose your language</p>
         <div class="grid">
-            <button onclick="setLanguage('ru')">Русский 🇷🇺</button>
-            <button onclick="setLanguage('en')">English 🇺🇸</button>
-            <button onclick="setLanguage('tr')">Türkçe 🇹🇷</button>
-            <button onclick="setLanguage('pl')">Polski 🇵🇱</button>
-            <button onclick="setLanguage('fr')">Français 🇫🇷</button>
-            <button onclick="setLanguage('es')">Español 🇪🇸</button>
-            <button onclick="setLanguage('it')">Italiano 🇮🇹</button>
-            <button onclick="setLanguage('de')">Deutsch 🇩🇪</button>
-            <button class="wide" onclick="setLanguage('cn')">中文 🇨🇳</button>
+            <button onclick="changeTo('ru')">Русский 🇷🇺</button>
+            <button onclick="changeTo('en')">English 🇺🇸</button>
+            <button onclick="changeTo('tr')">Türkçe 🇹🇷</button>
+            <button onclick="changeTo('pl')">Polski 🇵🇱</button>
+            <button onclick="changeTo('fr')">Français 🇫🇷</button>
+            <button onclick="changeTo('es')">Español 🇪🇸</button>
+            <button onclick="changeTo('it')">Italiano 🇮🇹</button>
+            <button onclick="changeTo('de')">Deutsch 🇩🇪</button>
+            <button class="wide" onclick="changeTo('cn')">中文 🇨🇳</button>
         </div>
     </div>
 
-    <div id="country-screen" class="container" style="display: none;">
-        <button id="btn-back" class="back-btn" onclick="location.reload()">⬅ Back</button>
-        <h1 id="country-title">In which country are you? 📍</h1>
+    <div id="screen-countries" class="container hidden">
+        <button class="back-btn" onclick="location.reload()">⬅ Back / Назад</button>
+        <h2 id="title-text">В какой вы стране? 📍</h2>
         <div id="country-list"></div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
+        tg.ready();
 
-        // Генерация звезд
-        const starField = document.getElementById('star-field');
-        for (let i = 0; i < 80; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            const size = Math.random() * 3 + 'px';
-            star.style.width = size;
-            star.style.height = size;
-            star.style.top = Math.random() * 100 + '%';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
-            starField.appendChild(star);
+        const dict = {
+            ru: { t: "В какой вы стране? 📍", c: ["Турция 🇹🇷", "ОАЭ 🇦🇪", "Таиланд 🇹🇭"] },
+            en: { t: "In which country are you? 📍", c: ["Turkey 🇹🇷", "UAE 🇦🇪", "Thailand 🇹🇭"] },
+            tr: { t: "Hangi ülkedesiniz? 📍", c: ["Türkiye 🇹🇷", "BAE 🇦🇪", "Tayland 🇹🇭"] },
+            pl: { t: "W jakim kraju jesteś? 📍", c: ["Turcja 🇹🇷", "ZEA 🇦🇪", "Tajlandia 🇹🇭"] },
+            fr: { t: "Dans quel pays êtes-vous ? 📍", c: ["Turquie 🇹🇷", "Émirats 🇦🇪", "Thaïlande 🇹🇭"] },
+            es: { t: "¿En qué país estás? 📍", c: ["Turquía 🇹🇷", "EAU 🇦🇪", "Tailandia 🇹🇭"] },
+            it: { t: "In quale paese ti trovi? 📍", c: ["Turchia 🇹🇷", "Emirati Arabi 🇦🇪", "Thailandia 🇹🇭"] },
+            de: { t: "In welchem Land bist du? 📍", c: ["Türkei 🇹🇷", "VAE 🇦🇪", "Thailand 🇹🇭"] },
+            cn: { t: "你在哪个国家？ 📍", c: ["土耳其 🇹🇷", "阿联酋 🇦🇪", "泰国 🇹🇭"] }
+        };
+
+        function changeTo(lang) {
+            tg.HapticFeedback.impactOccurred('light');
+            const data = dict[lang];
+            document.getElementById('title-text').innerText = data.t;
+            
+            const list = document.getElementById('country-list');
+            list.innerHTML = '';
+            data.c.forEach(name => {
+                const div = document.createElement('div');
+                div.className = 'country-card';
+                div.innerHTML = `<span>${name}</span> <span>➡️</span>`;
+                div.onclick = () => tg.showAlert(name);
+                list.appendChild(div);
+            });
+
+            document.getElementById('screen-langs').classList.add('hidden');
+            document.getElementById('screen-countries').classList.remove('hidden');
         }
-
-        const translations = {
-            ru: { title: "В какой вы стране? 📍", countries: ["Турция 🇹🇷", "ОАЭ 🇦🇪", "Таиланд 🇹🇭"] },
-            en: { title: "In which country are you? 📍", countries: ["Turkey 🇹🇷", "UAE 🇦🇪", "Thailand 🇹🇭"] },
-            tr: { title: "Hangi ülkedesiniz? 📍", countries: ["Türkiye 🇹🇷", "BAE 🇦🇪", "Tayland 🇹🇭"] },
-            pl: { title: "W jakim kraju jesteś? 📍", countries: ["Turcja 🇹🇷", "ZEA 🇦🇪", "Tajlandia 🇹🇭"] },
-            fr: { title: "Dans quel pays êtes-vous ? 📍", countries: ["Turquie 🇹🇷", "Émirats 🇦🇪", "Thaïlande 🇹🇭"] },
-            es: { title: "¿En qué país estás? 📍", countries: ["Turquía 🇹🇷", "EAU 🇦🇪", "Tailandia 🇹🇭"] },
-            it: { title: "In quale paese ti trovi? 📍", countries: ["Turchia 🇹🇷", "Emirati Arabi 🇦🇪", "Thailandia 🇹🇭"] },
-            de: { title: "In welchem Land bist du? 📍", countries: ["Türkei 🇹🇷", "VAE 🇦
+    </script>
+</body>
+</html>
