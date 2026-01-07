@@ -22,15 +22,15 @@
             width: 90%;
             max-width: 360px;
             text-align: center;
-            margin-top: 50px;
+            margin-top: 30px;
             background: rgba(255, 255, 255, 0.1);
             padding: 20px;
             border-radius: 25px;
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            box-sizing: border-box;
         }
 
-        /* Скрываем элементы по умолчанию */
         .hidden { display: none; }
 
         .grid {
@@ -48,29 +48,29 @@
             border-radius: 15px;
             font-size: 14px;
             font-weight: bold;
-            transition: transform 0.1s;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
+        button.wide { grid-column: span 2; }
         button:active { transform: scale(0.95); }
 
-        /* Стиль карточек стран */
         .country-card {
-            background: rgba(255, 255, 255, 0.2);
-            margin-bottom: 10px;
-            padding: 20px;
-            border-radius: 20px;
-            font-size: 18px;
+            background: rgba(255, 255, 255, 0.15);
+            margin-bottom: 12px;
+            padding: 18px;
+            border-radius: 18px;
+            font-size: 17px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .back-btn {
-            background: #555;
-            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
             width: 100%;
+            color: #eee;
         }
     </style>
 </head>
@@ -78,50 +78,72 @@
 
     <div id="lang-screen" class="container">
         <h1>Welcome! 🌍</h1>
-        <p>Выберите язык</p>
+        <p>Choose your language</p>
         <div class="grid">
-            <button onclick="showCountries()">Русский 🇷🇺</button>
-            <button onclick="tg.showAlert('Only Russian is available for now!')">English 🇺🇸</button>
-            <button onclick="showCountries()">Türkçe 🇹🇷</button>
-            <button onclick="showCountries()">Polski 🇵🇱</button>
-            <button onclick="showCountries()">Français 🇫🇷</button>
-            <button onclick="showCountries()">Español 🇪🇸</button>
-            <button onclick="showCountries()">Italiano 🇮🇹</button>
-            <button onclick="showCountries()">Deutsch 🇩🇪</button>
+            <button onclick="setLanguage('ru')">Русский 🇷🇺</button>
+            <button onclick="setLanguage('en')">English 🇺🇸</button>
+            <button onclick="setLanguage('tr')">Türkçe 🇹🇷</button>
+            <button onclick="setLanguage('pl')">Polski 🇵🇱</button>
+            <button onclick="setLanguage('fr')">Français 🇫🇷</button>
+            <button onclick="setLanguage('es')">Español 🇪🇸</button>
+            <button onclick="setLanguage('it')">Italiano 🇮🇹</button>
+            <button onclick="setLanguage('de')">Deutsch 🇩🇪</button>
+            <button class="wide" onclick="setLanguage('cn')">中文 🇨🇳</button>
         </div>
     </div>
 
     <div id="country-screen" class="container hidden">
-        <button class="back-btn" onclick="showLangs()">⬅ Назад</button>
-        <h1>Куда летим? ✈️</h1>
-        <div class="country-card" onclick="selectCountry('Турция')">
-            <span>Турция 🇹🇷</span> ➡️
-        </div>
-        <div class="country-card" onclick="selectCountry('ОАЭ')">
-            <span>ОАЭ 🇦🇪</span> ➡️
-        </div>
-        <div class="country-card" onclick="selectCountry('Таиланд')">
-            <span>Таиланд 🇹🇭</span> ➡️
-        </div>
+        <button id="btn-back" class="back-btn" onclick="showLangs()">⬅ Back</button>
+        <h1 id="country-title">Where to go? ✈️</h1>
+        <div id="country-list">
+            </div>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        function showCountries() {
+        // Словарь переводов
+        const translations = {
+            ru: { title: "Куда летим? ✈️", back: "⬅ Назад", countries: ["Турция 🇹🇷", "ОАЭ 🇦🇪", "Таиланд 🇹🇭"] },
+            en: { title: "Where to go? ✈️", back: "⬅ Back", countries: ["Turkey 🇹🇷", "UAE 🇦🇪", "Thailand 🇹🇭"] },
+            tr: { title: "Nereye gidiyoruz? ✈️", back: "⬅ Geri", countries: ["Türkiye 🇹🇷", "BAE 🇦🇪", "Tayland 🇹🇭"] },
+            pl: { title: "Dokąd jedziemy? ✈️", back: "⬅ Powrót", countries: ["Turcja 🇹🇷", "ZEA 🇦🇪", "Tajlandia 🇹🇭"] },
+            fr: { title: "Où aller ? ✈️", back: "⬅ Retour", countries: ["Turquie 🇹🇷", "Émirats 🇦🇪", "Thaïlande 🇹🇭"] },
+            es: { title: "¿A dónde vamos? ✈️", back: "⬅ Volver", countries: ["Turquía 🇹🇷", "EAU 🇦🇪", "Tailandia 🇹🇭"] },
+            it: { title: "Dove andiamo? ✈️", back: "⬅ Indietro", countries: ["Turchia 🇹🇷", "Emirati Arabi 🇦🇪", "Thailandia 🇹🇭"] },
+            de: { title: "Wohin gehen wir? ✈️", back: "⬅ Zurück", countries: ["Türkei 🇹🇷", "VAE 🇦🇪", "Thailand 🇹🇭"] },
+            cn: { title: "我们要去哪里？ ✈️", back: "⬅ 返回", countries: ["土耳其 🇹🇷", "阿联酋 🇦🇪", "泰国 🇹🇭"] }
+        };
+
+        function setLanguage(lang) {
+            tg.HapticFeedback.impactOccurred('medium');
+            
+            // Обновляем тексты на экране стран
+            const data = translations[lang];
+            document.getElementById('country-title').innerText = data.title;
+            document.getElementById('btn-back').innerText = data.back;
+
+            // Очищаем и создаем список стран
+            const list = document.getElementById('country-list');
+            list.innerHTML = '';
+            
+            data.countries.forEach(country => {
+                const card = document.createElement('div');
+                card.className = 'country-card';
+                card.innerHTML = `<span>${country}</span> <span>➡️</span>`;
+                card.onclick = () => tg.showConfirm(`${data.title}: ${country}`);
+                list.appendChild(card);
+            });
+
+            // Переключаем экраны
             document.getElementById('lang-screen').classList.add('hidden');
             document.getElementById('country-screen').classList.remove('hidden');
-            tg.HapticFeedback.impactOccurred('medium');
         }
 
         function showLangs() {
             document.getElementById('country-screen').classList.add('hidden');
             document.getElementById('lang-screen').classList.remove('hidden');
-        }
-
-        function selectCountry(name) {
-            tg.showConfirm("Открыть путеводитель по стране: " + name + "?");
         }
     </script>
 </body>
