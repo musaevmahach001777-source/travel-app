@@ -2,83 +2,90 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Travel App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        /* Общие настройки страницы */
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
-            /* Стильный темно-синий градиент */
-            background: linear-gradient(135deg, #102a43 0%, #243b55 100%);
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
             color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
+        /* Главный контейнер */
         .container {
+            width: 90%;
+            max-width: 360px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 25px 15px;
-            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 25px;
             backdrop-filter: blur(15px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            width: 85%;
-            max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-sizing: border-box;
         }
 
         h1 {
+            font-size: 24px;
             margin: 0 0 10px 0;
-            font-size: 26px;
-            letter-spacing: 1px;
         }
 
         p {
-            margin-bottom: 25px;
-            opacity: 0.7;
             font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 20px;
         }
 
-        /* Сетка для кнопок: 2 колонки */
+        /* Сетка кнопок: строго 2 колонки */
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
             width: 100%;
         }
 
+        /* Стиль кнопок */
         button {
-            padding: 14px 5px;
-            font-size: 15px;
-            font-weight: 600;
-            border: none;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: white;
-            /* Яркий оранжевый цвет */
             background: #ff9800;
-            box-shadow: 0 4px 10px rgba(255, 152, 0, 0.3);
+            color: white;
+            border: none;
+            padding: 15px 5px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 5px;
+        }
+
+        /* Последняя кнопка (Китай) на всю ширину */
+        button.wide {
+            grid-column: span 2;
         }
 
         button:active {
-            transform: scale(0.96);
+            transform: scale(0.95);
             background: #e68a00;
         }
 
         .footer {
-            margin-top: 25px;
-            font-size: 11px;
-            opacity: 0.4;
-            letter-spacing: 1px;
+            margin-top: 20px;
+            font-size: 10px;
+            opacity: 0.5;
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -97,7 +104,7 @@
             <button onclick="selectLang('es')">Español 🇪🇸</button>
             <button onclick="selectLang('it')">Italiano 🇮🇹</button>
             <button onclick="selectLang('de')">Deutsch 🇩🇪</button>
-            <button style="grid-column: span 2;" onclick="selectLang('cn')">中文 🇨🇳</button>
+            <button class="wide" onclick="selectLang('cn')">中文 🇨🇳</button>
         </div>
 
         <div class="footer">@travelles_bot</div>
@@ -105,15 +112,12 @@
 
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand(); // Развернуть на весь экран
-        tg.headerColor = '#102a43'; // Цвет верхней полоски приложения
+        tg.expand();
+        tg.ready();
 
         function selectLang(lang) {
-            // Маленькая вибрация при нажатии (только на телефонах)
             tg.HapticFeedback.impactOccurred('medium');
-            
-            alert("Selected: " + lang.toUpperCase());
-            // Сюда мы скоро добавим переход к списку стран
+            alert("Вы выбрали: " + lang.toUpperCase());
         }
     </script>
 </body>
