@@ -22,12 +22,12 @@
         .card { margin-bottom: 12px; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; animation: fadeIn 0.5s ease forwards; opacity: 0; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .chat-btn { background: linear-gradient(135deg, rgba(0, 210, 255, 0.1), rgba(0, 115, 255, 0.1)); border-color: rgba(0, 210, 255, 0.3); color: #00d2ff; margin-top: 10px; font-weight: 700; letter-spacing: 0.5px; }
+        .chat-btn { background: linear-gradient(135deg, rgba(0, 210, 255, 0.1), rgba(0, 115, 255, 0.1)); border-color: rgba(0, 210, 255, 0.3); color: #00d2ff; margin-top: 10px; font-weight: 700; }
         .hidden { display: none !important; opacity: 0; }
         #scroll-area { max-height: 60vh; overflow-y: auto; padding-right: 5px; scrollbar-width: none; }
         #scroll-area::-webkit-scrollbar { display: none; }
         
-        h1 { font-size: 26px; margin-bottom: 10px; letter-spacing: -0.5px; }
+        h1 { font-size: 26px; margin-bottom: 10px; }
         h2 { font-size: 22px; margin-bottom: 15px; color: #fff; font-weight: 700; }
         p { opacity: 0.5; font-size: 14px; margin-bottom: 25px; }
     </style>
@@ -65,19 +65,18 @@
     <script>
         const tg = window.Telegram.WebApp;
         const backButton = tg.BackButton;
+        const mainButton = tg.MainButton;
         
         tg.expand();
         tg.ready();
-        tg.setHeaderColor('#050810'); // Нативная настройка цвета шапки
+        tg.setHeaderColor('#050810');
 
         let currentLang = 'ru';
         let selectedCountry = '';
 
         const dict = {
             ru: { t: "Выберите страну 📍", act: "Выберите действие", join: "Перейти в группу", cancel: "Отмена", cat: ["Правила", "Работа", "Еда", "Услуги", "Недвижимость", "Реклама", "Новости", "Документы"], chat: "Чат сообщества", c: ["Франция 🇫🇷", "Россия 🇷🇺", "Турция 🇹🇷", "Испания 🇪🇸", "Италия 🇮🇹", "Германия 🇩🇪", "Индонезия (Бали) 🇮🇩", "Таиланд 🇹🇭", "Китай 🇨🇳", "Япония 🇯🇵", "Шри-Ланка 🇱🇰", "Катар 🇶🇦", "Египет 🇪🇬", "Мексика 🇲🇽", "Доминикана 🇩🇴", "США 🇺🇸", "Грузия 🇬🇪", "Армения 🇦🇲", "Казахстан 🇰🇿", "Португалия 🇵🇹", "Северный Кипр 🇹🇷", "Южный Кипр 🇨🇾", "ОАЭ 🇦🇪", "Черногория 🇲🇪", "Греция 🇬🇷", "Великобритания 🇬🇧", "Азербайджан 🇦🇿"] },
-            en: { t: "Select Country 📍", act: "Select Action", join: "Join Group", cancel: "Cancel", cat: ["Rules", "Jobs", "Food", "Services", "Property", "Ads", "News", "Documents"], chat: "Community Chat", c: ["France 🇫🇷", "Russia 🇷🇺", "Turkey 🇹🇷", "Spain 🇪🇸", "Italy 🇮🇹", "Germany 🇩🇪", "Indonesia (Bali) 🇮🇩", "Thailand 🇹🇭", "China 🇨🇳", "Japan 🇯🇵", "Sri Lanka 🇱🇰", "Qatar 🇶🇦", "Egypt 🇪🇬", "Mexico 🇲🇽", "Dominican Republic 🇩🇴", "USA 🇺🇸", "Georgia 🇬🇪", "Armenia 🇦🇲", "Kazakhstan 🇰🇿", "Portugal 🇵🇹", "Northern Cyprus 🇹🇷", "Southern Cyprus 🇨🇾", "UAE 🇦🇪", "Montenegro 🇲🇪", "Greece 🇬🇷", "United Kingdom 🇬🇧", "Azerbaijan 🇦🇿"] },
-            tr: { t: "Ülke Seçin 📍", act: "Eylem Seç", join: "Gruba Katıl", cancel: "İptal", cat: ["Kurallar", "İş", "Yemek", "Hizmetler", "Emlak", "Reklam", "Haberler", "Belgeler"], chat: "Topluluk Sohbeti", c: ["Fransa 🇫🇷", "Rusya 🇷🇺", "Türkiye 🇹🇷", "İspanya 🇪🇸", "İtalya 🇮🇹", "Almanya 🇩🇪", "Endonezya (Bali) 🇮🇩", "Tayland 🇹🇭", "Çin 🇨🇳", "Japonya 🇯🇵", "Sri Lanka 🇱🇰", "Katar 🇶🇦", "Mısır 🇪🇬", "Meksika 🇲🇽", "Dominik Cumhuriyeti 🇩🇴", "ABD 🇺🇸", "Gürcistan 🇬🇪", "Ermenistan 🇦🇲", "Kazakistan 🇰🇿", "Portekiz 🇵🇹", "Kuzey Kıbrıs 🇹🇷", "Güney Kıbrıs 🇨🇾", "BAE 🇦🇪", "Karadağ 🇲🇪", "Yunanistan 🇬🇷", "Birleşik Krallık 🇬🇧", "Azerbaycan 🇦🇿"] }
-            // Другие языки будут использовать английский как запасной в этой логике для краткости кода
+            en: { t: "Select Country 📍", act: "Select Action", join: "Join Group", cancel: "Cancel", cat: ["Rules", "Jobs", "Food", "Services", "Property", "Ads", "News", "Documents"], chat: "Community Chat", c: ["France 🇫🇷", "Russia 🇷🇺", "Turkey 🇹🇷", "Spain 🇪🇸", "Italy 🇮🇹", "Germany 🇩🇪", "Indonesia (Bali) 🇮🇩", "Thailand 🇹🇭", "China 🇨🇳", "Japan 🇯🇵", "Sri Lanka 🇱🇰", "Qatar 🇶🇦", "Egypt 🇪🇬", "Mexico 🇲🇽", "Dominican Republic 🇩🇴", "USA 🇺🇸", "Georgia 🇬🇪", "Armenia 🇦🇲", "Kazakhstan 🇰🇿", "Portugal 🇵🇹", "Northern Cyprus 🇹🇷", "Southern Cyprus 🇨🇾", "UAE 🇦🇪", "Montenegro 🇲🇪", "Greece 🇬🇷", "United Kingdom 🇬🇧", "Azerbaijan 🇦🇿"] }
         };
 
         function showScreen(id) {
@@ -85,7 +84,16 @@
             const target = document.getElementById(id);
             target.classList.remove('hidden');
             setTimeout(() => target.style.opacity = "1", 50);
-            id === 'screen-langs' ? backButton.hide() : backButton.show();
+            
+            if (id === 'screen-langs') {
+                backButton.hide();
+                mainButton.hide();
+            } else if (id === 'screen-countries') {
+                backButton.show();
+                mainButton.hide();
+            } else if (id === 'screen-inside') {
+                backButton.show();
+            }
         }
 
         backButton.onClick(() => {
@@ -117,6 +125,12 @@
             const data = dict[currentLang] || dict['en'];
             document.getElementById('current-country-name').innerText = name;
             document.getElementById('m-chat').innerText = data.chat;
+            
+            // Настраиваем Main Button
+            mainButton.setText(data.chat.toUpperCase());
+            mainButton.show();
+            mainButton.onClick(openChat);
+
             const grid = document.getElementById('menu-grid');
             grid.innerHTML = '';
             const icons = ["📜", "💼", "🍴", "🛠", "🏠", "📢", "📰", "📄"];
@@ -124,20 +138,18 @@
                 const btn = document.createElement('button');
                 btn.className = "wide";
                 btn.style.display = "flex"; btn.style.justifyContent = "center"; btn.style.alignItems = "center"; btn.style.gap = "10px";
-                btn.style.animation = "fadeIn 0.5s ease forwards"; btn.style.animationDelay = (index * 0.04) + "s";
                 btn.innerHTML = `<span>${icons[index]}</span> <span>${catName}</span>`;
                 btn.onclick = () => {
                     tg.HapticFeedback.impactOccurred('medium');
-                    // НАЙТИВНОЕ МЕНЮ (ActionSheet)
-                    tg.showActionSheet({
-                        title: `${name}: ${catName}`,
-                        buttons: [
-                            {text: data.join, type: 'default', id: 'join'},
-                            {text: data.cancel, type: 'destructive'}
-                        ]
-                    }, (buttonId) => {
-                        if(buttonId === 'join') tg.showAlert(`Redirecting to ${catName} chat...`);
-                    });
+                    // Резервный метод для ActionSheet
+                    if (tg.showActionSheet) {
+                        tg.showActionSheet({
+                            title: catName,
+                            buttons: [{text: data.join, id: 'ok'}, {text: data.cancel, type: 'destructive'}]
+                        }, (id) => { if(id === 'ok') tg.showAlert('Redirect...'); });
+                    } else {
+                        tg.showAlert(`${catName}: ${name}`);
+                    }
                 };
                 grid.appendChild(btn);
             });
@@ -146,9 +158,8 @@
 
         function openChat() { 
             tg.HapticFeedback.notificationOccurred('success');
-            const data = dict[currentLang] || dict['en'];
-            tg.showConfirm(`${data.chat}: ${selectedCountry}?`, (ok) => {
-                if(ok) tg.showAlert("Opening Telegram Group...");
+            tg.showConfirm(`Join ${selectedCountry} group?`, (ok) => {
+                if(ok) tg.showAlert("Opening...");
             });
         }
     </script>
