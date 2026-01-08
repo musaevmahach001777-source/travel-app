@@ -10,24 +10,49 @@
         .stars-bg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%); z-index: -1; }
         .stars-bg::after { content: ""; position: absolute; top: 0; left: 0; width: 200%; height: 200%; background-image: radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)), radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)); background-repeat: repeat; background-size: 250px 250px; animation: starsAnim 35s linear infinite; opacity: 0.5; }
         @keyframes starsAnim { from { transform: translateY(0); } to { transform: translateY(-50%); } }
-        .container { width: 92%; max-width: 360px; text-align: center; margin: 30px 0; background: rgba(255, 255, 255, 0.03); padding: 25px; border-radius: 32px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); position: relative; z-index: 10; height: fit-content; }
+        .container { width: 92%; max-width: 360px; text-align: center; margin: 30px 0; background: rgba(255, 255, 255, 0.03); padding: 25px; border-radius: 32px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); z-index: 10; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        button, .card { background: rgba(255, 255, 255, 0.06); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; }
+        button, .card { background: rgba(255,255,255,0.06); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; transition: all 0.2s ease; }
         button { padding: 14px 5px; font-size: 13px; font-weight: 600; cursor: pointer; }
         button.wide { grid-column: span 2; }
-        button:active, .card:active { background: rgba(255, 255, 255, 0.12); transform: scale(0.97); }
-        .card { margin-bottom: 12px; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .chat-btn { background: rgba(0, 210, 255, 0.08); border-color: rgba(0, 210, 255, 0.2); color: #00d2ff; margin-top: 10px; }
+        .card { padding: 18px 20px; display: flex; justify-content: space-between; cursor: pointer; margin-bottom: 10px; }
         .hidden { display: none !important; }
-        .back-btn { margin-bottom: 20px; width: 100%; font-size: 14px; color: white; display: flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; height: 45px; }
-        #scroll-area { max-height: 60vh; overflow-y: auto; padding-right: 5px; }
-        h1 { font-size: 26px; margin-bottom: 10px; }
-        h2 { font-size: 22px; margin-bottom: 15px; color: #fff; }
-        p { opacity: 0.5; font-size: 14px; margin-bottom: 25px; }
+        .back-btn { margin-bottom: 20px; width: 100%; height: 45px; }
+        #scroll-area { max-height: 60vh; overflow-y: auto; }
     </style>
 </head>
+
 <body>
 <div class="stars-bg"></div>
+
+<div id="screen-langs" class="container">
+    <h1>Welcome! 🌍</h1>
+    <p>Choose your language</p>
+    <div class="grid">
+        <button onclick="changeTo('ru')">Русский 🇷🇺</button>
+        <button onclick="changeTo('en')">English 🇺🇸</button>
+        <button onclick="changeTo('tr')">Türkçe 🇹🇷</button>
+        <button onclick="changeTo('pl')">Polski 🇵🇱</button>
+        <button onclick="changeTo('fr')">Français 🇫🇷</button>
+        <button onclick="changeTo('es')">Español 🇪🇸</button>
+        <button onclick="changeTo('it')">Italiano 🇮🇹</button>
+        <button onclick="changeTo('de')">Deutsch 🇩🇪</button>
+        <button class="wide" onclick="changeTo('cn')">中文 🇨🇳</button>
+    </div>
+</div>
+
+<div id="screen-countries" class="container hidden">
+    <button id="btn-back-to-lang" class="back-btn" onclick="showScreen('screen-langs')">⬅ Назад</button>
+    <h2 id="title-countries"></h2>
+    <div id="scroll-area"></div>
+</div>
+
+<div id="screen-inside" class="container hidden">
+    <button id="btn-back-to-list" class="back-btn" onclick="showScreen('screen-countries')">⬅ Назад</button>
+    <h2 id="current-country-name"></h2>
+    <div id="menu-grid" class="grid"></div>
+    <button class="wide" onclick="openChat()"><span id="m-chat"></span></button>
+</div>
 
 <script>
 const tg = window.Telegram.WebApp;
@@ -37,57 +62,50 @@ let currentLang = 'ru';
 let selectedCountry = '';
 
 const dict = {
-ru:{t:"Выберите страну 📍",b:"⬅ Назад",cat:["Правила","Работа","Еда","Услуги","Недвижимость","Реклама","Новости","Документы"],chat:"Чат сообщества",c:["Азербайджан 🇦🇿","Армения 🇦🇲","Германия 🇩🇪","Грузия 🇬🇪","Доминикана 🇩🇴","Египет 🇪🇬","Испания 🇪🇸","Италия 🇮🇹","Индонезия (Бали) 🇮🇩","Казахстан 🇰🇿","Катар 🇶🇦","Китай 🇨🇳","Мексика 🇲🇽","Португалия 🇵🇹","Россия 🇷🇺","США 🇺🇸","Таиланд 🇹🇭","Турция 🇹🇷","Франция 🇫🇷","Шри-Ланка 🇱🇰","Япония 🇯🇵","Северный Кипр 🇹🇷","Южный Кипр 🇨🇾"]},
-en:{t:"Select Country 📍",b:"⬅ Back",cat:["Rules","Jobs","Food","Services","Property","Ads","News","Documents"],chat:"Community Chat",c:["Azerbaijan 🇦🇿","Armenia 🇦🇲","China 🇨🇳","Dominican Republic 🇩🇴","Egypt 🇪🇬","France 🇫🇷","Georgia 🇬🇪","Germany 🇩🇪","Indonesia (Bali) 🇮🇩","Italy 🇮🇹","Japan 🇯🇵","Kazakhstan 🇰🇿","Mexico 🇲🇽","Portugal 🇵🇹","Qatar 🇶🇦","Russia 🇷🇺","Spain 🇪🇸","Sri Lanka 🇱🇰","Thailand 🇹🇭","Turkey 🇹🇷","USA 🇺🇸","Northern Cyprus 🇹🇷","Southern Cyprus 🇨🇾"]},
-tr:{t:"Ülke Seçin 📍",b:"⬅ Geri",cat:["Kurallar","İş","Yemek","Hizmetler","Emlak","Reklam","Haberler","Belgeler"],chat:"Topluluk Sohbeti",c:["Azerbaycan 🇦🇿","Almanya 🇩🇪","Amerika 🇺🇸","Arnavutluk 🇦🇱","Çin 🇨🇳","Dominik Cumhuriyeti 🇩🇴","Endonezya (Bali) 🇮🇩","Ermenistan 🇦🇲","Fransa 🇫🇷","Gürcistan 🇬🇪","İspanya 🇪🇸","İtalya 🇮🇹","Japonya 🇯🇵","Kazakistan 🇰🇿","Katar 🇶🇦","Meksika 🇲🇽","Portekiz 🇵🇹","Rusya 🇷🇺","Sri Lanka 🇱🇰","Tayland 🇹🇭","Türkiye 🇹🇷","Kuzey Kıbrıs 🇹🇷","Güney Kıbrıs 🇨🇾"]},
-pl:{t:"Wybierz kraj 📍",b:"⬅ Powrót",cat:["Zasady","Praca","Jedzenie","Usługi","Nieruchomości","Reklama","Wiadomości","Dokumenty"],chat:"Czat społeczności",c:["Azerbejdżan 🇦🇿","Armenia 🇦🇲","Chiny 🇨🇳","Dominikana 🇩🇴","Egipt 🇪🇬","Francja 🇫🇷","Gruzja 🇬🇪","Hiszpania 🇪🇸","Indonezja (Bali) 🇮🇩","Japonia 🇯🇵","Kazachstan 🇰🇿","Meksyk 🇲🇽","Niemcy 🇩🇪","Portugalia 🇵🇹","Rosja 🇷🇺","Sri Lanka 🇱🇰","Tajlandia 🇹🇭","Turcja 🇹🇷","USA 🇺🇸","Włochy 🇮🇹","Cypr Północny 🇹🇷","Cypr Południowy 🇨🇾"]},
-fr:{t:"Choisir un pays 📍",b:"⬅ Retour",cat:["Règles","Travail","Nourriture","Services","Immobilier","Publicité","Nouvelles","Documents"],chat:"Chat communautaire",c:["Azerbaïdjan 🇦🇿","Arménie 🇦🇲","Chine 🇨🇳","Égypte 🇪🇬","Espagne 🇪🇸","France 🇫🇷","Géorgie 🇬🇪","Indonésie (Bali) 🇮🇩","Italie 🇮🇹","Japon 🇯🇵","Kazakhstan 🇰🇿","Mexique 🇲🇽","Portugal 🇵🇹","Qatar 🇶🇦","Russie 🇷🇺","Sri Lanka 🇱🇰","Thaïlande 🇹🇭","Turquie 🇹🇷","États-Unis 🇺🇸","République Dominicaine 🇩🇴","Chypre du Nord 🇹🇷","Chypre du Sud 🇨🇾"]},
-es:{t:"Seleccionar país 📍",b:"⬅ Volver",cat:["Reglas","Trabajo","Comida","Servicios","Inmuebles","Anuncios","Noticias","Documentos"],chat:"Chat de la comunidad",c:["Azerbaiyán 🇦🇿","Alemania 🇩🇪","Armenia 🇦🇲","China 🇨🇳","Egipto 🇪🇬","España 🇪🇸","Estados Unidos 🇺🇸","Francia 🇫🇷","Georgia 🇬🇪","Indonesia (Bali) 🇮🇩","Italia 🇮🇹","Japón 🇯🇵","Kazajistán 🇰🇿","México 🇲🇽","Portugal 🇵🇹","Qatar 🇶🇦","Rusia 🇷🇺","Sri Lanka 🇱🇰","Tailandia 🇹🇭","Turquía 🇹🇷","República Dominicana 🇩🇴","Chipre del Norte 🇹🇷","Chipre del Sur 🇨🇾"]},
-it:{t:"Scegli il paese 📍",b:"⬅ Indietro",cat:["Regole","Lavoro","Cibo","Servizi","Immobili","Pubblicità","Notizie","Documenti"],chat:"Chat della community",c:["Azerbaigian 🇦🇿","Armenia 🇦🇲","Cina 🇨🇳","Egitto 🇪🇬","Francia 🇫🇷","Georgia 🇬🇪","Germania 🇩🇪","Indonesia (Bali) 🇮🇩","Italia 🇮🇹","Giappone 🇯🇵","Kazakistan 🇰🇿","Messico 🇲🇽","Portogallo 🇵🇹","Qatar 🇶🇦","Russia 🇷🇺","Spagna 🇪🇸","Sri Lanka 🇱🇰","Thailandia 🇹🇭","Turchia 🇹🇷","USA 🇺🇸","Repubblica Dominicana 🇩🇴","Cipro del Nord 🇹🇷","Cipro del Sud 🇨🇾"]},
-de:{t:"Land wählen 📍",b:"⬅ Zurück",cat:["Regeln","Arbeit","Essen","Dienstleistungen","Immobilien","Werbung","Nachrichten","Dokumente"],chat:"Community-Chat",c:["Aserbaidschan 🇦🇿","Armenien 🇦🇲","China 🇨🇳","Deutschland 🇩🇪","Dominikanische Republik 🇩🇴","Frankreich 🇫🇷","Georgien 🇬🇪","Indonesien (Bali) 🇮🇩","Italien 🇮🇹","Japan 🇯🇵","Kasachstan 🇰🇿","Mexiko 🇲🇽","Portugal 🇵🇹","Qatar 🇶🇦","Russland 🇷🇺","Spanien 🇪🇸","Sri Lanka 🇱🇰","Thailand 🇹🇭","Türkei 🇹🇷","USA 🇺🇸","Nordzypern 🇹🇷","Südzypern 🇨🇾"]},
-cn:{t:"选择国家 📍",b:"⬅ 返回",cat:["规则","工作","美食","服务","房产","广告","新闻","文件"],chat:"社区聊天",c:["阿塞拜疆 🇦🇿","亚美尼亚 🇦🇲","中国 🇨🇳","多米尼加 🇩🇴","埃及 🇪🇬","法国 🇫🇷","格鲁吉亚 🇬🇪","德国 🇩🇪","印度尼西亚 (巴厘岛) 🇮🇩","意大利 🇮🇹","日本 🇯🇵","哈萨克斯坦 🇰🇿","墨西哥 🇲🇽","葡萄牙 🇵🇹","卡塔尔 🇶🇦","俄罗斯 🇷🇺","西班牙 🇪🇸","斯里兰卡 🇱🇰","泰国 🇹🇭","土耳其 🇹🇷","美国 🇺🇸","北塞浦路斯 🇹🇷","南塞浦路斯 🇨🇾"]}
+    ru:{t:"Выберите страну 📍",b:"⬅ Назад",cat:["Правила","Работа","Еда","Услуги","Недвижимость","Реклама","Новости","Документы"],chat:"Чат сообщества",c:["Азербайджан 🇦🇿","Армения 🇦🇲","Германия 🇩🇪","Грузия 🇬🇪","Доминикана 🇩🇴","Египет 🇪🇬","Испания 🇪🇸","Италия 🇮🇹","Индонезия (Бали) 🇮🇩","Казахстан 🇰🇿","Катар 🇶🇦","Китай 🇨🇳","Мексика 🇲🇽","Португалия 🇵🇹","Россия 🇷🇺","США 🇺🇸","Таиланд 🇹🇭","Турция 🇹🇷","Франция 🇫🇷","Шри-Ланка 🇱🇰","Япония 🇯🇵","Северный Кипр 🇹🇷","Южный Кипр 🇨🇾"]}
 };
 
 function showScreen(id){
     document.querySelectorAll('.container').forEach(s=>s.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
 }
+
 function changeTo(lang){
-    currentLang=lang;
-    const data=dict[lang];
-    document.getElementById('title-countries').innerText=data.t;
-    document.getElementById('btn-back-to-lang').innerText=data.b;
-    const list=document.getElementById('scroll-area');
-    list.innerHTML='';
-    [...data.c].sort((a,b)=>a.localeCompare(b,lang)).forEach(name=>{
-        const div=document.createElement('div');
-        div.className='card';
-        div.innerHTML=`<span>${name}</span><span style="opacity:0.3">➡️</span>`;
-        div.onclick=()=>openCountry(name);
+    currentLang = lang;
+    const data = dict[lang];
+    document.getElementById('title-countries').innerText = data.t;
+    document.getElementById('btn-back-to-lang').innerText = data.b;
+    const list = document.getElementById('scroll-area');
+    list.innerHTML = '';
+    data.c.sort((a,b)=>a.localeCompare(b,lang)).forEach(name=>{
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `<span>${name}</span><span>➡️</span>`;
+        div.onclick = ()=>openCountry(name);
         list.appendChild(div);
     });
     showScreen('screen-countries');
 }
+
 function openCountry(name){
-    selectedCountry=name;
-    const data=dict[currentLang];
-    document.getElementById('current-country-name').innerText=name;
-    document.getElementById('btn-back-to-list').innerText=data.b;
-    document.getElementById('m-chat').innerText=data.chat;
-    const grid=document.getElementById('menu-grid');
-    grid.innerHTML='';
-    const icons=["📜","💼","🍴","🛠","🏠","📢","📰","📄"];
-    data.cat.forEach((cat,i)=>{
-        const btn=document.createElement('button');
-        btn.className="wide";
-        btn.innerHTML=`${icons[i]} ${cat}`;
-        btn.onclick=()=>tg.showAlert(`${cat}: ${name}`);
+    selectedCountry = name;
+    const data = dict[currentLang];
+    document.getElementById('current-country-name').innerText = name;
+    document.getElementById('btn-back-to-list').innerText = data.b;
+    document.getElementById('m-chat').innerText = data.chat;
+    const grid = document.getElementById('menu-grid');
+    grid.innerHTML = '';
+    data.cat.forEach(cat=>{
+        const btn = document.createElement('button');
+        btn.className = 'wide';
+        btn.innerText = cat;
         grid.appendChild(btn);
     });
     showScreen('screen-inside');
 }
+
 function openChat(){
-    tg.showAlert(`${dict[currentLang].chat}: ${selectedCountry}`);
+    tg.showAlert(selectedCountry);
 }
 </script>
 </body>
