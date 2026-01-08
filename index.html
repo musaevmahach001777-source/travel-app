@@ -41,7 +41,6 @@ body {
     animation: starsAnim 35s linear infinite;
     opacity: 0.5;
 }
-
 @keyframes starsAnim {
     from { transform: translateY(0); }
     to   { transform: translateY(-50%); }
@@ -59,15 +58,8 @@ body {
     border: 1px solid rgba(255,255,255,0.1);
     z-index: 1;
 }
-
 .hidden { display: none; }
-
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 button, .card {
     background: rgba(255,255,255,0.06);
     color: white;
@@ -75,20 +67,16 @@ button, .card {
     border-radius: 20px;
     transition: all .2s ease;
 }
-
 button {
     padding: 14px 5px;
     font-size: 13px;
     font-weight: 600;
 }
-
 button.wide { grid-column: span 2; }
-
 button:active, .card:active {
     transform: scale(0.97);
     background: rgba(255,255,255,0.12);
 }
-
 .card {
     padding: 16px;
     margin-bottom: 10px;
@@ -96,20 +84,17 @@ button:active, .card:active {
     justify-content: space-between;
     cursor: pointer;
 }
-
 .back-btn {
     margin-bottom: 15px;
     width: 100%;
     height: 44px;
 }
-
 .chat-btn {
     margin-top: 15px;
     background: rgba(0,210,255,.1);
     border-color: rgba(0,210,255,.3);
     color: #00d2ff;
 }
-
 #scroll-area {
     max-height: 60vh;
     overflow-y: auto;
@@ -198,46 +183,59 @@ c:["法国 🇫🇷","西班牙 🇪🇸","意大利 🇮🇹","德国 🇩🇪"
 };
 
 function showScreen(id){
-document.querySelectorAll('.container').forEach(el=>el.classList.add('hidden'));
-document.getElementById(id).classList.remove('hidden');
+    document.querySelectorAll('.container').forEach(el=>el.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
 }
 
 function changeTo(lang){
-currentLang = lang;
-const d = dict[lang];
-document.getElementById('title-countries').innerText = d.t;
-document.querySelector('#screen-countries .back-btn').innerText = d.b;
-const list = document.getElementById('scroll-area');
-list.innerHTML = '';
-d.c.forEach(c=>{
-const div=document.createElement('div');
-div.className='card';
-div.innerHTML=`<span>${c}</span><span>➡️</span>`;
-div.onclick=()=>openCountry(c);
-list.appendChild(div);
-});
-showScreen('screen-countries');
+    currentLang = lang;
+    const d = dict[lang];
+
+    document.getElementById('title-countries').innerText = d.t;
+    document.querySelector('#screen-countries .back-btn').innerText = d.b;
+
+    const list = document.getElementById('scroll-area');
+    list.innerHTML = '';
+
+    /* 🔤 АЛФАВИТНАЯ СОРТИРОВКА ПО ЯЗЫКУ */
+    const sortedCountries = [...d.c].sort((a, b) =>
+        a.localeCompare(b, currentLang)
+    );
+
+    sortedCountries.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `<span>${c}</span><span>➡️</span>`;
+        div.onclick = () => openCountry(c);
+        list.appendChild(div);
+    });
+
+    showScreen('screen-countries');
 }
 
 function openCountry(name){
-selectedCountry = name;
-const d = dict[currentLang];
-document.getElementById('current-country-name').innerText = name;
-document.getElementById('chat-btn').innerText = d.chat;
-const grid=document.getElementById('menu-grid');
-grid.innerHTML='';
-d.cat.forEach(cat=>{
-const btn=document.createElement('button');
-btn.className='wide';
-btn.innerText=cat;
-btn.onclick=()=>tg.showAlert(cat+" — "+name);
-grid.appendChild(btn);
-});
-showScreen('screen-inside');
+    selectedCountry = name;
+    const d = dict[currentLang];
+
+    document.getElementById('current-country-name').innerText = name;
+    document.getElementById('chat-btn').innerText = d.chat;
+
+    const grid = document.getElementById('menu-grid');
+    grid.innerHTML = '';
+
+    d.cat.forEach(cat=>{
+        const btn = document.createElement('button');
+        btn.className = 'wide';
+        btn.innerText = cat;
+        btn.onclick = ()=>tg.showAlert(cat+" — "+name);
+        grid.appendChild(btn);
+    });
+
+    showScreen('screen-inside');
 }
 
 function openChat(){
-tg.showAlert(dict[currentLang].chat+" — "+selectedCountry);
+    tg.showAlert(dict[currentLang].chat+" — "+selectedCountry);
 }
 </script>
 
