@@ -1,121 +1,128 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Travel Starfall Luxe</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body { margin: 0; padding: 0; background: #050810; color: white; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
-        .stars-bg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%); z-index: -1; }
-        .stars-bg::after { content: ""; position: absolute; top: 0; left: 0; width: 200%; height: 200%; background-image: radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)), radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)); background-repeat: repeat; background-size: 250px 250px; animation: starsAnim 35s linear infinite; opacity: 0.5; }
-        @keyframes starsAnim { from { transform: translateY(0); } to { transform: translateY(-50%); } }
-        .container { width: 92%; max-width: 360px; text-align: center; margin: 30px 0; background: rgba(255, 255, 255, 0.03); padding: 25px; border-radius: 32px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); position: relative; z-index: 10; height: fit-content; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        button, .card { background: rgba(255, 255, 255, 0.06); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; }
-        button { padding: 14px 5px; font-size: 13px; font-weight: 600; cursor: pointer; }
-        button.wide { grid-column: span 2; }
-        button:active, .card:active { background: rgba(255, 255, 255, 0.12); transform: scale(0.97); }
-        .card { margin-bottom: 12px; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .chat-btn { background: rgba(0, 210, 255, 0.08); border-color: rgba(0, 210, 255, 0.2); color: #00d2ff; margin-top: 10px; }
-        .hidden { display: none !important; }
-        .back-btn { margin-bottom: 20px; width: 100%; font-size: 14px; color: white; display: flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; height: 45px; }
-        #scroll-area { max-height: 60vh; overflow-y: auto; padding-right: 5px; }
-        h1 { font-size: 26px; margin-bottom: 10px; }
-        h2 { font-size: 22px; margin-bottom: 15px; color: #fff; }
-        p { opacity: 0.5; font-size: 14px; margin-bottom: 25px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Travel Starfall Luxe</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+body { margin:0; background:#050810; color:#fff; font-family:-apple-system,BlinkMacSystemFont,sans-serif; display:flex; justify-content:center; min-height:100vh; }
+.container { width:92%; max-width:360px; margin:30px 0; background:rgba(255,255,255,0.03); padding:25px; border-radius:32px; backdrop-filter:blur(15px); border:1px solid rgba(255,255,255,0.1); }
+.hidden { display:none; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+button,.card { background:rgba(255,255,255,0.06); color:white; border:1px solid rgba(255,255,255,0.1); border-radius:20px; }
+button { padding:14px 5px; font-size:13px; font-weight:600; }
+button.wide { grid-column:span 2; }
+.card { padding:18px; margin-bottom:10px; display:flex; justify-content:space-between; cursor:pointer; }
+.back-btn { margin-bottom:20px; width:100%; height:45px; }
+.chat-btn { margin-top:15px; background:rgba(0,210,255,.08); border-color:rgba(0,210,255,.2); color:#00d2ff; }
+#scroll-area { max-height:60vh; overflow-y:auto; }
+</style>
 </head>
+
 <body>
-    <div class="stars-bg"></div>
 
-    <div id="screen-langs" class="container">
-        <h1>Welcome! 🌍</h1>
-        <p>Choose your language</p>
-        <div class="grid">
-            <button onclick="changeTo('ru')">Русский 🇷🇺</button>
-            <button onclick="changeTo('en')">English 🇺🇸</button>
-            <button onclick="changeTo('tr')">Türkçe 🇹🇷</button>
-            <button onclick="changeTo('pl')">Polski 🇵🇱</button>
-            <button onclick="changeTo('fr')">Français 🇫🇷</button>
-            <button onclick="changeTo('es')">Español 🇪🇸</button>
-            <button onclick="changeTo('it')">Italiano 🇮🇹</button>
-            <button onclick="changeTo('de')">Deutsch 🇩🇪</button>
-            <button class="wide" onclick="changeTo('cn')">中文 🇨🇳</button>
-        </div>
-    </div>
+<div id="screen-langs" class="container">
+<h1>Welcome 🌍</h1>
+<p>Choose your language</p>
+<div class="grid">
+<button onclick="changeTo('ru')">Русский 🇷🇺</button>
+<button onclick="changeTo('en')">English 🇺🇸</button>
+<button onclick="changeTo('tr')">Türkçe 🇹🇷</button>
+<button onclick="changeTo('pl')">Polski 🇵🇱</button>
+<button onclick="changeTo('fr')">Français 🇫🇷</button>
+<button onclick="changeTo('es')">Español 🇪🇸</button>
+<button onclick="changeTo('it')">Italiano 🇮🇹</button>
+<button onclick="changeTo('de')">Deutsch 🇩🇪</button>
+<button class="wide" onclick="changeTo('cn')">中文 🇨🇳</button>
+</div>
+</div>
 
-    <div id="screen-countries" class="container hidden">
-        <button id="btn-back-to-lang" class="back-btn" onclick="showScreen('screen-langs')">⬅ Назад</button>
-        <h2 id="title-countries">Выберите страну 📍</h2>
-        <div id="scroll-area"></div>
-    </div>
+<div id="screen-countries" class="container hidden">
+<button class="back-btn" onclick="showScreen('screen-langs')">⬅ Back</button>
+<h2 id="title-countries"></h2>
+<div id="scroll-area"></div>
+</div>
 
-    <div id="screen-inside" class="container hidden">
-        <button id="btn-back-to-list" class="back-btn" onclick="showScreen('screen-countries')">⬅ Назад</button>
-        <h2 id="current-country-name">Country</h2>
-        <div id="menu-grid" class="grid"></div>
-        <button class="wide chat-btn" onclick="openChat()">💬 <span id="m-chat">Community Chat</span></button>
-    </div>
+<div id="screen-inside" class="container hidden">
+<button class="back-btn" onclick="showScreen('screen-countries')">⬅ Back</button>
+<h2 id="current-country-name"></h2>
+<div id="menu-grid" class="grid"></div>
+<button class="wide chat-btn" onclick="openChat()"><span id="m-chat"></span></button>
+</div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand(); tg.ready();
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand(); tg.ready();
 
-        let currentLang = 'ru';
-        let selectedCountry = '';
+let currentLang = 'en';
+let selectedCountry = '';
 
-        const dict = {
-            ru: { t: "Выберите страну 📍", b: "⬅ Назад", cat: ["Правила", "Работа", "Еда", "Услуги", "Недвижимость", "Реклама", "Новости", "Документы"], chat: "Чат сообщества", c: ["Франция 🇫🇷", "Россия 🇷🇺", "Турция 🇹🇷", "Испания 🇪🇸", "Италия 🇮🇹", "Германия 🇩🇪", "Индонезия (Бали) 🇮🇩", "Таиланд 🇹🇭", "Китай 🇨🇳", "Япония 🇯🇵", "Шри-Ланка 🇱🇰", "Катар 🇶🇦", "Египет 🇪🇬", "Мексика 🇲🇽", "Доминикана 🇩🇴", "США 🇺🇸", "Грузия 🇬🇪", "Армения 🇦🇲", "Казахстан 🇰🇿", "Португалия 🇵🇹", "Северный Кипр 🇹🇷", "Южный Кипр 🇨🇾", "ОАЭ 🇦🇪"] },
-            en: { t: "Select Country 📍", b: "⬅ Back", cat: ["Rules", "Jobs", "Food", "Services", "Property", "Ads", "News", "Documents"], chat: "Community Chat", c: ["France 🇫🇷", "Russia 🇷🇺", "Turkey 🇹🇷", "Spain 🇪🇸", "Italy 🇮🇹", "Germany 🇩🇪", "Indonesia (Bali) 🇮🇩", "Thailand 🇹🇭", "China 🇨🇳", "Japan 🇯🇵", "Sri Lanka 🇱🇰", "Qatar 🇶🇦", "Egypt 🇪🇬", "Mexico 🇲🇽", "Dominican Republic 🇩🇴", "USA 🇺🇸", "Georgia 🇬🇪", "Armenia 🇦🇲", "Kazakhstan 🇰🇿", "Portugal 🇵🇹", "Northern Cyprus 🇹🇷", "Southern Cyprus 🇨🇾", "UAE 🇦🇪"] },
-            tr: { t: "Ülke Seçin 📍", b: "⬅ Geri", cat: ["Kurallar", "İş", "Yemek", "Hizmetler", "Emlak", "Reklam", "Haberler", "Belgeler"], chat: "Topluluk Sohbeti", c: ["Fransa 🇫🇷", "Rusya 🇷🇺", "Türkiye 🇹🇷", "İspanya 🇪🇸", "İtalya 🇮🇹", "Almanya 🇩🇪", "Endonezya (Bali) 🇮🇩", "Tayland 🇹🇭", "Çin 🇨🇳", "Japonya 🇯🇵", "Sri Lanka 🇱🇰", "Katar 🇶🇦", "Mısır 🇪🇬", "Meksika 🇲🇽", "Dominik Cumhuriyeti 🇩🇴", "ABD 🇺🇸", "Gürcistan 🇬🇪", "Ermenistan 🇦🇲", "Kazakistan 🇰🇿", "Portekiz 🇵🇹", "Kuzey Kıbrıs 🇹🇷", "Güney Kıbrıs 🇨🇾", "BAE 🇦🇪"] }
-            // Другие языки добавляются по такому же принципу
-        };
+const countries = [
+"France 🇫🇷","Russia 🇷🇺","Turkey 🇹🇷","Spain 🇪🇸","Italy 🇮🇹","Germany 🇩🇪",
+"Indonesia (Bali) 🇮🇩","Thailand 🇹🇭","China 🇨🇳","Japan 🇯🇵","Sri Lanka 🇱🇰",
+"Qatar 🇶🇦","Egypt 🇪🇬","Mexico 🇲🇽","Dominican Republic 🇩🇴","USA 🇺🇸",
+"Georgia 🇬🇪","Armenia 🇦🇲","Kazakhstan 🇰🇿","Portugal 🇵🇹",
+"Northern Cyprus 🇹🇷","Southern Cyprus 🇨🇾","UAE 🇦🇪"
+];
 
-        function showScreen(id) {
-            document.querySelectorAll('.container').forEach(s => s.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-        }
+const dict = {
+ru:{t:"Выберите страну 📍",b:"⬅ Назад",chat:"Чат сообщества",cat:["Правила","Работа","Еда","Услуги","Недвижимость","Реклама","Новости","Документы"],c:countries},
+en:{t:"Select Country 📍",b:"⬅ Back",chat:"Community Chat",cat:["Rules","Jobs","Food","Services","Property","Ads","News","Documents"],c:countries},
+tr:{t:"Ülke Seçin 📍",b:"⬅ Geri",chat:"Topluluk Sohbeti",cat:["Kurallar","İş","Yemek","Hizmetler","Emlak","Reklam","Haberler","Belgeler"],c:countries},
+pl:{t:"Wybierz kraj 📍",b:"⬅ Wstecz",chat:"Czat społeczności",cat:["Zasady","Praca","Jedzenie","Usługi","Nieruchomości","Reklama","Wiadomości","Dokumenty"],c:countries},
+fr:{t:"Choisissez un pays 📍",b:"⬅ Retour",chat:"Chat communautaire",cat:["Règles","Emplois","Nourriture","Services","Immobilier","Publicité","Actualités","Documents"],c:countries},
+es:{t:"Seleccione un país 📍",b:"⬅ Atrás",chat:"Chat comunitario",cat:["Reglas","Trabajo","Comida","Servicios","Propiedad","Publicidad","Noticias","Documentos"],c:countries},
+it:{t:"Seleziona paese 📍",b:"⬅ Indietro",chat:"Chat comunitaria",cat:["Regole","Lavoro","Cibo","Servizi","Immobili","Pubblicità","Notizie","Documenti"],c:countries},
+de:{t:"Land auswählen 📍",b:"⬅ Zurück",chat:"Community-Chat",cat:["Regeln","Jobs","Essen","Services","Immobilien","Werbung","Nachrichten","Dokumente"],c:countries},
+cn:{t:"选择国家 📍",b:"⬅ 返回",chat:"社区聊天",cat:["规则","工作","美食","服务","房地产","广告","新闻","文件"],c:countries}
+};
 
-        function changeTo(lang) {
-            currentLang = lang;
-            const data = dict[lang];
-            document.getElementById('title-countries').innerText = data.t;
-            document.getElementById('btn-back-to-lang').innerText = data.b;
-            const list = document.getElementById('scroll-area');
-            list.innerHTML = '';
-            const sorted = [...data.c].sort((a, b) => a.localeCompare(b, lang));
-            sorted.forEach(name => {
-                const div = document.createElement('div');
-                div.className = 'card';
-                div.innerHTML = `<span>${name}</span> <span style="opacity:0.3">➡️</span>`;
-                div.onclick = () => openCountry(name);
-                list.appendChild(div);
-            });
-            showScreen('screen-countries');
-        }
+function showScreen(id){
+document.querySelectorAll('.container').forEach(x=>x.classList.add('hidden'));
+document.getElementById(id).classList.remove('hidden');
+}
 
-        function openCountry(name) {
-            selectedCountry = name;
-            const data = dict[currentLang];
-            document.getElementById('current-country-name').innerText = name;
-            document.getElementById('btn-back-to-list').innerText = data.b;
-            document.getElementById('m-chat').innerText = data.chat;
-            const grid = document.getElementById('menu-grid');
-            grid.innerHTML = '';
-            const icons = ["📜", "💼", "🍴", "🛠", "🏠", "📢", "📰", "📄"];
-            
-            data.cat.forEach((catName, index) => {
-                const btn = document.createElement('button');
-                btn.className = "wide";
-                btn.innerHTML = `${icons[index]} <span>${catName}</span>`;
-                btn.onclick = () => { tg.showAlert(`${catName}: ${name}`); };
-                grid.appendChild(btn);
-            });
-            showScreen('screen-inside');
-        }
+function changeTo(lang){
+currentLang=lang;
+const d=dict[lang];
+document.getElementById('title-countries').innerText=d.t;
+document.querySelector('#screen-countries .back-btn').innerText=d.b;
+const list=document.getElementById('scroll-area');
+list.innerHTML='';
+d.c.forEach(c=>{
+const div=document.createElement('div');
+div.className='card';
+div.innerHTML=`<span>${c}</span><span>➡️</span>`;
+div.onclick=()=>openCountry(c);
+list.appendChild(div);
+});
+showScreen('screen-countries');
+}
 
-        function openChat() { tg.showAlert(`${dict[currentLang].chat}: ${selectedCountry}`); }
-    </script>
+function openCountry(name){
+selectedCountry=name;
+const d=dict[currentLang];
+document.getElementById('current-country-name').innerText=name;
+document.querySelector('#screen-inside .back-btn').innerText=d.b;
+document.getElementById('m-chat').innerText=d.chat;
+const grid=document.getElementById('menu-grid');
+grid.innerHTML='';
+d.cat.forEach(cat=>{
+const btn=document.createElement('button');
+btn.className='wide';
+btn.innerText=cat;
+btn.onclick=()=>tg.showAlert(cat+" — "+name);
+grid.appendChild(btn);
+});
+showScreen('screen-inside');
+}
+
+function openChat(){
+tg.showAlert(dict[currentLang].chat+" — "+selectedCountry);
+}
+</script>
+
 </body>
 </html>
