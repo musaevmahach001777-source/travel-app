@@ -5,15 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Travel Starfall Luxe</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
 body{margin:0;background:#050810;color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif;display:flex;justify-content:center;min-height:100vh;overflow-x:hidden}
 .stars-bg{position:fixed;inset:0;background:radial-gradient(circle,#1b2735 0%,#090a0f 100%);z-index:-1}
-.stars-bg::after{content:"";position:absolute;inset:0;width:200%;height:200%;background-image:
+.stars-bg::after{content:"";position:absolute;inset:0;width:200%;height:200%;
+background-image:
 radial-gradient(2px 2px at 20px 30px,#eee,rgba(0,0,0,0)),
 radial-gradient(2px 2px at 40px 70px,#fff,rgba(0,0,0,0));
 background-size:250px 250px;animation:starsAnim 35s linear infinite;opacity:.5}
 @keyframes starsAnim{from{transform:translateY(0)}to{transform:translateY(-50%)}}
-
 .container{width:92%;max-width:360px;margin:30px 0;padding:25px;background:rgba(255,255,255,.03);
 border-radius:32px;backdrop-filter:blur(15px);border:1px solid rgba(255,255,255,.1);text-align:center}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -29,8 +30,8 @@ button:active,.card:active{background:rgba(255,255,255,.12);transform:scale(.97)
 h1{font-size:26px}h2{font-size:22px}p{opacity:.5;font-size:14px}
 </style>
 </head>
-<body>
 
+<body>
 <div class="stars-bg"></div>
 
 <div id="screen-langs" class="container">
@@ -66,24 +67,16 @@ h1{font-size:26px}h2{font-size:22px}p{opacity:.5;font-size:14px}
 const tg = Telegram.WebApp; tg.expand(); tg.ready();
 let currentLang='ru', selectedCountry='';
 
-const baseCountries = [
-"Armenia 🇦🇲","China 🇨🇳","Dominican Republic 🇩🇴","Egypt 🇪🇬","France 🇫🇷",
-"Georgia 🇬🇪","Germany 🇩🇪","Indonesia (Bali) 🇮🇩","Italy 🇮🇹","Japan 🇯🇵",
-"Kazakhstan 🇰🇿","Mexico 🇲🇽","Northern Cyprus 🇹🇷","Portugal 🇵🇹","Qatar 🇶🇦",
-"Russia 🇷🇺","Spain 🇪🇸","Sri Lanka 🇱🇰","Thailand 🇹🇭","Turkey 🇹🇷",
-"UAE 🇦🇪","USA 🇺🇸","Southern Cyprus 🇨🇾"
-];
-
-const dict = {
-ru:{t:"Выберите страну 📍",chat:"Чат сообщества",cat:["Правила","Работа","Еда","Услуги","Недвижимость","Реклама","Новости","Документы"],c:baseCountries},
-en:{t:"Select Country 📍",chat:"Community Chat",cat:["Rules","Jobs","Food","Services","Property","Ads","News","Documents"],c:baseCountries},
-tr:{t:"Ülke Seçin 📍",chat:"Topluluk Sohbeti",cat:["Kurallar","İş","Yemek","Hizmetler","Emlak","Reklam","Haberler","Belgeler"],c:baseCountries},
-pl:{t:"Wybierz kraj 📍",chat:"Czat społeczności",cat:["Zasady","Praca","Jedzenie","Usługi","Nieruchomości","Reklama","Wiadomości","Dokumenty"],c:baseCountries},
-fr:{t:"Choisissez un pays 📍",chat:"Chat communautaire",cat:["Règles","Travail","Nourriture","Services","Immobilier","Publicité","Actualités","Documents"],c:baseCountries},
-es:{t:"Seleccione país 📍",chat:"Chat comunitario",cat:["Reglas","Trabajo","Comida","Servicios","Inmuebles","Publicidad","Noticias","Documentos"],c:baseCountries},
-it:{t:"Seleziona paese 📍",chat:"Chat della comunità",cat:["Regole","Lavoro","Cibo","Servizi","Immobili","Pubblicità","Notizie","Documenti"],c:baseCountries},
-de:{t:"Land wählen 📍",chat:"Community-Chat",cat:["Regeln","Jobs","Essen","Services","Immobilien","Werbung","Nachrichten","Dokumente"],c:baseCountries},
-cn:{t:"选择国家 📍",chat:"社区聊天",cat:["规则","工作","美食","服务","房产","广告","新闻","文件"],c:baseCountries}
+const countries = {
+ru:["Армения 🇦🇲","Германия 🇩🇪","Грузия 🇬🇪","Доминикана 🇩🇴","Египет 🇪🇬","Индонезия (Бали) 🇮🇩","Испания 🇪🇸","Италия 🇮🇹","Казахстан 🇰🇿","Катар 🇶🇦","Китай 🇨🇳","Мексика 🇲🇽","ОАЭ 🇦🇪","Португалия 🇵🇹","Россия 🇷🇺","Северный Кипр 🇹🇷","США 🇺🇸","Таиланд 🇹🇭","Турция 🇹🇷","Франция 🇫🇷","Шри-Ланка 🇱🇰","Южный Кипр 🇨🇾","Япония 🇯🇵"],
+en:["Armenia 🇦🇲","Germany 🇩🇪","Georgia 🇬🇪","Dominican Republic 🇩🇴","Egypt 🇪🇬","Indonesia (Bali) 🇮🇩","Spain 🇪🇸","Italy 🇮🇹","Kazakhstan 🇰🇿","Qatar 🇶🇦","China 🇨🇳","Mexico 🇲🇽","UAE 🇦🇪","Portugal 🇵🇹","Russia 🇷🇺","Northern Cyprus 🇹🇷","USA 🇺🇸","Thailand 🇹🇭","Turkey 🇹🇷","France 🇫🇷","Sri Lanka 🇱🇰","Southern Cyprus 🇨🇾","Japan 🇯🇵"],
+tr:["Ermenistan 🇦🇲","Almanya 🇩🇪","Gürcistan 🇬🇪","Dominik Cumhuriyeti 🇩🇴","Mısır 🇪🇬","Endonezya (Bali) 🇮🇩","İspanya 🇪🇸","İtalya 🇮🇹","Kazakistan 🇰🇿","Katar 🇶🇦","Çin 🇨🇳","Meksika 🇲🇽","BAE 🇦🇪","Portekiz 🇵🇹","Rusya 🇷🇺","Kuzey Kıbrıs 🇹🇷","ABD 🇺🇸","Tayland 🇹🇭","Türkiye 🇹🇷","Fransa 🇫🇷","Sri Lanka 🇱🇰","Güney Kıbrıs 🇨🇾","Japonya 🇯🇵"],
+pl:["Armenia 🇦🇲","Niemcy 🇩🇪","Gruzja 🇬🇪","Dominikana 🇩🇴","Egipt 🇪🇬","Indonezja (Bali) 🇮🇩","Hiszpania 🇪🇸","Włochy 🇮🇹","Kazachstan 🇰🇿","Katar 🇶🇦","Chiny 🇨🇳","Meksyk 🇲🇽","ZEA 🇦🇪","Portugalia 🇵🇹","Rosja 🇷🇺","Cypr Północny 🇹🇷","USA 🇺🇸","Tajlandia 🇹🇭","Turcja 🇹🇷","Francja 🇫🇷","Sri Lanka 🇱🇰","Cypr Południowy 🇨🇾","Japonia 🇯🇵"],
+fr:["Arménie 🇦🇲","Allemagne 🇩🇪","Géorgie 🇬🇪","République dominicaine 🇩🇴","Égypte 🇪🇬","Indonésie (Bali) 🇮🇩","Espagne 🇪🇸","Italie 🇮🇹","Kazakhstan 🇰🇿","Qatar 🇶🇦","Chine 🇨🇳","Mexique 🇲🇽","EAU 🇦🇪","Portugal 🇵🇹","Russie 🇷🇺","Chypre Nord 🇹🇷","USA 🇺🇸","Thaïlande 🇹🇭","Turquie 🇹🇷","France 🇫🇷","Sri Lanka 🇱🇰","Chypre Sud 🇨🇾","Japon 🇯🇵"],
+es:["Armenia 🇦🇲","Alemania 🇩🇪","Georgia 🇬🇪","República Dominicana 🇩🇴","Egipto 🇪🇬","Indonesia (Bali) 🇮🇩","España 🇪🇸","Italia 🇮🇹","Kazajistán 🇰🇿","Catar 🇶🇦","China 🇨🇳","México 🇲🇽","EAU 🇦🇪","Portugal 🇵🇹","Rusia 🇷🇺","Chipre del Norte 🇹🇷","EE.UU. 🇺🇸","Tailandia 🇹🇭","Turquía 🇹🇷","Francia 🇫🇷","Sri Lanka 🇱🇰","Chipre del Sur 🇨🇾","Japón 🇯🇵"],
+it:["Armenia 🇦🇲","Germania 🇩🇪","Georgia 🇬🇪","Repubblica Dominicana 🇩🇴","Egitto 🇪🇬","Indonesia (Bali) 🇮🇩","Spagna 🇪🇸","Italia 🇮🇹","Kazakistan 🇰🇿","Qatar 🇶🇦","Cina 🇨🇳","Messico 🇲🇽","EAU 🇦🇪","Portogallo 🇵🇹","Russia 🇷🇺","Cipro Nord 🇹🇷","USA 🇺🇸","Thailandia 🇹🇭","Turchia 🇹🇷","Francia 🇫🇷","Sri Lanka 🇱🇰","Cipro Sud 🇨🇾","Giappone 🇯🇵"],
+de:["Armenien 🇦🇲","Deutschland 🇩🇪","Georgien 🇬🇪","Dominikanische Republik 🇩🇴","Ägypten 🇪🇬","Indonesien (Bali) 🇮🇩","Spanien 🇪🇸","Italien 🇮🇹","Kasachstan 🇰🇿","Katar 🇶🇦","China 🇨🇳","Mexiko 🇲🇽","VAE 🇦🇪","Portugal 🇵🇹","Russland 🇷🇺","Nordzypern 🇹🇷","USA 🇺🇸","Thailand 🇹🇭","Türkei 🇹🇷","Frankreich 🇫🇷","Sri Lanka 🇱🇰","Südzypern 🇨🇾","Japan 🇯🇵"],
+cn:["亚美尼亚 🇦🇲","德国 🇩🇪","格鲁吉亚 🇬🇪","多米尼加 🇩🇴","埃及 🇪🇬","印度尼西亚（巴厘岛）🇮🇩","西班牙 🇪🇸","意大利 🇮🇹","哈萨克斯坦 🇰🇿","卡塔尔 🇶🇦","中国 🇨🇳","墨西哥 🇲🇽","阿联酋 🇦🇪","葡萄牙 🇵🇹","俄罗斯 🇷🇺","北塞浦路斯 🇹🇷","美国 🇺🇸","泰国 🇹🇭","土耳其 🇹🇷","法国 🇫🇷","斯里兰卡 🇱🇰","南塞浦路斯 🇨🇾","日本 🇯🇵"]
 };
 
 function showScreen(id){
@@ -93,38 +86,27 @@ document.getElementById(id).classList.remove('hidden');
 
 function changeTo(lang){
 currentLang=lang;
-const d=dict[lang];
-document.getElementById('title-countries').innerText=d.t;
-document.getElementById('m-chat').innerText=d.chat;
 const list=document.getElementById('scroll-area');
 list.innerHTML='';
-[...d.c].sort((a,b)=>a.localeCompare(b,lang)).forEach(c=>{
+[...countries[lang]].sort((a,b)=>a.localeCompare(b,lang)).forEach(c=>{
 const div=document.createElement('div');
 div.className='card';
 div.innerHTML=`<span>${c}</span><span style="opacity:.3">➡️</span>`;
 div.onclick=()=>openCountry(c);
 list.appendChild(div);
 });
+document.getElementById('title-countries').innerText='Select country 📍';
 showScreen('screen-countries');
 }
 
-function openCountry(name){
-selectedCountry=name;
-document.getElementById('current-country-name').innerText=name;
-const grid=document.getElementById('menu-grid');
-grid.innerHTML='';
-dict[currentLang].cat.forEach(cat=>{
-const b=document.createElement('button');
-b.className='wide';
-b.innerText=cat;
-b.onclick=()=>tg.showAlert(cat+" / "+name);
-grid.appendChild(b);
-});
+function openCountry(c){
+selectedCountry=c;
+document.getElementById('current-country-name').innerText=c;
 showScreen('screen-inside');
 }
 
 function openChat(){
-tg.showAlert(dict[currentLang].chat+": "+selectedCountry);
+tg.showAlert(selectedCountry);
 }
 </script>
 </body>
