@@ -22,7 +22,6 @@
         .card { margin-bottom: 12px; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; animation: fadeIn 0.5s ease forwards; opacity: 0; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .chat-btn { background: linear-gradient(135deg, rgba(0, 210, 255, 0.1), rgba(0, 115, 255, 0.1)); border-color: rgba(0, 210, 255, 0.3); color: #00d2ff; margin-top: 10px; font-weight: 700; }
         .hidden { display: none !important; opacity: 0; }
         #scroll-area { max-height: 60vh; overflow-y: auto; padding-right: 5px; scrollbar-width: none; }
         #scroll-area::-webkit-scrollbar { display: none; }
@@ -59,13 +58,13 @@
     <div id="screen-inside" class="container hidden">
         <h2 id="current-country-name">Country</h2>
         <div id="menu-grid" class="grid"></div>
-        <button class="wide chat-btn" onclick="openChat()">💬 <span id="m-chat">Community Chat</span></button>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         const backButton = tg.BackButton;
         const mainButton = tg.MainButton;
+        const secondaryButton = tg.SecondaryButton; // Нативная кнопка поддержки
         
         tg.expand();
         tg.ready();
@@ -74,28 +73,31 @@
         let currentLang = 'ru';
         let selectedCountry = '';
 
+        // Вставьте здесь ссылку на вашего менеджера
+        const MANAGER_URL = "https://t.me/your_manager_username"; 
+
         const countriesList = {
             ru: ["Франция 🇫🇷", "Россия 🇷🇺", "Турция 🇹🇷", "Испания 🇪🇸", "Италия 🇮🇹", "Германия 🇩🇪", "Индонезия (Бали) 🇮🇩", "Таиланд 🇹🇭", "Китай 🇨🇳", "Япония 🇯🇵", "Шри-Ланка 🇱🇰", "Катар 🇶🇦", "Египет 🇪🇬", "Мексика 🇲🇽", "Доминикана 🇩🇴", "США 🇺🇸", "Грузия 🇬🇪", "Армения 🇦🇲", "Казахстан 🇰🇿", "Португалия 🇵🇹", "Северный Кипр 🇹🇷", "Южный Кипр 🇨🇾", "ОАЭ 🇦🇪", "Черногория 🇲🇪", "Греция 🇬🇷", "Великобритания 🇬🇧", "Азербайджан 🇦🇿"],
             en: ["France 🇫🇷", "Russia 🇷🇺", "Turkey 🇹🇷", "Spain 🇪🇸", "Italy 🇮🇹", "Germany 🇩🇪", "Indonesia (Bali) 🇮🇩", "Thailand 🇹🇭", "China 🇨🇳", "Japan 🇯🇵", "Sri Lanka 🇱🇰", "Qatar 🇶🇦", "Egypt 🇪🇬", "Mexico 🇲🇽", "Dominican Republic 🇩🇴", "USA 🇺🇸", "Georgia 🇬🇪", "Armenia 🇦🇲", "Kazakhstan 🇰🇿", "Portugal 🇵🇹", "Northern Cyprus 🇹🇷", "Southern Cyprus 🇨🇾", "UAE 🇦🇪", "Montenegro 🇲🇪", "Greece 🇬🇷", "United Kingdom 🇬🇧", "Azerbaijan 🇦🇿"],
             tr: ["Fransa 🇫🇷", "Rusya 🇷🇺", "Türkiye 🇹🇷", "İspanya 🇪🇸", "İtalya 🇮🇹", "Almanya 🇩🇪", "Endonezya (Bali) 🇮🇩", "Tayland 🇹🇭", "Çin 🇨🇳", "Japonya 🇯🇵", "Sri Lanka 🇱🇰", "Katar 🇶🇦", "Mısır 🇪🇬", "Meksika 🇲🇽", "Dominik Cumhuriyeti 🇩🇴", "ABD 🇺🇸", "Gürcistan 🇬🇪", "Ermenistan 🇦🇲", "Kazakistan 🇰🇿", "Portekiz 🇵🇹", "Kuzey Kıbrıs 🇹🇷", "Güney Kıbrıs 🇨🇾", "BAE 🇦🇪", "Karadağ 🇲🇪", "Yunanistan 🇬🇷", "Birleşik Krallık 🇬🇧", "Azerbaycan 🇦🇿"],
-            pl: ["Francja 🇫🇷", "Rosja 🇷🇺", "Turcja 🇹🇷", "Hiszpania 🇪🇸", "Włochy 🇮🇹", "Niemcy 🇩🇪", "Indonezja (Bali) 🇮🇩", "Tajlandia 🇹🇭", "Chiny 🇨🇳", "Japonia 🇯🇵", "Sri Lanka 🇱🇰", "Katar 🇶🇦", "Egipt 🇪🇬", "Meksyk 🇲🇽", "Dominikana 🇩🇴", "USA 🇺🇸", "Gruzja 🇬🇪", "Armenia 🇦🇲", "Kazachstan 🇰🇿", "Portugalia 🇵🇹", "Cypr Północny 🇹🇷", "Cypr Południowy 🇨🇾", "ZEA 🇦🇪", "Czarnogóra 🇲🇪", "Grecja 🇬🇷", "Wielka Brytania 🇬🇧", "Azerbejdżan 🇦🇿"],
-            fr: ["France 🇫🇷", "Russie 🇷🇺", "Turquie 🇹🇷", "Espagne 🇪🇸", "Italie 🇮🇹", "Allemagne 🇩🇪", "Indonésie (Bali) 🇮🇩", "Thaïlande 🇹🇭", "Chine 🇨🇳", "Japon 🇯🇵", "Sri Lanka 🇱🇰", "Qatar 🇶🇦", "Égypte 🇪🇬", "Mexique 🇲🇽", "République Dominicaine 🇩🇴", "États-Unis 🇺🇸", "Géorgie 🇬🇪", "Arménie 🇦🇲", "Kazakhstan 🇰🇿", "Portugal 🇵🇹", "Chypre du Nord 🇹🇷", "Chypre du Sud 🇨🇾", "ÉAU 🇦🇪", "Monténégro 🇲🇪", "Grèce 🇬🇷", "Royaume-Uni 🇬🇧", "Azerbaïdjan 🇦🇿"],
-            es: ["Francia 🇫🇷", "Rusia 🇷🇺", "Turquía 🇹🇷", "España 🇪🇸", "Italia 🇮🇹", "Alemania 🇩🇪", "Indonesia (Bali) 🇮🇩", "Tailandia 🇹🇭", "China 🇨🇳", "Japón 🇯🇵", "Sri Lanka 🇱🇰", "Catar 🇶🇦", "Egipto 🇪🇬", "México 🇲🇽", "República Dominicana 🇩🇴", "EE. UU. 🇺🇸", "Georgia 🇬🇪", "Armenia 🇦🇲", "Kazajistán 🇰🇿", "Portugal 🇵🇹", "Chipre del Norte 🇹🇷", "Chipre del Sud 🇨🇾", "EAU 🇦🇪", "Montenegro 🇲🇪", "Grecia 🇬🇷", "Reino Unido 🇬🇧", "Azerbaiyán 🇦🇿"],
+            pl: ["Francja 🇫🇷", "Rosja 🇷🇺", "Turcja 🇹🇷", "Hiszpania 🇪🇸", "Włochy 🇮🇹", "Niemcy 🇩🇪", "Indonezja (Bali) 🇮🇩", "Tajlandia 🇹🇭", "Chiny 🇨🇳", "Japonia 🇯🇵", "Sri Lanka 🇱🇰", "Katar 🇶🇦", "Egipt 🇪🇬", "Meksyk 🇲🇽", "Dominikana 🇩🇴", "USA 🇺🇸", "Gruzja 🇬🇪", "Armenia 🇦🇲", "Kazakhstan 🇰🇿", "Portugalia 🇵🇹", "Cypr Północny 🇹🇷", "Cypr Południowy 🇨🇾", "ZEA 🇦🇪", "Czarnogóra 🇲🇪", "Grecja 🇬🇷", "Wielka Brytania 🇬🇧", "Azerbejdżan 🇦🇿"],
+            fr: ["France 🇫🇷", "Russie 🇷🇺", "Turquie 🇹🇷", "Espagne 🇪🇸", "Italie 🇮🇹", "Allemagne 🇩🇪", "Indonésie (Bali) 🇮🇩", "Thaïlande 🇹🇭", "Chine 🇨🇳", "Japon 🇯🇵", "Sri Lanka 🇱🇰", "Qatar 🇶🇦", "Égypte 🇪🇬", "Mexique 🇲🇽", "République Dominicaine 🇩🇴", "États-Unis 🇺🇸", "Géорgie 🇬🇪", "Arménie 🇦🇲", "Kazakhstan 🇰🇿", "Portugal 🇵🇹", "Chypre du Nord 🇹🇷", "Chypre du Sud 🇨🇾", "ÉAU 🇦🇪", "Monténégro 🇲🇪", "Grèce 🇬🇷", "Royaume-Uni 🇬🇧", "Azerbaïdjan 🇦🇿"],
+            es: ["Francia 🇫🇷", "Rusia 🇷🇺", "Turquía 🇹🇷", "España 🇪🇸", "Italia 🇮🇹", "Alemania 🇩🇪", "Indonesia (Bali) 🇮🇩", "Tailandia 🇹🇭", "China 🇨🇳", "Japón 🇯🇵", "Sri Lanka 🇱🇰", "Catar 🇶🇦", "Egipto 🇪🇬", "México 🇲🇽", "República Dominicana 🇩🇴", "EE. UU. 🇺🇸", "Georgia 🇬🇪", "Armenia 🇦🇲", "Kazajistán 🇰🇿", "Portugal 🇵🇹", "Chipre del Norte 🇹🇷", "Chipre del Sur 🇨🇾", "EAU 🇦🇪", "Montenegro 🇲🇪", "Grecia 🇬🇷", "Reino Unido 🇬🇧", "Azerbaiyán 🇦🇿"],
             it: ["Francia 🇫🇷", "Russia 🇷🇺", "Turchia 🇹🇷", "Spagna 🇪🇸", "Italia 🇮🇹", "Germania 🇩🇪", "Indonesia (Bali) 🇮🇩", "Thailandia 🇹🇭", "Cina 🇨🇳", "Giappone 🇯🇵", "Sri Lanka 🇱🇰", "Qatar 🇶🇦", "Egitto 🇪🇬", "Messico 🇲🇽", "Repubblica Dominicana 🇩🇴", "USA 🇺🇸", "Georgia 🇬🇪", "Armenia 🇦🇲", "Kazakistan 🇰🇿", "Portogallo 🇵🇹", "Cipro del Nord 🇹🇷", "Cipro del Sud 🇨🇾", "EAU 🇦🇪", "Montenegro 🇲🇪", "Grecia 🇬🇷", "Regno Unito 🇬🇧", "Azerbaigian 🇦🇿"],
             de: ["Frankreich 🇫🇷", "Russland 🇷🇺", "Türkei 🇹🇷", "Spanien 🇪🇸", "Italien 🇮🇹", "Deutschland 🇩🇪", "Indonesien (Bali) 🇮🇩", "Thailand 🇹🇭", "China 🇨🇳", "Japan 🇯🇵", "Sri Lanka 🇱🇰", "Katar 🇶🇦", "Ägypten 🇪🇬", "Mexiko 🇲🇽", "Dominikanische Republik 🇩🇴", "USA 🇺🇸", "Georgien 🇬🇪", "Armenien 🇦🇲", "Kasachstan 🇰🇿", "Portugal 🇵🇹", "Nordzypern 🇹🇷", "Südzypern 🇨🇾", "VAE 🇦🇪", "Montenegro 🇲🇪", "Griechenland 🇬🇷", "Vereinigtes Königreich 🇬🇧", "Aserbaidschan 🇦🇿"],
             cn: ["法国 🇫🇷", "俄罗斯 🇷🇺", "土耳其 🇹🇷", "西班牙 🇪🇸", "意大利 🇮🇹", "德国 🇩🇪", "印度尼西亚 (巴厘岛) 🇮🇩", "泰国 🇹🇭", "中国 🇨🇳", "日本 🇯🇵", "斯里兰卡 🇱🇰", "卡塔尔 🇶🇦", "埃及 🇪🇬", "墨西哥 🇲🇽", "多米尼加 🇩🇴", "美国 🇺🇸", "格鲁吉亚 🇬🇪", "亚美尼亚 🇦🇲", "哈萨克斯坦 🇰🇿", "Portugal 🇵🇹", "北塞浦路斯 🇹🇷", "南塞浦路斯 🇨🇾", "阿联酋 🇦🇪", "黑山 🇲🇪", "希腊 🇬🇷", "英国 🇬🇧", "阿塞拜疆 🇦🇿"]
         };
 
         const dict = {
-            ru: { t: "Выберите страну 📍", act: "Выберите действие", join: "Перейти в группу", cancel: "Отмена", cat: ["Правила", "Работа", "Еда", "Услуги", "Недвижимость", "Реклама", "Новости", "Документы"], chat: "Чат сообщества" },
-            en: { t: "Select Country 📍", act: "Select Action", join: "Join Group", cancel: "Cancel", cat: ["Rules", "Jobs", "Food", "Services", "Property", "Ads", "News", "Documents"], chat: "Community Chat" },
-            tr: { t: "Ülke Seçin 📍", act: "Eylem Seç", join: "Gruba Katıl", cancel: "İptal", cat: ["Kurallar", "İş", "Yemek", "Hizmetler", "Emlak", "Reklam", "Haberler", "Belgeler"], chat: "Topluluk Sohbeti" },
-            pl: { t: "Wybierz kraj 📍", act: "Wybierz akcję", join: "Dołącz do grupy", cancel: "Anuluj", cat: ["Zasady", "Praca", "Jedzenie", "Usługi", "Nieruchomości", "Reklama", "Wiadomości", "Dokumenty"], chat: "Czat społeczności" },
-            fr: { t: "Choisir un pays 📍", act: "Choisir une action", join: "Rejoindre le groupe", cancel: "Annuler", cat: ["Règles", "Travail", "Nourriture", "Services", "Immobilier", "Publicité", "Nouvelles", "Documents"], chat: "Chat communautaire" },
-            es: { t: "Seleccionar país 📍", act: "Seleccionar acción", join: "Unirse al grupo", cancel: "Cancelar", cat: ["Reglas", "Trabajo", "Comida", "Servicios", "Inmuebles", "Anuncios", "Noticias", "Documentos"], chat: "Chat de la comunidad" },
-            it: { t: "Scegli il paese 📍", act: "Scegli azione", join: "Unisciti al gruppo", cancel: "Annulla", cat: ["Regole", "Lavoro", "Cibo", "Servizi", "Immobili", "Pubblicità", "Notizie", "Documenti"], chat: "Chat della community" },
-            de: { t: "Land wählen 📍", act: "Aktion wählen", join: "Gruppe beitreten", cancel: "Abbrechen", cat: ["Regeln", "Arbeit", "Essen", "Dienstleistungen", "Immobilien", "Werbung", "Nachrichten", "Dokumente"], chat: "Community-Chat" },
-            cn: { t: "选择国家 📍", act: "选择动作", join: "加入群组", cancel: "取消", cat: ["规则", "工作", "美食", "服务", "房产", "广告", "新闻", "文件"], chat: "社区聊天" }
+            ru: { t: "Выберите страну 📍", act: "Выберите действие", join: "Перейти в группу", cancel: "Отмена", cat: ["Правила", "Работа", "Еда", "Услуги", "Недвижимость", "Реклама", "Новости", "Документы"], chat: "ЧАТ СООБЩЕСТВА", support: "ПОДДЕРЖКА" },
+            en: { t: "Select Country 📍", act: "Select Action", join: "Join Group", cancel: "Cancel", cat: ["Rules", "Jobs", "Food", "Services", "Property", "Ads", "News", "Documents"], chat: "COMMUNITY CHAT", support: "SUPPORT" },
+            tr: { t: "Ülke Seçin 📍", act: "Eylem Seç", join: "Gruba Katıl", cancel: "İptal", cat: ["Kurallar", "İş", "Yemek", "Hizmetler", "Emlak", "Reklam", "Haberler", "Belgeler"], chat: "TOPLULUK SOHBETI", support: "DESTEK" },
+            pl: { t: "Wybierz kraj 📍", act: "Wybierz akcję", join: "Dołącz do grupy", cancel: "Anuluj", cat: ["Zasady", "Praca", "Jedzenie", "Usługi", "Nieruchomości", "Reklama", "Wiadomości", "Dokumenty"], chat: "CZAT SPOŁECZNOŚCI", support: "WSPARCIE" },
+            fr: { t: "Choisir un pays 📍", act: "Choisir une action", join: "Rejoindre le groupe", cancel: "Annuler", cat: ["Règles", "Travail", "Nourriture", "Services", "Immobilier", "Publicité", "Nouvelles", "Documents"], chat: "CHAT COMMUNAUTAIRE", support: "SUPPORT" },
+            es: { t: "Seleccionar país 📍", act: "Seleccionar acción", join: "Unirse al grupo", cancel: "Cancelar", cat: ["Reglas", "Trabajo", "Comida", "Servicios", "Inmuebles", "Anuncios", "Noticias", "Documentos"], chat: "CHAT DE LA COMUNIDAD", support: "SOPORTE" },
+            it: { t: "Scegli il paese 📍", act: "Scegli azione", join: "Unisciti al gruppo", cancel: "Annulla", cat: ["Regole", "Lavoro", "Cibo", "Servizi", "Immobili", "Pubblicità", "Notizie", "Documenti"], chat: "CHAT DELLA COMMUNITY", support: "SUPPORTO" },
+            de: { t: "Land wählen 📍", act: "Aktion wählen", join: "Gruppe beitreten", cancel: "Abbrechen", cat: ["Regeln", "Arbeit", "Essen", "Dienstleistungen", "Immobilien", "Werbung", "Nachrichten", "Dokumente"], chat: "COMMUNITY-CHAT", support: "SUPPORT" },
+            cn: { t: "选择国家 📍", act: "选择动作", join: "加入群组", cancel: "取消", cat: ["规则", "工作", "美食", "服务", "房产", "广告", "新闻", "文件"], chat: "社区聊天", support: "支持" }
         };
 
         function showScreen(id) {
@@ -107,6 +109,7 @@
             if (id === 'screen-langs') {
                 backButton.hide();
                 mainButton.hide();
+                secondaryButton.hide();
             } else {
                 backButton.show();
             }
@@ -142,12 +145,16 @@
             selectedCountry = name;
             const data = dict[currentLang];
             document.getElementById('current-country-name').innerText = name;
-            document.getElementById('m-chat').innerText = data.chat;
             
-            mainButton.setText(data.chat.toUpperCase());
-            mainButton.show();
-            mainButton.offClick(openChat); // Снимаем старый обработчик
+            // Настраиваем Main Button (Чат сообщества)
+            mainButton.setParams({ text: data.chat, is_visible: true, color: '#2481cc' });
+            mainButton.offClick(openChat);
             mainButton.onClick(openChat);
+
+            // Настраиваем Secondary Button (Поддержка)
+            secondaryButton.setParams({ text: data.support, is_visible: true, color: '#2c2c2e' });
+            secondaryButton.offClick(openSupport);
+            secondaryButton.onClick(openSupport);
 
             const grid = document.getElementById('menu-grid');
             grid.innerHTML = '';
@@ -163,7 +170,7 @@
                         tg.showActionSheet({
                             title: catName,
                             buttons: [{text: data.join, id: 'ok'}, {text: data.cancel, type: 'destructive'}]
-                        }, (id) => { if(id === 'ok') tg.showAlert('Redirecting...'); });
+                        }, (id) => { if(id === 'ok') tg.openTelegramLink(MANAGER_URL); });
                     } else {
                         tg.showAlert(`${catName}: ${name}`);
                     }
@@ -175,10 +182,14 @@
 
         function openChat() { 
             tg.HapticFeedback.notificationOccurred('success');
-            const data = dict[currentLang];
-            tg.showConfirm(`${data.chat}: ${selectedCountry}?`, (ok) => {
-                if(ok) tg.showAlert("Opening Telegram Group...");
+            tg.showConfirm(`Open Community Chat for ${selectedCountry}?`, (ok) => {
+                if(ok) tg.openTelegramLink(MANAGER_URL); 
             });
+        }
+
+        function openSupport() {
+            tg.HapticFeedback.impactOccurred('medium');
+            tg.openTelegramLink(MANAGER_URL);
         }
     </script>
 </body>
