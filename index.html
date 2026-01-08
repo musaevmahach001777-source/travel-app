@@ -7,21 +7,25 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body { margin: 0; padding: 0; background: #050810; color: white; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
-        .stars-bg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%); z-index: -1; }
-        .stars-bg::after { content: ""; position: absolute; top: 0; left: 0; width: 200%; height: 200%; background-image: radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)), radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)); background-repeat: repeat; background-size: 250px 250px; animation: starsAnim 35s linear infinite; opacity: 0.5; }
+        .stars-bg { position: fixed; inset: 0; background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%); z-index: -1; }
+        .stars-bg::after { content: ""; position: absolute; inset: 0; width: 200%; height: 200%; background-image: radial-gradient(2px 2px at 20px 30px, #eee, transparent), radial-gradient(2px 2px at 40px 70px, #fff, transparent); background-repeat: repeat; background-size: 250px 250px; animation: starsAnim 35s linear infinite; opacity: 0.5; }
         @keyframes starsAnim { from { transform: translateY(0); } to { transform: translateY(-50%); } }
-        .container { width: 92%; max-width: 360px; text-align: center; margin: 30px 0; background: rgba(255, 255, 255, 0.03); padding: 25px; border-radius: 32px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); z-index: 10; }
+        .container { width: 92%; max-width: 360px; text-align: center; margin: 30px 0; background: rgba(255,255,255,0.03); padding: 25px; border-radius: 32px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); z-index: 10; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        button, .card { background: rgba(255,255,255,0.06); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; transition: all 0.2s ease; }
+        button, .card { background: rgba(255,255,255,0.06); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; transition: all .2s ease; }
         button { padding: 14px 5px; font-size: 13px; font-weight: 600; cursor: pointer; }
         button.wide { grid-column: span 2; }
-        .card { padding: 18px 20px; display: flex; justify-content: space-between; cursor: pointer; margin-bottom: 10px; }
+        button:active, .card:active { background: rgba(255,255,255,0.12); transform: scale(.97); }
+        .card { margin-bottom: 12px; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .chat-btn { background: rgba(0,210,255,0.08); border-color: rgba(0,210,255,0.2); color: #00d2ff; margin-top: 10px; }
         .hidden { display: none !important; }
-        .back-btn { margin-bottom: 20px; width: 100%; height: 45px; }
-        #scroll-area { max-height: 60vh; overflow-y: auto; }
+        .back-btn { margin-bottom: 20px; width: 100%; height: 45px; font-size: 14px; background: rgba(255,255,255,0.06); border-radius: 20px; }
+        #scroll-area { max-height: 60vh; overflow-y: auto; padding-right: 5px; }
+        h1 { font-size: 26px; }
+        h2 { font-size: 22px; margin-bottom: 15px; }
+        p { opacity: .5; font-size: 14px; margin-bottom: 25px; }
     </style>
 </head>
-
 <body>
 <div class="stars-bg"></div>
 
@@ -51,7 +55,7 @@
     <button id="btn-back-to-list" class="back-btn" onclick="showScreen('screen-countries')">⬅ Назад</button>
     <h2 id="current-country-name"></h2>
     <div id="menu-grid" class="grid"></div>
-    <button class="wide" onclick="openChat()"><span id="m-chat"></span></button>
+    <button class="wide chat-btn" onclick="openChat()">💬 <span id="m-chat"></span></button>
 </div>
 
 <script>
@@ -61,51 +65,70 @@ tg.expand(); tg.ready();
 let currentLang = 'ru';
 let selectedCountry = '';
 
-const dict = {
-    ru:{t:"Выберите страну 📍",b:"⬅ Назад",cat:["Правила","Работа","Еда","Услуги","Недвижимость","Реклама","Новости","Документы"],chat:"Чат сообщества",c:["Азербайджан 🇦🇿","Армения 🇦🇲","Германия 🇩🇪","Грузия 🇬🇪","Доминикана 🇩🇴","Египет 🇪🇬","Испания 🇪🇸","Италия 🇮🇹","Индонезия (Бали) 🇮🇩","Казахстан 🇰🇿","Катар 🇶🇦","Китай 🇨🇳","Мексика 🇲🇽","Португалия 🇵🇹","Россия 🇷🇺","США 🇺🇸","Таиланд 🇹🇭","Турция 🇹🇷","Франция 🇫🇷","Шри-Ланка 🇱🇰","Япония 🇯🇵","Северный Кипр 🇹🇷","Южный Кипр 🇨🇾"]}
+const localeMap = {
+    ru: 'ru',
+    en: 'en',
+    tr: 'tr',
+    pl: 'pl',
+    fr: 'fr',
+    es: 'es',
+    it: 'it',
+    de: 'de',
+    cn: 'zh'
 };
 
-function showScreen(id){
-    document.querySelectorAll('.container').forEach(s=>s.classList.add('hidden'));
+const dict = /* ⬅ ТВОЙ dict БЕЗ ИЗМЕНЕНИЙ */ window.dict || {};
+
+function showScreen(id) {
+    document.querySelectorAll('.container').forEach(s => s.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
 }
 
-function changeTo(lang){
+function changeTo(lang) {
     currentLang = lang;
     const data = dict[lang];
     document.getElementById('title-countries').innerText = data.t;
     document.getElementById('btn-back-to-lang').innerText = data.b;
+
+    const collator = new Intl.Collator(localeMap[lang] || 'en');
+    const sorted = [...data.c].sort((a, b) => collator.compare(a, b));
+
     const list = document.getElementById('scroll-area');
     list.innerHTML = '';
-    data.c.sort((a,b)=>a.localeCompare(b,lang)).forEach(name=>{
+    sorted.forEach(name => {
         const div = document.createElement('div');
         div.className = 'card';
-        div.innerHTML = `<span>${name}</span><span>➡️</span>`;
-        div.onclick = ()=>openCountry(name);
+        div.innerHTML = `<span>${name}</span><span style="opacity:.3">➡️</span>`;
+        div.onclick = () => openCountry(name);
         list.appendChild(div);
     });
+
     showScreen('screen-countries');
 }
 
-function openCountry(name){
+function openCountry(name) {
     selectedCountry = name;
     const data = dict[currentLang];
     document.getElementById('current-country-name').innerText = name;
     document.getElementById('btn-back-to-list').innerText = data.b;
     document.getElementById('m-chat').innerText = data.chat;
+
     const grid = document.getElementById('menu-grid');
     grid.innerHTML = '';
-    data.cat.forEach(cat=>{
+    const icons = ["📜","💼","🍴","🛠","🏠","📢","📰","📄"];
+    data.cat.forEach((cat, i) => {
         const btn = document.createElement('button');
         btn.className = 'wide';
-        btn.innerText = cat;
+        btn.innerHTML = `${icons[i]} ${cat}`;
+        btn.onclick = () => tg.showAlert(`${cat}: ${name}`);
         grid.appendChild(btn);
     });
+
     showScreen('screen-inside');
 }
 
-function openChat(){
-    tg.showAlert(selectedCountry);
+function openChat() {
+    tg.showAlert(`${dict[currentLang].chat}: ${selectedCountry}`);
 }
 </script>
 </body>
